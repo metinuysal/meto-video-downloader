@@ -177,7 +177,8 @@
                     ${queue.map(item => {
                         const prog = item.progress || null;
                         const pct = prog ? prog.percent : 0;
-                        const isDownloading = item.status === "downloading" && prog;
+                        const isActive = item.status === "downloading";
+                        const hasProgress = isActive && prog && prog.percent > 0;
                         const rawStatus = statusDetail(item.status);
                         const label = statusLabel(item.status);
                         const speed = prog && prog.speed ? prog.speed : "";
@@ -187,12 +188,12 @@
                         <div class="queue-item">
                             <div class="queue-item-title truncate" title="${escapeHtml(item.title || item.url)}">${escapeHtml(item.title || item.url)}</div>
                             <div class="queue-item-info">
-                                ${isDownloading ? `
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar" style="width:${pct}%"></div>
+                                ${isActive ? `
+                                    <div class="progress-bar-container${hasProgress ? '' : ' progress-indeterminate'}">
+                                        <div class="progress-bar" style="width:${hasProgress ? pct : 100}%"></div>
                                     </div>
-                                    <span class="progress-text">${pct}%</span>
-                                    ${meta ? `<span class="progress-meta">${escapeHtml(meta)}</span>` : ""}
+                                    ${hasProgress ? `<span class="progress-text">${pct}%</span>` : ''}
+                                    ${meta ? `<span class="progress-meta">${escapeHtml(meta)}</span>` : ''}
                                 ` : `<span class="status-badge status-${escapeHtml(label).replace(/[^a-z]/g, '')}" title="${escapeHtml(rawStatus)}">${escapeHtml(label)}</span>`}
                                 <span class="queue-duration">${item.duration ? formatDuration(item.duration) : ""}</span>
                             </div>

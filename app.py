@@ -151,6 +151,8 @@ def api_queue():
         added, skipped = downloader.add_to_queue(project_id, urls)
         return jsonify({"added": added, "skipped": skipped})
 
+    # Ensure queue processing recovers after app restarts.
+    downloader.process_queue(project_id)
     queue = database.get_queue(project_id)
     for item in queue:
         prog = downloader.get_progress(item["url"])

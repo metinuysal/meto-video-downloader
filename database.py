@@ -289,6 +289,14 @@ def get_queue(project_id):
         return [dict(r) for r in rows]
 
 
+def requeue_downloading(project_id):
+    with get_db() as conn:
+        conn.execute(
+            "UPDATE videos SET status = 'queued' WHERE project_id = ? AND status = 'downloading'",
+            (project_id,)
+        )
+
+
 def delete_video(video_id):
     with get_db() as conn:
         conn.execute("DELETE FROM videos WHERE id = ?", (video_id,))
