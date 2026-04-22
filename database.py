@@ -1,4 +1,5 @@
 import os
+import shutil
 import sqlite3
 import threading
 from contextlib import contextmanager
@@ -7,16 +8,173 @@ import config
 
 _local = threading.local()
 
-PROJECT_SETTINGS_FIELDS = {"quality", "format", "audio_only", "subtitles", "thumbnail"}
+PROJECT_SETTINGS_FIELDS = {
+    "quality", "format", "audio_only", "subtitles", "thumbnail",
+    "cookies_browser", "proxy", "rate_limit", "output_template", 
+    "embed_metadata", "max_concurrent"
+}
 VIDEO_FILTER_FIELDS = {"orientation", "length_category", "aspect_ratio", "custom_category", "favorite"}
 
 
+def is_mysql():
+    return bool(config.DATABASE_URL and config.DATABASE_URL.startswith("mysql"))
+
+def is_postgres():
+    return bool(config.DATABASE_URL and config.DATABASE_URL.startswith("postgres"))
+
+def get_integrity_error():
+    if is_mysql():
+        import pymysql
+        return pymysql.err.IntegrityError
+    if is_postgres():
+        import psycopg2
+        return psycopg2.IntegrityError
+    return sqlite3.IntegrityError
+
+class MySQLCursorWrapper:
+    def __init__(self, cursor):
+        self._cursor = cursor
+        
+    def _translate_query(self, query):
+        return query.replace("?", "%s")
+        
+    def execute(self, query, params=None):
+        return self._cursor.execute(self._translate_query(query), params)
+        
+    def fetchone(self):
+        return self._cursor.fetchone()
+        
+    def fetchall(self):
+        return self._cursor.fetchall()
+        
+    @property
+    def rowcount(self):
+        return self._cursor.rowcount
+        
+    @property
+    def lastrowid(self):
+        return self._cursor.lastrowid
+        
+    def close(self):
+        self._cursor.close()
+        
+class MySQLConnectionWrapper:
+    def __init__(self, conn):
+        self._conn = conn
+        
+    def execute(self, query, params=None):
+        cursor = self.cursor()
+        cursor.execute(query, params)
+        return cursor
+        
+    def executescript(self, script):
+        cursor = self.cursor()
+        statements = script.split(";")
+        for stmt in statements:
+            stmt = stmt.strip()
+            if stmt:
+                cursor.execute(stmt)
+                
+    def cursor(self):
+        import pymysql.cursors
+        return MySQLCursorWrapper(self._conn.cursor(pymysql.cursors.DictCursor))
+        
+    def commit(self):
+        self._conn.commit()
+        
+    def rollback(self):
+        self._conn.rollback()
+
+class PostgresCursorWrapper:
+    def __init__(self, cursor):
+        self._cursor = cursor
+        
+    def _translate_query(self, query):
+        return query.replace("?", "%s")
+        
+    def execute(self, query, params=None):
+        return self._cursor.execute(self._translate_query(query), params)
+        
+    def fetchone(self):
+        row = self._cursor.fetchone()
+        return dict(row) if row else None
+        
+    def fetchall(self):
+        return [dict(r) for r in self._cursor.fetchall()]
+        
+    @property
+    def rowcount(self):
+        return self._cursor.rowcount
+        
+    @property
+    def lastrowid(self):
+        # Postgres returns lastrowid usually as an object, but psycopg2 might not populate it on generic INSERTS without RETURNING.
+        # However, for basic apps relying on sqlite lastrowid, we might need a workaround.
+        # But wait, SQLite lastrowid only works for simple inserts anyway. Let's see if we can get by.
+        return self._cursor.lastrowid
+        
+    def close(self):
+        self._cursor.close()
+
+class PostgresConnectionWrapper:
+    def __init__(self, conn):
+        self._conn = conn
+        
+    def execute(self, query, params=None):
+        cursor = self.cursor()
+        # To simulate lastrowid since psycopg2 doesn't fill it nicely without RETURNING id:
+        if query.strip().upper().startswith("INSERT INTO"):
+            # Simple hack to get returning id if possible, otherwise rely on the limited support
+            try:
+                cursor.execute(query + " RETURNING id", params)
+                res = cursor.fetchone()
+                if res and "id" in res:
+                    cursor._cursor.lastrowid = res["id"]
+            except Exception:
+                self._conn.rollback()
+                cursor.execute(query, params)
+        else:
+            cursor.execute(query, params)
+        return cursor
+        
+    def executescript(self, script):
+        cursor = self.cursor()
+        cursor._cursor.execute(script)
+                
+    def cursor(self):
+        import psycopg2.extras
+        return PostgresCursorWrapper(self._conn.cursor(cursor_factory=psycopg2.extras.DictCursor))
+        
+    def commit(self):
+        self._conn.commit()
+        
+    def rollback(self):
+        self._conn.rollback()
+
 def get_connection():
     if not hasattr(_local, "connection"):
-        _local.connection = sqlite3.connect(config.DATABASE_PATH)
-        _local.connection.row_factory = sqlite3.Row
-        _local.connection.execute("PRAGMA journal_mode=WAL")
-        _local.connection.execute("PRAGMA foreign_keys=ON")
+        if is_mysql():
+            import pymysql
+            from urllib.parse import urlparse
+            url = urlparse(config.DATABASE_URL)
+            conn = pymysql.connect(
+                host=url.hostname,
+                user=url.username,
+                password=url.password,
+                database=url.path.lstrip("/"),
+                port=url.port or 3306,
+                charset='utf8mb4'
+            )
+            _local.connection = MySQLConnectionWrapper(conn)
+        elif is_postgres():
+            import psycopg2
+            conn = psycopg2.connect(config.DATABASE_URL.replace("postgresql+psycopg2://", "postgresql://"))
+            _local.connection = PostgresConnectionWrapper(conn)
+        else:
+            _local.connection = sqlite3.connect(config.DATABASE_PATH)
+            _local.connection.row_factory = sqlite3.Row
+            _local.connection.execute("PRAGMA journal_mode=WAL")
+            _local.connection.execute("PRAGMA foreign_keys=ON")
     return _local.connection
 
 
@@ -33,7 +191,7 @@ def get_db():
 
 def init_db():
     with get_db() as conn:
-        conn.executescript("""
+        script = """
             CREATE TABLE IF NOT EXISTS projects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
@@ -98,7 +256,14 @@ def init_db():
             CREATE INDEX IF NOT EXISTS idx_videos_project_category ON videos(project_id, custom_category);
             CREATE INDEX IF NOT EXISTS idx_video_tags_video_id ON video_tags(video_id);
             CREATE INDEX IF NOT EXISTS idx_video_tags_tag_id ON video_tags(tag_id);
-        """)
+        """
+        if is_mysql():
+            script = script.replace("AUTOINCREMENT", "AUTO_INCREMENT")
+        elif is_postgres():
+            script = script.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
+            script = script.replace("DATETIME", "TIMESTAMP")
+            
+        conn.executescript(script)
 
     with get_db() as conn:
         exists = conn.execute("SELECT id FROM projects LIMIT 1").fetchone()
@@ -110,6 +275,21 @@ def init_db():
             conn.execute(
                 "INSERT INTO project_settings (project_id) VALUES (1)"
             )
+
+        # Migrate existing project_settings
+        columns = [
+            ("cookies_browser", "TEXT DEFAULT ''"),
+            ("proxy", "TEXT DEFAULT ''"),
+            ("rate_limit", "TEXT DEFAULT ''"),
+            ("output_template", "TEXT DEFAULT '%(id)s.%(ext)s'"),
+            ("embed_metadata", "INTEGER DEFAULT 0"),
+            ("max_concurrent", "INTEGER DEFAULT 1"),
+        ]
+        for col, col_def in columns:
+            try:
+                conn.execute(f"ALTER TABLE project_settings ADD COLUMN {col} {col_def}")
+            except Exception:
+                pass
 
 
 def get_projects():
@@ -134,7 +314,7 @@ def create_project(name):
                 (cursor.lastrowid,)
             )
             return {"id": cursor.lastrowid, "name": name, "slug": slug, "folder": folder}
-        except sqlite3.IntegrityError:
+        except get_integrity_error():
             return None
 
 
@@ -406,7 +586,7 @@ def create_tag(name):
         try:
             cursor = conn.execute("INSERT INTO tags (name) VALUES (?)", (name,))
             return {"id": cursor.lastrowid, "name": name}
-        except sqlite3.IntegrityError:
+        except get_integrity_error():
             row = conn.execute("SELECT * FROM tags WHERE name = ?", (name,)).fetchone()
             return dict(row) if row else None
 
@@ -420,7 +600,7 @@ def add_video_tag(video_id, tag_id):
     with get_db() as conn:
         try:
             conn.execute("INSERT INTO video_tags (video_id, tag_id) VALUES (?, ?)", (video_id, tag_id))
-        except sqlite3.IntegrityError:
+        except get_integrity_error():
             pass
 
 
@@ -474,3 +654,95 @@ def get_distinct_values(project_id, column):
 
 def get_all_categories(project_id):
     return get_distinct_values(project_id, "custom_category")
+
+
+def bulk_update_category(video_ids, category):
+    if not video_ids:
+        return 0
+    placeholders = ", ".join("?" for _ in video_ids)
+    with get_db() as conn:
+        cursor = conn.execute(
+            f"UPDATE videos SET custom_category = ? WHERE id IN ({placeholders})",
+            [category] + list(video_ids)
+        )
+        return cursor.rowcount
+
+
+def bulk_add_tag(video_ids, tag_name):
+    if not video_ids:
+        return 0
+    tag = create_tag(tag_name)
+    if not tag:
+        return 0
+    tag_id = tag["id"]
+    added = 0
+    with get_db() as conn:
+        for vid in video_ids:
+            try:
+                conn.execute("INSERT INTO video_tags (video_id, tag_id) VALUES (?, ?)", (vid, tag_id))
+                added += 1
+            except get_integrity_error():
+                pass
+    return added
+
+
+def bulk_delete_videos(video_ids):
+    if not video_ids:
+        return 0
+    placeholders = ", ".join("?" for _ in video_ids)
+    with get_db() as conn:
+        rows = conn.execute(
+            f"SELECT id, filepath FROM videos WHERE id IN ({placeholders})",
+            list(video_ids)
+        ).fetchall()
+        deleted = 0
+        for row in rows:
+            if row["filepath"] and os.path.exists(row["filepath"]):
+                try:
+                    os.remove(row["filepath"])
+                except OSError:
+                    pass
+            conn.execute("DELETE FROM videos WHERE id = ?", (row["id"],))
+            deleted += 1
+        return deleted
+
+
+def bulk_move_project(video_ids, target_project_id):
+    if not video_ids:
+        return 0
+    
+    target_project = get_project(target_project_id)
+    if not target_project:
+        return 0
+        
+    target_folder = os.path.join(config.VIDEO_DIR, target_project["folder"])
+    os.makedirs(target_folder, exist_ok=True)
+
+    placeholders = ", ".join("?" for _ in video_ids)
+    with get_db() as conn:
+        rows = conn.execute(
+            f"SELECT id, filepath FROM videos WHERE id IN ({placeholders})",
+            list(video_ids)
+        ).fetchall()
+        
+        moved = 0
+        for row in rows:
+            old_path = row["filepath"]
+            new_path = old_path
+            
+            if old_path and os.path.exists(old_path):
+                filename = os.path.basename(old_path)
+                new_path = os.path.join(target_folder, filename)
+                try:
+                    shutil.move(old_path, new_path)
+                except Exception:
+                    # If move fails, skip updating DB so they remain consistent
+                    continue
+                    
+            conn.execute(
+                "UPDATE videos SET project_id = ?, filepath = ? WHERE id = ?", 
+                (target_project_id, new_path, row["id"])
+            )
+            moved += 1
+            
+        return moved

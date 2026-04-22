@@ -114,6 +114,14 @@
             return;
         }
 
+        const urlList = normalizeUrls(urls);
+        const hasPlaylist = urlList.some(url => url.includes("playlist?list=") || url.includes("&list="));
+        if (hasPlaylist) {
+            if (!confirm("One or more links appear to be a playlist. This will add ALL videos in the playlist to the queue.\n\nDo you want to proceed?")) {
+                return;
+            }
+        }
+
         const prevBtnText = addBtn.textContent;
         addBtn.disabled = true;
         clearBtn.disabled = true;

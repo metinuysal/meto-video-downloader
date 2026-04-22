@@ -21,14 +21,48 @@ app.secret_key = _secret_key
 
 @app.context_processor
 def inject_config():
-    return {"POLL_INTERVAL_MS": config.POLL_INTERVAL_MS}
+    from flask import session
+    return {
+        "POLL_INTERVAL_MS": config.POLL_INTERVAL_MS,
+        "AUTH_ENABLED": bool(config.USERNAME and config.PASSWORD),
+        "AUTHENTICATED": session.get("authenticated", False)
+    }
 
 
 @app.before_request
 def load_current_project():
-    from flask import session
+    from flask import session, request, redirect, url_for
+    
+    if config.USERNAME and config.PASSWORD:
+        if request.endpoint and request.endpoint not in ("login_page", "static", "serve_video"):
+            if not session.get("authenticated"):
+                return redirect(url_for("login_page"))
+
     if "project_id" not in session:
         session["project_id"] = 1
+
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    from flask import session
+    if not (config.USERNAME and config.PASSWORD):
+        return redirect(url_for("index"))
+        
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if username == config.USERNAME and password == config.PASSWORD:
+            session["authenticated"] = True
+            return redirect(url_for("index"))
+        error = "Invalid username or password."
+        
+    return render_template("login.html", error=error)
+
+@app.route("/logout")
+def logout():
+    from flask import session
+    session.pop("authenticated", None)
+    return redirect(url_for("login_page"))
 
 
 @app.route("/")
@@ -257,6 +291,32 @@ def api_toggle_favorite(video_id):
     if result is not None:
         return jsonify({"favorite": result})
     return jsonify({"error": "Video not found"}), 404
+
+
+@app.route("/api/videos/bulk", methods=["POST"])
+def api_videos_bulk():
+    data = request.get_json()
+    action = data.get("action")
+    video_ids = data.get("video_ids", [])
+    value = data.get("value")
+
+    if not action or not video_ids:
+        return jsonify({"error": "Invalid request"}), 400
+
+    if action == "move_project":
+        moved = database.bulk_move_project(video_ids, int(value))
+        return jsonify({"moved": moved})
+    elif action == "set_category":
+        updated = database.bulk_update_category(video_ids, value)
+        return jsonify({"updated": updated})
+    elif action == "add_tag":
+        added = database.bulk_add_tag(video_ids, value)
+        return jsonify({"added": added})
+    elif action == "delete":
+        deleted = database.bulk_delete_videos(video_ids)
+        return jsonify({"deleted": deleted})
+
+    return jsonify({"error": "Unknown action"}), 400
 
 
 @app.route("/api/reset", methods=["POST"])

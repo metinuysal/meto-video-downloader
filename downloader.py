@@ -3,6 +3,7 @@ import shutil
 import threading
 import time
 import glob as glob_mod
+import concurrent.futures
 import yt_dlp
 
 import config
@@ -28,8 +29,22 @@ _progress_map = {}
 _progress_lock = threading.Lock()
 
 
+def _parse_rate_limit(rate_str):
+    if not rate_str: return None
+    rate_str = rate_str.upper().strip()
+    multiplier = 1
+    if rate_str.endswith("K"): multiplier = 1024; rate_str = rate_str[:-1]
+    elif rate_str.endswith("M"): multiplier = 1024 * 1024; rate_str = rate_str[:-1]
+    elif rate_str.endswith("G"): multiplier = 1024 * 1024 * 1024; rate_str = rate_str[:-1]
+    try:
+        return int(float(rate_str) * multiplier)
+    except ValueError:
+        return None
+
+
 def _get_ydl_opts(project_folder, settings):
-    outtmpl = os.path.join(config.VIDEO_DIR, project_folder, "%(id)s.%(ext)s")
+    template = settings.get("output_template") or "%(id)s.%(ext)s"
+    outtmpl = os.path.join(config.VIDEO_DIR, project_folder, template)
 
     fmt = settings.get("quality", "best")
     fmt_ext = settings.get("format", "mp4")
@@ -77,6 +92,19 @@ def _get_ydl_opts(project_folder, settings):
     # Configure JS runtime so yt-dlp can solve YouTube signatures.
     if _JS_RUNTIMES:
         opts["js_runtimes"] = _JS_RUNTIMES
+
+    if settings.get("proxy"):
+        opts["proxy"] = settings["proxy"]
+
+    if settings.get("cookies_browser"):
+        opts["cookiesfrombrowser"] = (settings["cookies_browser"],)
+        
+    rate_limit = _parse_rate_limit(settings.get("rate_limit"))
+    if rate_limit:
+        opts["ratelimit"] = rate_limit
+
+    if settings.get("embed_metadata"):
+        opts.setdefault("postprocessors", []).append({"key": "FFmpegMetadata", "add_metadata": True})
 
     return opts
 
@@ -308,21 +336,33 @@ def process_queue(project_id):
     # Recover items left as downloading after crashes/restarts.
     database.requeue_downloading(project_id)
 
+    settings = database.get_project_settings(project_id) or {}
+    max_concurrent = int(settings.get("max_concurrent") or 1)
+    max_concurrent = max(1, min(10, max_concurrent))
+
     def _run():
         try:
-            while True:
-                queued = database.get_queue(project_id)
-                if not queued:
-                    break
-                item = queued[0]
-                try:
-                    _download_item(item)
-                except Exception as e:
-                    try:
-                        database.update_video(item["id"], status=f"failed: {str(e)[:100]}")
-                    except Exception:
-                        pass
-                time.sleep(0.5)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_concurrent) as executor:
+                futures = set()
+                while True:
+                    queued = database.get_queue(project_id)
+                    pending = [q for q in queued if q["status"] == "queued"]
+                    
+                    if not pending and not futures:
+                        break
+                        
+                    for item in pending:
+                        if len(futures) >= max_concurrent:
+                            break
+                        database.update_video(item["id"], status="downloading")
+                        f = executor.submit(_download_item, item)
+                        futures.add(f)
+                    
+                    if futures:
+                        done, _ = concurrent.futures.wait(futures, return_when=concurrent.futures.FIRST_COMPLETED, timeout=1.0)
+                        futures.difference_update(done)
+                    else:
+                        time.sleep(1.0)
         except Exception:
             pass
         finally:

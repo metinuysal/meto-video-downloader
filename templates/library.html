@@ -69,7 +69,22 @@
     <div class="library-main">
         <div class="library-toolbar">
             <span id="video-count">0 videos</span>
-            <div class="toolbar-actions">
+            
+            <div id="bulk-toolbar" style="display:none; gap: 8px; align-items: center; background: #2a2a2a; padding: 4px 12px; border-radius: 6px; margin-left: 16px;">
+                <span id="selected-count" style="font-weight: 500; font-size: 0.9em; margin-right: 8px;">0 selected</span>
+                <select id="bulk-move-project" class="btn btn-sm" style="max-width: 150px;">
+                    <option value="">Move to...</option>
+                    {% for p in projects %}
+                    <option value="{{ p.id }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="bulk-category" class="btn btn-sm btn-outline">Set Category</button>
+                <button id="bulk-tag" class="btn btn-sm btn-outline">Add Tag</button>
+                <button id="bulk-delete" class="btn btn-sm btn-danger">Delete</button>
+                <button id="bulk-clear" class="btn btn-sm btn-outline">&times;</button>
+            </div>
+
+            <div class="toolbar-actions" style="margin-left: auto;">
                 <button class="btn btn-sm btn-outline filter-toggle" id="filter-toggle">Filters</button>
                 <div class="view-toggle">
                     <button id="view-grid" class="btn btn-sm active" title="Grid">&#9638;</button>
@@ -167,6 +182,7 @@
             const thumb = v.thumbnail ? `<img src="${escapeHtml(v.thumbnail)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='${placeholder.replace(/"/g, "\\'")}';this.remove();">` : placeholder;
             card.innerHTML = `
                 <div class="video-thumb" onclick="window.location.href='/video/${v.id}'">${thumb}
+                    <input type="checkbox" class="video-checkbox" data-id="${v.id}" onclick="event.stopPropagation(); toggleSelection(this);" style="position:absolute; top:8px; left:8px; width:18px; height:18px; z-index:10; cursor:pointer;">
                     <button class="star-btn" data-id="${v.id}" title="Toggle favorite">${star}</button>
                 </div>
                 <div class="video-info" onclick="window.location.href='/video/${v.id}'">
@@ -184,6 +200,7 @@
             row.className = "video-row";
             const smallThumb = v.thumbnail ? `<img src="${escapeHtml(v.thumbnail)}" alt="" loading="lazy" onerror="this.style.display='none'">` : "";
             row.innerHTML = `
+                <input type="checkbox" class="video-checkbox" data-id="${v.id}" onclick="event.stopPropagation(); toggleSelection(this);" style="margin: 0 12px; width:18px; height:18px; cursor:pointer;">
                 <div class="video-thumb small" onclick="window.location.href='/video/${v.id}'">${smallThumb}</div>
                 <div class="video-info" onclick="window.location.href='/video/${v.id}'">
                     <h4 class="truncate" title="${escapeHtml(v.title)}">${escapeHtml(v.title)}</h4>
@@ -267,6 +284,95 @@
 
     document.getElementById("close-filters").addEventListener("click", () => {
         document.getElementById("filters-panel").classList.remove("open");
+    });
+
+    let selectedVideoIds = new Set();
+
+    function updateBulkToolbar() {
+        const toolbar = document.getElementById("bulk-toolbar");
+        const countSpan = document.getElementById("selected-count");
+        if (selectedVideoIds.size > 0) {
+            toolbar.style.display = "flex";
+            countSpan.textContent = `${selectedVideoIds.size} selected`;
+        } else {
+            toolbar.style.display = "none";
+        }
+    }
+
+    window.toggleSelection = function(checkbox) {
+        const id = parseInt(checkbox.dataset.id);
+        if (checkbox.checked) {
+            selectedVideoIds.add(id);
+        } else {
+            selectedVideoIds.delete(id);
+        }
+        
+        // Sync checkboxes between grid and list views
+        document.querySelectorAll(`.video-checkbox[data-id="${id}"]`).forEach(cb => {
+            cb.checked = checkbox.checked;
+        });
+        
+        updateBulkToolbar();
+    };
+
+    function clearSelection() {
+        selectedVideoIds.clear();
+        document.querySelectorAll(".video-checkbox").forEach(cb => cb.checked = false);
+        updateBulkToolbar();
+    }
+
+    document.getElementById("bulk-clear").addEventListener("click", clearSelection);
+
+    async function executeBulkAction(action, value) {
+        if (!selectedVideoIds.size) return;
+        const ids = Array.from(selectedVideoIds);
+        try {
+            const res = await fetch("/api/videos/bulk", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, video_ids: ids, value })
+            });
+            if (res.ok) {
+                clearSelection();
+                loadVideos();
+                loadFilters();
+            } else {
+                alert("Bulk action failed.");
+            }
+        } catch (e) {
+            alert("Error communicating with server.");
+        }
+    }
+
+    document.getElementById("bulk-move-project").addEventListener("change", (e) => {
+        const targetId = e.target.value;
+        if (!targetId) return;
+        if (!confirm(`Move ${selectedVideoIds.size} videos to this project?`)) {
+            e.target.value = "";
+            return;
+        }
+        executeBulkAction("move_project", targetId);
+        e.target.value = "";
+    });
+
+    document.getElementById("bulk-category").addEventListener("click", () => {
+        const cat = prompt(`Enter category for ${selectedVideoIds.size} videos:`);
+        if (cat !== null) {
+            executeBulkAction("set_category", cat.trim());
+        }
+    });
+
+    document.getElementById("bulk-tag").addEventListener("click", () => {
+        const tag = prompt(`Enter tag to add to ${selectedVideoIds.size} videos:`);
+        if (tag !== null && tag.trim()) {
+            executeBulkAction("add_tag", tag.trim());
+        }
+    });
+
+    document.getElementById("bulk-delete").addEventListener("click", () => {
+        if (confirm(`Are you sure you want to delete ${selectedVideoIds.size} videos permanently?`)) {
+            executeBulkAction("delete", null);
+        }
     });
 
     loadFilters();

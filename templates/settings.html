@@ -53,6 +53,49 @@
             </label>
         </div>
 
+        <div class="setting-group">
+            <label class="toggle-label">
+                <input type="checkbox" id="setting-embed-metadata" {% if settings.embed_metadata %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+                <span>Embed Metadata</span>
+            </label>
+        </div>
+
+        <div class="setting-group">
+            <label>Cookies Browser</label>
+            <select id="setting-cookies-browser" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+                <option value="" {% if not settings.cookies_browser %}selected{% endif %}>None</option>
+                <option value="chrome" {% if settings.cookies_browser == 'chrome' %}selected{% endif %}>Chrome</option>
+                <option value="edge" {% if settings.cookies_browser == 'edge' %}selected{% endif %}>Edge</option>
+                <option value="firefox" {% if settings.cookies_browser == 'firefox' %}selected{% endif %}>Firefox</option>
+                <option value="brave" {% if settings.cookies_browser == 'brave' %}selected{% endif %}>Brave</option>
+                <option value="safari" {% if settings.cookies_browser == 'safari' %}selected{% endif %}>Safari</option>
+                <option value="opera" {% if settings.cookies_browser == 'opera' %}selected{% endif %}>Opera</option>
+            </select>
+            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">Extracts cookies from the browser to download restricted videos.</small>
+        </div>
+
+        <div class="setting-group">
+            <label>Proxy URL</label>
+            <input type="text" id="setting-proxy" value="{{ settings.proxy or '' }}" placeholder="http://user:pass@ip:port" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+        </div>
+
+        <div class="setting-group">
+            <label>Rate Limit</label>
+            <input type="text" id="setting-rate-limit" value="{{ settings.rate_limit or '' }}" placeholder="e.g. 5M, 500K" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+        </div>
+
+        <div class="setting-group">
+            <label>Output Template</label>
+            <input type="text" id="setting-output-template" value="{{ settings.output_template or '%(id)s.%(ext)s' }}" placeholder="%(id)s.%(ext)s" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">e.g., %(title)s.%(ext)s</small>
+        </div>
+
+        <div class="setting-group">
+            <label>Max Concurrent Downloads</label>
+            <input type="number" id="setting-max-concurrent" value="{{ settings.max_concurrent or 1 }}" min="1" max="10" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+        </div>
+
         <button id="save-settings" class="btn btn-primary">Save Settings</button>
         <span id="save-status"></span>
     </div>
@@ -171,6 +214,12 @@
             audio_only: document.getElementById("setting-audio").checked ? 1 : 0,
             subtitles: document.getElementById("setting-subtitles").checked ? 1 : 0,
             thumbnail: document.getElementById("setting-thumbnail").checked ? 1 : 0,
+            embed_metadata: document.getElementById("setting-embed-metadata").checked ? 1 : 0,
+            cookies_browser: document.getElementById("setting-cookies-browser").value,
+            proxy: document.getElementById("setting-proxy").value,
+            rate_limit: document.getElementById("setting-rate-limit").value,
+            output_template: document.getElementById("setting-output-template").value,
+            max_concurrent: parseInt(document.getElementById("setting-max-concurrent").value) || 1,
         };
         const status = document.getElementById("save-status");
         status.textContent = "Saving...";
