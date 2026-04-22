@@ -15,3 +15,4 @@ bulk_video.db-shm
 
 videos/
 data/
+.env
