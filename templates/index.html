@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block title %}Download - METO Bulk Video Downloader{% endblock %}
+
+{% block content %}
+<div class="landing-hero">
+    <div class="landing-hero-main">
+        <h1>Download</h1>
+        <p>Paste video, playlist, or channel links (one per line). Downloads show up in <a href="/library">Library</a>.</p>
+    </div>
+    <div class="landing-hero-meta">
+        <span class="badge">Project: {{ current.name }}</span>
+    </div>
+</div>
+
+<div class="landing-grid">
+    <div class="landing-card landing-card-form">
+        <form id="download-form">
+            <label class="field-label" for="url-input">Links</label>
+            <textarea id="url-input" placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..." rows="7" autocomplete="off" spellcheck="false"></textarea>
+            <div class="form-footer">
+                <div class="form-hints">
+                    <span id="url-count" class="badge">0 links</span>
+                    <span class="hint-text">Ctrl+Enter to add</span>
+                </div>
+                <div class="form-actions">
+                    <button id="add-to-queue" type="submit" class="btn btn-primary">Add to Queue</button>
+                    <button id="clear-input" type="button" class="btn btn-outline">Clear</button>
+                    <span id="submit-status"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="landing-card landing-card-tips">
+        <h2>Quick Tips</h2>
+        <ul class="tips-list">
+            <li>Mix videos, playlists, and channels. One link per line.</li>
+            <li>Duplicates get skipped automatically.</li>
+            <li>Change quality, format, audio-only, subtitles, and thumbnails in <a href="/settings">Settings</a>.</li>
+            <li>Switch projects from the top bar.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="queue-section">
+    <div class="queue-header">
+        <div class="queue-header-left">
+            <h2>Queue</h2>
+            <span id="queue-count" class="badge">0</span>
+            <span id="queue-updated" class="queue-updated"></span>
+        </div>
+        <button id="refresh-queue" class="btn btn-sm">Refresh</button>
+    </div>
+    <div id="queue-container">
+        <p class="empty-state">No active downloads.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const POLL_INTERVAL = {{ POLL_INTERVAL_MS }};
+    const PROJECT_ID = {{ current.id }};
+
+    const form = document.getElementById("download-form");
+    const input = document.getElementById("url-input");
+    const addBtn = document.getElementById("add-to-queue");
+    const clearBtn = document.getElementById("clear-input");
+    const status = document.getElementById("submit-status");
+    const urlCount = document.getElementById("url-count");
+    const queueCount = document.getElementById("queue-count");
+    const queueUpdated = document.getElementById("queue-updated");
+
+    function normalizeUrls(text) {
+        return text
+            .replace(/,/g, "\n")
+            .split("\n")
+            .map(s => s.trim())
+            .filter(Boolean);
+    }
+
+    function setStatus(text, kind) {
+        status.textContent = text || "";
+        status.dataset.kind = kind || "";
+    }
+
+    function updateUrlCount() {
+        const urls = normalizeUrls(input.value);
+        const n = urls.length;
+        urlCount.textContent = `${n} link${n === 1 ? "" : "s"}`;
+    }
+
+    input.addEventListener("input", updateUrlCount);
+    input.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            form.requestSubmit();
+        }
+    });
+
+    clearBtn.addEventListener("click", () => {
+        input.value = "";
+        updateUrlCount();
+        setStatus("", "");
+        input.focus();
+    });
+
+    updateUrlCount();
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const urls = input.value;
+        if (!urls.trim()) {
+            setStatus("Paste at least one link.", "warn");
+            return;
+        }
+
+        const prevBtnText = addBtn.textContent;
+        addBtn.disabled = true;
+        clearBtn.disabled = true;
+        addBtn.textContent = "Adding...";
+        setStatus("Adding...", "info");
+
+        try {
+            const res = await fetch(`/api/queue?project=${PROJECT_ID}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ urls }),
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                setStatus(`Error: ${err.error || "Failed"}`, "error");
+                return;
+            }
+            const data = await res.json();
+            setStatus(`Added: ${data.added}, Skipped: ${data.skipped}`, "ok");
+            if (data.added > 0) {
+                input.value = "";
+                updateUrlCount();
+            }
+            setTimeout(() => { setStatus("", ""); }, 4000);
+            loadQueue();
+        } catch (err) {
+            setStatus("Connection error", "error");
+        } finally {
+            addBtn.disabled = false;
+            clearBtn.disabled = false;
+            addBtn.textContent = prevBtnText;
+        }
+    });
+
+    function statusLabel(raw) {
+        const text = (raw || "").trim();
+        if (!text) return "";
+        return text.split(":")[0].trim();
+    }
+
+    function statusDetail(raw) {
+        return (raw || "").trim();
+    }
+
+    async function loadQueue() {
+        try {
+            const res = await fetch(`/api/queue?project=${PROJECT_ID}`);
+            if (!res.ok) return;
+            const queue = await res.json();
+            const container = document.getElementById("queue-container");
+            queueCount.textContent = String(queue.length);
+            queueUpdated.textContent = queue.length ? `Updated ${new Date().toLocaleTimeString()}` : "";
+
+            if (!queue.length) {
+                container.innerHTML = '<p class="empty-state">No active downloads.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="queue-list">
+                    ${queue.map(item => {
+                        const prog = item.progress || null;
+                        const pct = prog ? prog.percent : 0;
+                        const isDownloading = item.status === "downloading" && prog;
+                        const rawStatus = statusDetail(item.status);
+                        const label = statusLabel(item.status);
+                        const speed = prog && prog.speed ? prog.speed : "";
+                        const eta = prog && prog.eta ? prog.eta : "";
+                        const meta = [speed, eta].filter(Boolean).join(" · ");
+                        return `
+                        <div class="queue-item">
+                            <div class="queue-item-title truncate" title="${escapeHtml(item.title || item.url)}">${escapeHtml(item.title || item.url)}</div>
+                            <div class="queue-item-info">
+                                ${isDownloading ? `
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar" style="width:${pct}%"></div>
+                                    </div>
+                                    <span class="progress-text">${pct}%</span>
+                                    ${meta ? `<span class="progress-meta">${escapeHtml(meta)}</span>` : ""}
+                                ` : `<span class="status-badge status-${escapeHtml(label).replace(/[^a-z]/g, '')}" title="${escapeHtml(rawStatus)}">${escapeHtml(label)}</span>`}
+                                <span class="queue-duration">${item.duration ? formatDuration(item.duration) : ""}</span>
+                            </div>
+                        </div>
+                        `;
+                    }).join("")}
+                </div>
+            `;
+        } catch (err) {
+            console.error("Queue load error:", err);
+        }
+    }
+
+    document.getElementById("refresh-queue").addEventListener("click", loadQueue);
+    loadQueue();
+    setInterval(loadQueue, POLL_INTERVAL);
+</script>
+{% endblock %}

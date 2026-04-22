@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}{{ video.title }} - METO Bulk Video Downloader{% endblock %}
+
+{% block content %}
+<div class="detail-layout">
+    <div class="detail-player">
+        {% if video.video_url %}
+        <video controls class="video-player" preload="metadata">
+            <source src="{{ video.video_url }}">
+            Your browser does not support video.
+        </video>
+        {% else %}
+        <div class="video-player no-video">
+            <p>No video file found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="detail-sidebar">
+        <h2 class="detail-title">{{ video.title }}</h2>
+
+        <div class="detail-meta">
+            {% if video.uploader %}
+            <div class="meta-row"><span class="meta-label">Uploader</span><span>{{ video.uploader }}</span></div>
+            {% endif %}
+            {% if video.upload_date %}
+            <div class="meta-row"><span class="meta-label">Upload Date</span><span>{{ video.upload_date }}</span></div>
+            {% endif %}
+            {% if video.duration %}
+            <div class="meta-row"><span class="meta-label">Duration</span><span>{{ video.duration // 60 }}:{{ "%02d" | format(video.duration % 60) }}</span></div>
+            {% endif %}
+            {% if video.width and video.height %}
+            <div class="meta-row"><span class="meta-label">Resolution</span><span>{{ video.width }}x{{ video.height }}</span></div>
+            {% endif %}
+            {% if video.aspect_ratio %}
+            <div class="meta-row"><span class="meta-label">Aspect Ratio</span><span>{{ video.aspect_ratio }}</span></div>
+            {% endif %}
+            {% if video.orientation %}
+            <div class="meta-row"><span class="meta-label">Orientation</span><span class="badge">{{ video.orientation }}</span></div>
+            {% endif %}
+            {% if video.length_category %}
+            <div class="meta-row"><span class="meta-label">Length</span><span class="badge">{{ video.length_category }}</span></div>
+            {% endif %}
+            {% if video.filesize %}
+            <div class="meta-row"><span class="meta-label">Size</span><span id="filesize-display"></span></div>
+            {% endif %}
+            {% if video.downloaded_at %}
+            <div class="meta-row"><span class="meta-label">Downloaded</span><span>{{ video.downloaded_at }}</span></div>
+            {% endif %}
+            <div class="meta-row"><span class="meta-label">Status</span><span class="status-badge status-{{ video.status }}">{{ video.status }}</span></div>
+            <div class="meta-row">
+                <span class="meta-label">Favorite</span>
+                <button id="detail-favorite" class="detail-star-btn {% if video.favorite %}starred{% endif %}" data-id="{{ video.id }}">
+                    {% if video.favorite %}&#9733;{% else %}&#9734;{% endif %}
+                </button>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3>Category</h3>
+            <div class="category-selector">
+                <select id="category-select">
+                    <option value="">No category</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if video.custom_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="new-category" placeholder="New category...">
+                <button id="set-category" class="btn btn-sm">Set</button>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3>Tags</h3>
+            <div class="tag-input-row">
+                <input type="text" id="tag-input" placeholder="Add tag...">
+                <button id="add-tag" class="btn btn-sm">Add</button>
+            </div>
+            <div id="tags-container" class="tags-container">
+                {% for tag in tags %}
+                <span class="tag" data-id="{{ tag.id }}">{{ tag.name }}<button class="tag-remove" data-tag-id="{{ tag.id }}">&times;</button></span>
+                {% endfor %}
+            </div>
+            <div id="existing-tags" class="existing-tags">
+                {% for tag in all_tags %}
+                    {% if tag not in tags %}
+                    <button class="tag-btn" data-tag-id="{{ tag.id }}">{{ tag.name }}</button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="detail-actions">
+            <a href="{{ video.url }}" target="_blank" class="btn btn-outline">Open Source</a>
+            <button id="delete-video" class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const VIDEO_ID = {{ video.id }};
+
+    if ({{ video.filesize }}) {
+        document.getElementById("filesize-display").textContent = formatFileSize({{ video.filesize }});
+    }
+
+    document.getElementById("set-category").addEventListener("click", async () => {
+        const select = document.getElementById("category-select");
+        const input = document.getElementById("new-category");
+        const category = input.value.trim() || select.value;
+
+        await fetch(`/api/video/${VIDEO_ID}/category`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ category }),
+        });
+
+        if (input.value.trim()) {
+            const opt = document.createElement("option");
+            opt.value = input.value.trim();
+            opt.textContent = input.value.trim();
+            opt.selected = true;
+            select.appendChild(opt);
+            input.value = "";
+        }
+    });
+
+    async function refreshTags() {
+        const res = await fetch(`/api/video/${VIDEO_ID}/tag`);
+        const tags = await res.json();
+        const container = document.getElementById("tags-container");
+        const existingContainer = document.getElementById("existing-tags");
+
+        container.innerHTML = tags.map(t => `
+            <span class="tag" data-id="${t.id}">${escapeHtml(t.name)}<button class="tag-remove" data-tag-id="${t.id}">&times;</button></span>
+        `).join("");
+
+        const tagIds = new Set(tags.map(t => t.id));
+        const allRes = await fetch("/api/tags");
+        const allTags = await allRes.json();
+        existingContainer.innerHTML = allTags
+            .filter(t => !tagIds.has(t.id))
+            .map(t => `<button class="tag-btn" data-tag-id="${t.id}">${escapeHtml(t.name)}</button>`)
+            .join("");
+    }
+
+    document.getElementById("add-tag").addEventListener("click", async () => {
+        const input = document.getElementById("tag-input");
+        const name = input.value.trim();
+        if (!name) return;
+        await fetch(`/api/video/${VIDEO_ID}/tag`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tag_name: name }),
+        });
+        input.value = "";
+        refreshTags();
+    });
+
+    document.getElementById("tag-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("add-tag").click(); }
+    });
+
+    document.getElementById("tags-container").addEventListener("click", async (e) => {
+        if (e.target.classList.contains("tag-remove")) {
+            await fetch(`/api/video/${VIDEO_ID}/tag/${e.target.dataset.tagId}`, { method: "DELETE" });
+            refreshTags();
+        }
+    });
+
+    document.getElementById("existing-tags").addEventListener("click", async (e) => {
+        if (e.target.classList.contains("tag-btn")) {
+            await fetch(`/api/video/${VIDEO_ID}/tag`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tag_id: parseInt(e.target.dataset.tagId) }),
+            });
+            refreshTags();
+        }
+    });
+
+    document.getElementById("delete-video").addEventListener("click", async () => {
+        if (!confirm("Delete this video and its file?")) return;
+        await fetch(`/api/video/${VIDEO_ID}`, { method: "DELETE" });
+        window.location.href = "/library";
+    });
+
+    document.getElementById("detail-favorite").addEventListener("click", async (e) => {
+        const res = await fetch(`/api/video/${VIDEO_ID}/favorite`, { method: "POST" });
+        const data = await res.json();
+        e.target.innerHTML = data.favorite ? "&#9733;" : "&#9734;";
+        e.target.classList.toggle("starred", data.favorite);
+    });
+</script>
+{% endblock %}

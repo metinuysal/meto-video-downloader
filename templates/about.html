@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}About - METO Bulk Video Downloader{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>About</h1>
+    <p><span class="about-inline-brand">METO</span> Bulk Video Downloader runs on your machine: queue links, download with open-source tooling, and browse everything in the library.</p>
+</div>
+
+<div class="about-layout">
+    <div class="settings-card about-card">
+        <h2>Author</h2>
+        <p class="about-text">Maintained by <strong>metinuysal</strong>. More work and contact via the links below.</p>
+        <ul class="about-link-list">
+            <li>
+                <a href="https://metinuysal.net" target="_blank" rel="noopener noreferrer" class="about-external-link">metinuysal.net</a>
+                <span class="about-link-hint">Website</span>
+            </li>
+            <li>
+                <a href="https://github.com/metinuysal" target="_blank" rel="noopener noreferrer" class="about-external-link">github.com/metinuysal</a>
+                <span class="about-link-hint">GitHub profile</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="settings-card about-card">
+        <h2>Open source</h2>
+        <p class="about-text">This app bundles and orchestrates trusted open-source utilities—see the project README for details (for example <code>yt-dlp</code>, Flask, and SQLite).</p>
+    </div>
+</div>
+{% endblock %}

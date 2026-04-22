@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}METO Bulk Video Downloader{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/" class="nav-brand">
+                <span class="brand-meto">METO</span>
+                <span class="brand-sub">Bulk Video Downloader</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <select id="project-select" class="project-select">
+                {% for p in projects %}
+                <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Download</a>
+            <a href="/library" class="{% if request.path == '/library' %}active{% endif %}">Library</a>
+            <a href="/settings" class="{% if request.path == '/settings' %}active{% endif %}">Settings</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="/">Download</a>
+        <a href="/library">Library</a>
+        <a href="/settings">Settings</a>
+        <a href="/about">About</a>
+        <select class="project-select-mobile">
+            {% for p in projects %}
+            <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="/static/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

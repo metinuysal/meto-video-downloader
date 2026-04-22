@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}Settings - METO Bulk Video Downloader{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Settings</h1>
+    <p>Configure <strong>{{ current.name }}</strong></p>
+</div>
+
+<div class="settings-layout">
+    <div class="settings-card">
+        <h2>Download Quality</h2>
+        <div class="setting-group">
+            <label>Video Quality</label>
+            <select id="setting-quality">
+                <option value="best" {% if settings.quality == 'best' %}selected{% endif %}>Best Available</option>
+                <option value="1080" {% if settings.quality == '1080' %}selected{% endif %}>1080p Max</option>
+                <option value="720" {% if settings.quality == '720' %}selected{% endif %}>720p Max</option>
+                <option value="480" {% if settings.quality == '480' %}selected{% endif %}>480p Max</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>Output Format</label>
+            <select id="setting-format">
+                <option value="mp4" {% if settings.format == 'mp4' %}selected{% endif %}>MP4</option>
+                <option value="mkv" {% if settings.format == 'mkv' %}selected{% endif %}>MKV</option>
+                <option value="webm" {% if settings.format == 'webm' %}selected{% endif %}>WebM</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="toggle-label">
+                <input type="checkbox" id="setting-audio" {% if settings.audio_only %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+                <span>Audio Only</span>
+            </label>
+        </div>
+
+        <div class="setting-group">
+            <label class="toggle-label">
+                <input type="checkbox" id="setting-subtitles" {% if settings.subtitles %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+                <span>Download Subtitles</span>
+            </label>
+        </div>
+
+        <div class="setting-group">
+            <label class="toggle-label">
+                <input type="checkbox" id="setting-thumbnail" {% if settings.thumbnail is not defined or settings.thumbnail %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+                <span>Download Thumbnail</span>
+            </label>
+        </div>
+
+        <button id="save-settings" class="btn btn-primary">Save Settings</button>
+        <span id="save-status"></span>
+    </div>
+
+    <div class="settings-card">
+        <h2>Projects</h2>
+        <div class="project-list" id="project-list">
+            {% for p in projects %}
+            <div class="project-item" data-id="{{ p.id }}">
+                <span class="project-name">{{ p.name }}</span>
+                {% if p.id != 1 %}
+                <button class="btn btn-sm btn-danger delete-project" data-id="{{ p.id }}">&times;</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="add-project">
+            <input type="text" id="new-project-name" placeholder="New project name...">
+            <button id="add-project" class="btn btn-sm btn-primary">Add</button>
+        </div>
+    </div>
+
+    <div class="settings-card full-width">
+        <h2>Storage & Cleanup</h2>
+        <div id="project-stats" class="stats-grid">
+            <div class="stat-item"><span class="stat-value" id="stat-total">-</span><span class="stat-label">Total Videos</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-favorites">-</span><span class="stat-label">Favorites</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-completed">-</span><span class="stat-label">Completed</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-failed">-</span><span class="stat-label">Failed</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-size">-</span><span class="stat-label">Total Size</span></div>
+        </div>
+
+        <div class="reset-section">
+            <h3>Reset & Delete</h3>
+
+            <div class="reset-row">
+                <div>
+                    <label>Delete videos downloaded before</label>
+                    <input type="date" id="reset-date">
+                </div>
+                <button id="reset-by-date" class="btn btn-sm btn-danger">Delete Before Date</button>
+            </div>
+
+            <div class="reset-row">
+                <div>
+                    <label>Delete videos by status</label>
+                    <select id="reset-status">
+                        <option value="failed">Failed</option>
+                        <option value="queued">Queued</option>
+                        <option value="downloading">Downloading</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <button id="reset-by-status" class="btn btn-sm btn-danger">Delete by Status</button>
+            </div>
+
+            <div class="reset-row reset-danger">
+                <div>
+                    <label>Delete ALL videos and files in this project</label>
+                </div>
+                <button id="reset-all" class="btn btn-sm btn-danger">Reset Project</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const PROJECT_ID = {{ current.id }};
+
+    async function loadStats() {
+        const res = await fetch(`/api/stats?project=${PROJECT_ID}`);
+        const s = await res.json();
+        document.getElementById("stat-total").textContent = s.total;
+        document.getElementById("stat-favorites").textContent = s.favorites;
+        document.getElementById("stat-completed").textContent = s.completed;
+        document.getElementById("stat-failed").textContent = s.failed;
+        document.getElementById("stat-size").textContent = formatFileSize(s.total_size);
+    }
+
+    async function doReset(action, body) {
+        const res = await fetch(`/api/reset?project=${PROJECT_ID}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        alert(`Deleted ${data.deleted} video(s)`);
+        loadStats();
+    }
+
+    document.getElementById("reset-by-date").addEventListener("click", () => {
+        const date = document.getElementById("reset-date").value;
+        if (!date) { alert("Select a date"); return; }
+        if (!confirm(`Delete all videos downloaded before ${date}?`)) return;
+        doReset("before_date", { action: "before_date", date });
+    });
+
+    document.getElementById("reset-by-status").addEventListener("click", () => {
+        const status = document.getElementById("reset-status").value;
+        if (!confirm(`Delete all ${status} videos?`)) return;
+        doReset("by_status", { action: "by_status", status });
+    });
+
+    document.getElementById("reset-all").addEventListener("click", () => {
+        if (!confirm("Delete ALL videos and files in this project? This cannot be undone.")) return;
+        if (!confirm("Are you really sure?")) return;
+        doReset("all", { action: "all" });
+    });
+
+    document.getElementById("save-settings").addEventListener("click", async () => {
+        const data = {
+            quality: document.getElementById("setting-quality").value,
+            format: document.getElementById("setting-format").value,
+            audio_only: document.getElementById("setting-audio").checked ? 1 : 0,
+            subtitles: document.getElementById("setting-subtitles").checked ? 1 : 0,
+            thumbnail: document.getElementById("setting-thumbnail").checked ? 1 : 0,
+        };
+        const status = document.getElementById("save-status");
+        status.textContent = "Saving...";
+        try {
+            await fetch(`/api/settings?project=${PROJECT_ID}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            status.textContent = "Saved!";
+            setTimeout(() => { status.textContent = ""; }, 2000);
+        } catch (err) {
+            status.textContent = "Error saving";
+        }
+    });
+
+    document.getElementById("add-project").addEventListener("click", async () => {
+        const input = document.getElementById("new-project-name");
+        const name = input.value.trim();
+        if (!name) return;
+        try {
+            const res = await fetch("/api/projects", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name }),
+            });
+            if (res.ok) { location.reload(); }
+            else { const err = await res.json(); alert(err.error || "Failed"); }
+        } catch (err) { alert("Error creating project"); }
+    });
+
+    document.getElementById("project-list").addEventListener("click", async (e) => {
+        if (e.target.classList.contains("delete-project")) {
+            if (!confirm("Delete this project and all its videos?")) return;
+            await fetch(`/api/projects/${e.target.dataset.id}`, { method: "DELETE" });
+            location.reload();
+        }
+    });
+
+    loadStats();
+</script>
+{% endblock %}

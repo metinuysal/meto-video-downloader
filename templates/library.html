@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% block title %}Library - METO Bulk Video Downloader{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Library</h1>
+</div>
+
+<div class="library-layout">
+    <aside class="filters-panel" id="filters-panel">
+        <div class="filters-header">
+            <h3>Filters</h3>
+            <button class="btn btn-sm btn-outline close-filters" id="close-filters">&times;</button>
+        </div>
+
+        <div class="filter-group">
+            <label>Search</label>
+            <input type="text" id="filter-search" placeholder="Title or uploader...">
+        </div>
+
+        <div class="filter-group">
+            <label>Favorites</label>
+            <select id="filter-favorite">
+                <option value="">All</option>
+                <option value="1">Favorites Only</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Orientation</label>
+            <select id="filter-orientation"><option value="">All</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label>Length</label>
+            <select id="filter-length">
+                <option value="">All</option>
+                <option value="short">Short (&lt;1min)</option>
+                <option value="medium">Medium (1-10min)</option>
+                <option value="long">Long (10-60min)</option>
+                <option value="feature">Feature (&gt;60min)</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Aspect Ratio</label>
+            <select id="filter-aspect"><option value="">All</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label>Category</label>
+            <select id="filter-category"><option value="">All</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label>Sort By</label>
+            <select id="filter-sort">
+                <option value="downloaded_at">Date Downloaded</option>
+                <option value="title">Title</option>
+                <option value="duration">Duration</option>
+                <option value="filesize">File Size</option>
+                <option value="upload_date">Upload Date</option>
+            </select>
+        </div>
+
+        <button id="clear-filters" class="btn btn-sm btn-outline">Clear Filters</button>
+    </aside>
+
+    <div class="library-main">
+        <div class="library-toolbar">
+            <span id="video-count">0 videos</span>
+            <div class="toolbar-actions">
+                <button class="btn btn-sm btn-outline filter-toggle" id="filter-toggle">Filters</button>
+                <div class="view-toggle">
+                    <button id="view-grid" class="btn btn-sm active" title="Grid">&#9638;</button>
+                    <button id="view-list" class="btn btn-sm" title="List">&#9776;</button>
+                </div>
+            </div>
+        </div>
+        <div id="video-grid" class="video-grid"></div>
+        <div id="video-list" class="video-list" style="display:none;"></div>
+        <div id="load-more-container" style="text-align:center;padding:20px;">
+            <button id="load-more" class="btn btn-outline" style="display:none;">Load More</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const PROJECT_ID = {{ current.id }};
+    let currentOffset = 0;
+    const LIMIT = 24;
+    let currentView = "grid";
+
+    async function loadFilters() {
+        const res = await fetch(`/api/filters?project=${PROJECT_ID}`);
+        const data = await res.json();
+        populateSelect("filter-orientation", data.orientations || []);
+        populateSelect("filter-aspect", data.aspect_ratios || []);
+        populateSelect("filter-category", data.categories || []);
+    }
+
+    function populateSelect(id, items) {
+        const sel = document.getElementById(id);
+        const first = sel.options[0];
+        sel.innerHTML = "";
+        sel.appendChild(first);
+        items.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item;
+            opt.textContent = item;
+            sel.appendChild(opt);
+        });
+    }
+
+    async function loadVideos(append = false) {
+        const params = new URLSearchParams();
+        params.set("project", PROJECT_ID);
+        params.set("limit", LIMIT);
+        params.set("offset", append ? currentOffset : 0);
+
+        const search = document.getElementById("filter-search").value;
+        if (search) params.set("search", search);
+        const favorite = document.getElementById("filter-favorite").value;
+        if (favorite) params.set("favorite", favorite);
+        const orientation = document.getElementById("filter-orientation").value;
+        if (orientation) params.set("orientation", orientation);
+        const length = document.getElementById("filter-length").value;
+        if (length) params.set("length_category", length);
+        const aspect = document.getElementById("filter-aspect").value;
+        if (aspect) params.set("aspect_ratio", aspect);
+        const category = document.getElementById("filter-category").value;
+        if (category) params.set("custom_category", category);
+        params.set("sort", document.getElementById("filter-sort").value);
+
+        const res = await fetch(`/api/videos?${params}`);
+        const data = await res.json();
+
+        document.getElementById("video-count").textContent = `${data.total} video${data.total !== 1 ? "s" : ""}`;
+
+        if (!append) currentOffset = 0;
+        currentOffset = (append ? currentOffset : 0) + data.videos.length;
+
+        const showMore = currentOffset < data.total;
+        document.getElementById("load-more").style.display = showMore ? "inline-block" : "none";
+
+        renderVideos(data.videos, append);
+    }
+
+    function renderVideos(videos, append) {
+        const grid = document.getElementById("video-grid");
+        const list = document.getElementById("video-list");
+        if (!append) { grid.innerHTML = ""; list.innerHTML = ""; }
+
+        if (!videos.length && !append) {
+            grid.innerHTML = '<p class="empty-state">No videos found.</p>';
+            return;
+        }
+
+        const placeholder = '<div class="thumb-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>';
+
+        videos.forEach(v => {
+            const star = v.favorite ? '&#9733;' : '&#9734;';
+            const card = document.createElement("div");
+            card.className = "video-card";
+            const thumb = v.thumbnail ? `<img src="${escapeHtml(v.thumbnail)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='${placeholder.replace(/"/g, "\\'")}';this.remove();">` : placeholder;
+            card.innerHTML = `
+                <div class="video-thumb" onclick="window.location.href='/video/${v.id}'">${thumb}
+                    <button class="star-btn" data-id="${v.id}" title="Toggle favorite">${star}</button>
+                </div>
+                <div class="video-info" onclick="window.location.href='/video/${v.id}'">
+                    <h4 class="truncate" title="${escapeHtml(v.title)}">${escapeHtml(v.title)}</h4>
+                    <div class="video-meta">
+                        ${v.duration_fmt ? `<span>${v.duration_fmt}</span>` : ""}
+                        ${v.orientation ? `<span class="badge">${v.orientation}</span>` : ""}
+                        ${v.aspect_ratio ? `<span class="badge">${v.aspect_ratio}</span>` : ""}
+                    </div>
+                    ${v.tags && v.tags.length ? `<div class="video-tags">${v.tags.slice(0,3).map(t => `<span class="tag">${escapeHtml(t.name)}</span>`).join("")}</div>` : ""}
+                </div>`;
+            grid.appendChild(card);
+
+            const row = document.createElement("div");
+            row.className = "video-row";
+            const smallThumb = v.thumbnail ? `<img src="${escapeHtml(v.thumbnail)}" alt="" loading="lazy" onerror="this.style.display='none'">` : "";
+            row.innerHTML = `
+                <div class="video-thumb small" onclick="window.location.href='/video/${v.id}'">${smallThumb}</div>
+                <div class="video-info" onclick="window.location.href='/video/${v.id}'">
+                    <h4 class="truncate" title="${escapeHtml(v.title)}">${escapeHtml(v.title)}</h4>
+                    <div class="video-meta">
+                        ${v.uploader ? `<span>${escapeHtml(v.uploader)}</span>` : ""}
+                        <span>${v.duration_fmt || "-"}</span>
+                        ${v.filesize_fmt ? `<span>${v.filesize_fmt}</span>` : ""}
+                        ${v.orientation ? `<span class="badge">${v.orientation}</span>` : ""}
+                        ${v.custom_category ? `<span class="badge cat">${escapeHtml(v.custom_category)}</span>` : ""}
+                    </div>
+                </div>
+                <button class="star-btn-row" data-id="${v.id}" title="Toggle favorite">${star}</button>`;
+            list.appendChild(row);
+        });
+    }
+
+    document.getElementById("video-grid").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".star-btn");
+        if (!btn) return;
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const res = await fetch(`/api/video/${id}/favorite`, { method: "POST" });
+        const data = await res.json();
+        btn.innerHTML = data.favorite ? "&#9733;" : "&#9734;";
+        btn.classList.toggle("starred", data.favorite);
+    });
+
+    document.getElementById("video-list").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".star-btn-row");
+        if (!btn) return;
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const res = await fetch(`/api/video/${id}/favorite`, { method: "POST" });
+        const data = await res.json();
+        btn.innerHTML = data.favorite ? "&#9733;" : "&#9734;";
+        btn.classList.toggle("starred", data.favorite);
+    });
+
+    document.getElementById("clear-filters").addEventListener("click", () => {
+        document.getElementById("filter-search").value = "";
+        document.getElementById("filter-favorite").value = "";
+        document.getElementById("filter-orientation").value = "";
+        document.getElementById("filter-length").value = "";
+        document.getElementById("filter-aspect").value = "";
+        document.getElementById("filter-category").value = "";
+        document.getElementById("filter-sort").value = "downloaded_at";
+        loadVideos();
+    });
+
+    let searchTimeout;
+    document.getElementById("filter-search").addEventListener("input", () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => loadVideos(), 400);
+    });
+
+    ["filter-favorite", "filter-orientation", "filter-length", "filter-aspect", "filter-category", "filter-sort"].forEach(id => {
+        document.getElementById(id).addEventListener("change", () => loadVideos());
+    });
+
+    document.getElementById("load-more").addEventListener("click", () => loadVideos(true));
+
+    document.getElementById("view-grid").addEventListener("click", () => {
+        currentView = "grid";
+        document.getElementById("video-grid").style.display = "";
+        document.getElementById("video-list").style.display = "none";
+        document.getElementById("view-grid").classList.add("active");
+        document.getElementById("view-list").classList.remove("active");
+    });
+
+    document.getElementById("view-list").addEventListener("click", () => {
+        currentView = "list";
+        document.getElementById("video-grid").style.display = "none";
+        document.getElementById("video-list").style.display = "";
+        document.getElementById("view-list").classList.add("active");
+        document.getElementById("view-grid").classList.remove("active");
+    });
+
+    document.getElementById("filter-toggle").addEventListener("click", () => {
+        document.getElementById("filters-panel").classList.toggle("open");
+    });
+
+    document.getElementById("close-filters").addEventListener("click", () => {
+        document.getElementById("filters-panel").classList.remove("open");
+    });
+
+    loadFilters();
+    loadVideos();
+</script>
+{% endblock %}

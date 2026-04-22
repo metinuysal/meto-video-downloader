@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+bulk_video.db
+bulk_video.db-wal
+bulk_video.db-shm
+*.db
+*.db-wal
+*.db-shm
+
+videos/
+data/
