@@ -52,3 +52,7 @@ PORT = int(os.getenv("BULK_VIDEO_PORT") or os.getenv("PORT") or "5000")
 DEBUG = _get_env_bool("BULK_VIDEO_DEBUG", False)
 
 POLL_INTERVAL_MS = 2000
+
+# Storage limit in MB
+_storage_max_str = os.getenv("BULK_VIDEO_STORAGE_MAX_MB")
+STORAGE_MAX_MB = int(_storage_max_str) if _storage_max_str and _storage_max_str.isdigit() else None

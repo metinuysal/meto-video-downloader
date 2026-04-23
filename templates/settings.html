@@ -131,6 +131,20 @@
 
     <div class="settings-card full-width">
         <h2>Storage & Cleanup</h2>
+        
+        <div class="storage-info" style="margin-bottom: 20px; padding: 15px; background: #1a1a1a; border-radius: 8px; border: 1px solid #333;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                <span><strong>Storage Used:</strong> {{ storage.used_fmt }} / {{ storage.max_fmt }}</span>
+                <span>{{ storage.percent }}%</span>
+            </div>
+            <div style="background: #2a2a2a; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid #444;">
+                <div style="background: {% if storage.percent > 90 %}#dc3545{% elif storage.percent > 75 %}#ffc107{% else %}#007bff{% endif %}; height: 100%; width: {{ storage.percent }}%; transition: width 0.3s ease;"></div>
+            </div>
+            {% if storage.percent >= 100 %}
+            <small style="color: #dc3545; display: block; margin-top: 8px;">Storage limit reached. New downloads will be blocked.</small>
+            {% endif %}
+        </div>
+
         <div id="project-stats" class="stats-grid">
             <div class="stat-item"><span class="stat-value" id="stat-total">-</span><span class="stat-label">Total Videos</span></div>
             <div class="stat-item"><span class="stat-value" id="stat-favorites">-</span><span class="stat-label">Favorites</span></div>

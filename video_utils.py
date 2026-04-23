@@ -49,3 +49,17 @@ def format_filesize(bytes_size):
             return f"{bytes_size:.1f} {unit}"
         bytes_size /= 1024
     return f"{bytes_size:.1f} TB"
+
+
+def get_directory_size(path):
+    import os
+
+    total_size = 0
+    if not os.path.exists(path):
+        return 0
+    for dirpath, _, filenames in os.walk(path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            if not os.path.islink(fp):
+                total_size += os.path.getsize(fp)
+    return total_size

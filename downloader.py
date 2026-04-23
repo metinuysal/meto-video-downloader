@@ -368,6 +368,12 @@ def process_queue(project_id):
                     if not pending and not futures:
                         break
 
+                    if config.STORAGE_MAX_MB:
+                        used_mb = video_utils.get_directory_size(config.VIDEO_DIR) / (1024 * 1024)
+                        if used_mb >= config.STORAGE_MAX_MB:
+                            # Too much storage used, stop spawning new downloads
+                            break
+
                     for item in pending:
                         if len(futures) >= max_concurrent:
                             break

@@ -96,7 +96,20 @@ def settings_page():
     current_id = request.args.get("project", type=int) or 1
     current = database.get_project(current_id) or projects[0]
     settings = database.get_project_settings(current["id"]) or {}
-    return render_template("settings.html", projects=projects, current=current, settings=settings)
+    
+    used_bytes = video_utils.get_directory_size(config.VIDEO_DIR)
+    used_mb = used_bytes / (1024 * 1024)
+    max_mb = config.STORAGE_MAX_MB
+    
+    storage_info = {
+        "used_mb": used_mb,
+        "max_mb": max_mb,
+        "used_fmt": video_utils.format_filesize(used_bytes),
+        "max_fmt": f"{max_mb} MB" if max_mb else "Limitsiz",
+        "percent": min(100, round((used_mb / max_mb * 100) if max_mb else 0, 1))
+    }
+    
+    return render_template("settings.html", projects=projects, current=current, settings=settings, storage=storage_info)
 
 
 @app.route("/about")
@@ -186,6 +199,11 @@ def api_settings():
 def api_queue():
     project_id = request.args.get("project", type=int) or 1
     if request.method == "POST":
+        if config.STORAGE_MAX_MB:
+            used_mb = video_utils.get_directory_size(config.VIDEO_DIR) / (1024 * 1024)
+            if used_mb >= config.STORAGE_MAX_MB:
+                return jsonify({"error": f"Storage limit reached ({config.STORAGE_MAX_MB} MB). Cannot add more videos."}), 400
+
         data = request.get_json()
         raw_urls = data.get("urls", "")
         urls = [u.strip() for u in raw_urls.replace(",", "\n").split("\n") if u.strip()]
