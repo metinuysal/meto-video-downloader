@@ -1,14 +1,16 @@
+import concurrent.futures
+import glob as glob_mod
 import os
 import shutil
 import threading
 import time
-import glob as glob_mod
-import concurrent.futures
+
 import yt_dlp
 
 import config
 import database
 import video_utils
+
 
 # Build a js_runtimes dict for yt-dlp (needed for YouTube signature solving).
 # Any runtime found in PATH is enabled; node/nodejs → keyed as "node".
@@ -20,6 +22,7 @@ def _build_js_runtimes():
             runtimes[key] = {}
     return runtimes or None
 
+
 _JS_RUNTIMES = _build_js_runtimes()
 
 _queue_lock = threading.Lock()
@@ -30,12 +33,19 @@ _progress_lock = threading.Lock()
 
 
 def _parse_rate_limit(rate_str):
-    if not rate_str: return None
+    if not rate_str:
+        return None
     rate_str = rate_str.upper().strip()
     multiplier = 1
-    if rate_str.endswith("K"): multiplier = 1024; rate_str = rate_str[:-1]
-    elif rate_str.endswith("M"): multiplier = 1024 * 1024; rate_str = rate_str[:-1]
-    elif rate_str.endswith("G"): multiplier = 1024 * 1024 * 1024; rate_str = rate_str[:-1]
+    if rate_str.endswith("K"):
+        multiplier = 1024
+        rate_str = rate_str[:-1]
+    elif rate_str.endswith("M"):
+        multiplier = 1024 * 1024
+        rate_str = rate_str[:-1]
+    elif rate_str.endswith("G"):
+        multiplier = 1024 * 1024 * 1024
+        rate_str = rate_str[:-1]
     try:
         return int(float(rate_str) * multiplier)
     except ValueError:
@@ -54,16 +64,16 @@ def _get_ydl_opts(project_folder, settings):
         format_str = "bestaudio/best"
         merge_fmt = None
     elif fmt == "best":
-        format_str = f"bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
+        format_str = "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
         merge_fmt = fmt_ext
     elif fmt == "1080":
-        format_str = f"bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080]"
+        format_str = "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080]"
         merge_fmt = fmt_ext
     elif fmt == "720":
-        format_str = f"bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720]"
+        format_str = "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720]"
         merge_fmt = fmt_ext
     elif fmt == "480":
-        format_str = f"bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/best[height<=480]"
+        format_str = "bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/best[height<=480]"
         merge_fmt = fmt_ext
     else:
         format_str = "best"
@@ -98,13 +108,15 @@ def _get_ydl_opts(project_folder, settings):
 
     if settings.get("cookies_browser"):
         opts["cookiesfrombrowser"] = (settings["cookies_browser"],)
-        
+
     rate_limit = _parse_rate_limit(settings.get("rate_limit"))
     if rate_limit:
         opts["ratelimit"] = rate_limit
 
     if settings.get("embed_metadata"):
-        opts.setdefault("postprocessors", []).append({"key": "FFmpegMetadata", "add_metadata": True})
+        opts.setdefault("postprocessors", []).append(
+            {"key": "FFmpegMetadata", "add_metadata": True}
+        )
 
     return opts
 
@@ -248,8 +260,11 @@ def _download_item(item):
     project = database.get_project(project_id)
     project_folder = project["folder"] if project else "default"
     settings = database.get_project_settings(project_id) or {
-        "quality": "best", "format": "mp4", "audio_only": 0,
-        "subtitles": 0, "thumbnail": 1,
+        "quality": "best",
+        "format": "mp4",
+        "audio_only": 0,
+        "subtitles": 0,
+        "thumbnail": 1,
     }
 
     database.update_video(item["id"], status="downloading")
@@ -279,7 +294,9 @@ def _download_item(item):
                     if not entry_url or database.video_exists_by_url(entry_url, project_id):
                         continue
                     meta = _extract_metadata(entry)
-                    database.insert_video(project_id=project_id, url=entry_url, status="queued", **meta)
+                    database.insert_video(
+                        project_id=project_id, url=entry_url, status="queued", **meta
+                    )
                     added += 1
                     pct = round(i / total * 100, 1) if total else 0
                     with _progress_lock:
@@ -347,19 +364,21 @@ def process_queue(project_id):
                 while True:
                     queued = database.get_queue(project_id)
                     pending = [q for q in queued if q["status"] == "queued"]
-                    
+
                     if not pending and not futures:
                         break
-                        
+
                     for item in pending:
                         if len(futures) >= max_concurrent:
                             break
                         database.update_video(item["id"], status="downloading")
                         f = executor.submit(_download_item, item)
                         futures.add(f)
-                    
+
                     if futures:
-                        done, _ = concurrent.futures.wait(futures, return_when=concurrent.futures.FIRST_COMPLETED, timeout=1.0)
+                        done, _ = concurrent.futures.wait(
+                            futures, return_when=concurrent.futures.FIRST_COMPLETED, timeout=1.0
+                        )
                         futures.difference_update(done)
                     else:
                         time.sleep(1.0)

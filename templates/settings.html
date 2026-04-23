@@ -8,6 +8,17 @@
 </div>
 
 <div class="settings-layout">
+    <div class="settings-card full-width">
+        <h2>Global Preferences (Applies to browser)</h2>
+        <div class="setting-group" style="margin-bottom: 0;">
+            <label class="toggle-label">
+                <input type="checkbox" id="setting-animations">
+                <span class="toggle-slider"></span>
+                <span>Enable UI Animations</span>
+            </label>
+        </div>
+    </div>
+
     <div class="settings-card">
         <h2>Download Quality</h2>
         <div class="setting-group">
@@ -166,6 +177,20 @@
 {% block scripts %}
 <script>
     const PROJECT_ID = {{ current.id }};
+
+    // UI Animations Toggle
+    const animToggle = document.getElementById("setting-animations");
+    if (animToggle) {
+        animToggle.checked = localStorage.getItem("ui_animations") !== "false";
+        animToggle.addEventListener("change", (e) => {
+            localStorage.setItem("ui_animations", e.target.checked);
+            if (!e.target.checked) {
+                document.documentElement.classList.add("no-animations");
+            } else {
+                document.documentElement.classList.remove("no-animations");
+            }
+        });
+    }
 
     async function loadStats() {
         const res = await fetch(`/api/stats?project=${PROJECT_ID}`);

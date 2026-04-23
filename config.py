@@ -1,6 +1,8 @@
 import os
+
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
@@ -8,7 +10,7 @@ except ImportError:
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASE_PATH = os.getenv("BULK_VIDEO_DB_PATH", os.path.join(BASE_DIR, "bulk_video.db"))
-DATABASE_URL = os.getenv("BULK_VIDEO_DB_URL") # e.g. mysql+pymysql://user:pass@host:3306/db
+DATABASE_URL = os.getenv("BULK_VIDEO_DB_URL")  # e.g. mysql+pymysql://user:pass@host:3306/db
 
 # Classic DB setup alternative
 DB_HOST = os.getenv("BULK_VIDEO_DB_HOST")
@@ -24,7 +26,7 @@ if not DATABASE_URL and DB_HOST and DB_NAME:
         user_pass += f":{DB_PASSWORD}"
     if user_pass:
         user_pass += "@"
-    
+
     if DB_TYPE in ("postgres", "postgresql", "pg"):
         DATABASE_URL = f"postgresql+psycopg2://{user_pass}{DB_HOST}:{DB_PORT}/{DB_NAME}"
     else:
@@ -36,6 +38,7 @@ PASSWORD = os.getenv("BULK_VIDEO_PASSWORD")
 VIDEO_DIR = os.getenv("BULK_VIDEO_VIDEO_DIR", os.path.join(BASE_DIR, "videos"))
 
 os.makedirs(VIDEO_DIR, exist_ok=True)
+
 
 def _get_env_bool(name: str, default: bool) -> bool:
     val = os.getenv(name)

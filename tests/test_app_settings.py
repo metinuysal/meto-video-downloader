@@ -14,6 +14,7 @@ def _fresh_app(monkeypatch, tmp_path):
     database.init_db()
 
     import app
+
     importlib.reload(app)
     return app
 

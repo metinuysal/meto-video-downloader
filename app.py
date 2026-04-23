@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
+
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, url_for
 
 import config
 import database
@@ -15,24 +16,27 @@ if not _secret_key:
     if config.DEBUG:
         _secret_key = "bulk-video-dev-secret"
     else:
-        raise RuntimeError("SECRET_KEY environment variable must be set when BULK_VIDEO_DEBUG is false")
+        raise RuntimeError(
+            "SECRET_KEY environment variable must be set when BULK_VIDEO_DEBUG is false"
+        )
 app.secret_key = _secret_key
 
 
 @app.context_processor
 def inject_config():
     from flask import session
+
     return {
         "POLL_INTERVAL_MS": config.POLL_INTERVAL_MS,
         "AUTH_ENABLED": bool(config.USERNAME and config.PASSWORD),
-        "AUTHENTICATED": session.get("authenticated", False)
+        "AUTHENTICATED": session.get("authenticated", False),
     }
 
 
 @app.before_request
 def load_current_project():
-    from flask import session, request, redirect, url_for
-    
+    from flask import redirect, request, session, url_for
+
     if config.USERNAME and config.PASSWORD:
         if request.endpoint and request.endpoint not in ("login_page", "static", "serve_video"):
             if not session.get("authenticated"):
@@ -41,12 +45,14 @@ def load_current_project():
     if "project_id" not in session:
         session["project_id"] = 1
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
     from flask import session
+
     if not (config.USERNAME and config.PASSWORD):
         return redirect(url_for("index"))
-        
+
     error = None
     if request.method == "POST":
         username = request.form.get("username")
@@ -55,12 +61,14 @@ def login_page():
             session["authenticated"] = True
             return redirect(url_for("index"))
         error = "Invalid username or password."
-        
+
     return render_template("login.html", error=error)
+
 
 @app.route("/logout")
 def logout():
     from flask import session
+
     session.pop("authenticated", None)
     return redirect(url_for("login_page"))
 
@@ -150,6 +158,7 @@ def api_delete_project(project_id):
         folder = os.path.join(config.VIDEO_DIR, project["folder"])
         if os.path.exists(folder):
             import shutil
+
             shutil.rmtree(folder, ignore_errors=True)
     database.delete_project(project_id)
     return "", 204
@@ -215,8 +224,13 @@ def api_videos():
     offset = int(request.args.get("offset", 0))
 
     videos = database.get_videos(
-        project_id, filters=filters, search=search,
-        sort_by=sort_by, order=order, limit=limit, offset=offset,
+        project_id,
+        filters=filters,
+        search=search,
+        sort_by=sort_by,
+        order=order,
+        limit=limit,
+        offset=offset,
     )
     total = database.count_videos(project_id, filters=filters, search=search)
 
@@ -353,13 +367,15 @@ def api_stats():
 @app.route("/api/filters")
 def api_filters():
     project_id = request.args.get("project", type=int) or 1
-    return jsonify({
-        "orientations": database.get_distinct_values(project_id, "orientation"),
-        "length_categories": database.get_distinct_values(project_id, "length_category"),
-        "aspect_ratios": database.get_distinct_values(project_id, "aspect_ratio"),
-        "categories": database.get_all_categories(project_id),
-        "tags": database.get_all_tags(),
-    })
+    return jsonify(
+        {
+            "orientations": database.get_distinct_values(project_id, "orientation"),
+            "length_categories": database.get_distinct_values(project_id, "length_category"),
+            "aspect_ratios": database.get_distinct_values(project_id, "aspect_ratio"),
+            "categories": database.get_all_categories(project_id),
+            "tags": database.get_all_tags(),
+        }
+    )
 
 
 @app.route("/videos/<int:project_id>/<path:filename>")

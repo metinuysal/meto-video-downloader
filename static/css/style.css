@@ -14,8 +14,29 @@
     --border: #333;
     --radius: 8px;
     --radius-sm: 4px;
-    --shadow: 0 2px 8px rgba(0,0,0,0.4);
+    --shadow: 0 4px 12px rgba(0,0,0,0.5);
+    --shadow-hover: 0 8px 24px rgba(62, 166, 255, 0.15);
     --nav-height: 64px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.no-animations *, .no-animations *::before, .no-animations *::after {
+    animation: none !important;
+    transition: none !important;
 }
 
 html { font-size: 16px; }
@@ -31,7 +52,7 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hover); }
 
-.container { max-width: 1400px; margin: 0 auto; padding: 16px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 16px; animation: fadeIn 0.5s ease-out forwards; }
 
 /* NAVBAR */
 .navbar {
@@ -102,6 +123,7 @@ a:hover { color: var(--accent-hover); }
     font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
     white-space: nowrap; min-height: 44px;
 }
+.btn:active { transform: scale(0.96); }
 .btn-primary { background: var(--accent); color: #000; }
 .btn-primary:hover { background: var(--accent-hover); color: #000; }
 .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
@@ -127,6 +149,7 @@ a:hover { color: var(--accent-hover); }
 .landing-card {
     background: var(--bg-secondary); border-radius: var(--radius);
     padding: 16px; border: 1px solid var(--border);
+    animation: fadeUp 0.5s ease-out forwards;
 }
 .landing-card h2 { font-size: 1rem; margin-bottom: 10px; }
 .field-label {
@@ -232,9 +255,10 @@ a:hover { color: var(--accent-hover); }
 .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .video-card {
     background: var(--bg-secondary); border-radius: var(--radius); overflow: hidden;
-    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    animation: popIn 0.4s ease-out forwards;
 }
-.video-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.video-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(62, 166, 255, 0.3); }
 .video-thumb { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg-tertiary); overflow: hidden; }
 .video-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .thumb-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
@@ -260,9 +284,10 @@ a:hover { color: var(--accent-hover); }
 .video-row {
     display: flex; align-items: center; gap: 10px; padding: 8px 10px;
     background: var(--bg-secondary); border-radius: var(--radius);
-    cursor: pointer; transition: background 0.2s;
+    cursor: pointer; transition: background 0.2s, transform 0.2s;
+    animation: fadeUp 0.3s ease-out forwards;
 }
-.video-row:hover { background: var(--bg-tertiary); }
+.video-row:hover { background: var(--bg-tertiary); transform: translateX(4px); }
 .video-thumb.small { width: 100px; min-width: 100px; padding-top: 0; height: 56px; border-radius: var(--radius-sm); overflow: hidden; position: relative; }
 .video-thumb.small img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
 
@@ -312,7 +337,7 @@ a:hover { color: var(--accent-hover); }
 
 /* SETTINGS */
 .settings-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.settings-card { background: var(--bg-secondary); border-radius: var(--radius); padding: 20px; }
+.settings-card { background: var(--bg-secondary); border-radius: var(--radius); padding: 20px; animation: fadeUp 0.4s ease-out forwards; }
 .settings-card.full-width { grid-column: 1 / -1; }
 .settings-card h2 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 .setting-group { margin-bottom: 16px; }

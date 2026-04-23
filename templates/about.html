@@ -17,6 +17,10 @@
                 <span class="about-link-hint">Website</span>
             </li>
             <li>
+                <a href="https://github.com/metinuysal/meto-video-downloader/" target="_blank" rel="noopener noreferrer" class="about-external-link">github.com/metinuysal/meto-video-downloader</a>
+                <span class="about-link-hint">Project Repository</span>
+            </li>
+            <li>
                 <a href="https://github.com/metinuysal" target="_blank" rel="noopener noreferrer" class="about-external-link">github.com/metinuysal</a>
                 <span class="about-link-hint">GitHub profile</span>
             </li>
@@ -25,7 +29,29 @@
 
     <div class="settings-card about-card">
         <h2>Open source</h2>
-        <p class="about-text">This app bundles and orchestrates trusted open-source utilities—see the project README for details (for example <code>yt-dlp</code>, Flask, and SQLite).</p>
+        <p class="about-text">This app bundles and orchestrates trusted open-source utilities—see the project README for details (for example <code>yt-dlp</code>, Flask, and Python).</p>
+    </div>
+
+    <div class="settings-card about-card" style="grid-column: 1 / -1;">
+        <h2>Features & Architecture</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 12px;">
+            <div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Cloud Ready</h3>
+                <p class="about-text">Fully compatible with Docker and Dokploy. Configure everything seamlessly via <code>.env</code> variables.</p>
+            </div>
+            <div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Flexible Database</h3>
+                <p class="about-text">Runs on a zero-config <strong>SQLite</strong> file by default, but natively supports <strong>MySQL</strong> and <strong>PostgreSQL</strong> for production environments.</p>
+            </div>
+            <div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Secure Access</h3>
+                <p class="about-text">Includes an optional, cookie-based authentication system. Set a username and password to lock down the UI for public servers.</p>
+            </div>
+            <div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Library Management</h3>
+                <p class="about-text">Organize massive collections with grid/list views, metadata tagging, favoriting, and multi-select bulk operations.</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
