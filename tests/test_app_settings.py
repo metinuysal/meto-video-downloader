@@ -5,6 +5,8 @@ def _fresh_app(monkeypatch, tmp_path):
     monkeypatch.setenv("BULK_VIDEO_DB_PATH", str(tmp_path / "test.db"))
     monkeypatch.setenv("BULK_VIDEO_VIDEO_DIR", str(tmp_path / "videos"))
     monkeypatch.setenv("BULK_VIDEO_DEBUG", "1")
+    monkeypatch.setenv("BULK_VIDEO_USERNAME", "")
+    monkeypatch.setenv("BULK_VIDEO_PASSWORD", "")
 
     import config
     import database
