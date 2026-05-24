@@ -129,6 +129,22 @@
         </div>
     </div>
 
+    {% if sqlite_backend %}
+    <div class="settings-card full-width">
+        <h2>Database Backup</h2>
+        <p style="color:#aaa;margin-bottom:16px;">
+            SQLite only. Download a zip or save a copy into the local <code>dbbackup/</code> folder.
+            To restore on another PC, put <code>restore.zip</code> in <code>dbbackup/</code> and run <code>install.bat</code>,
+            or extract <code>bulk_video.db</code> into the project root manually.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+            <a id="download-db-backup" class="btn btn-primary" href="/api/db/backup">Download ZIP</a>
+            <button id="save-db-backup" type="button" class="btn btn-outline">Save copy to dbbackup/</button>
+            <span id="db-backup-status"></span>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="settings-card full-width">
         <h2>Storage & Cleanup</h2>
         
@@ -295,6 +311,23 @@
             if (!confirm("Delete this project and all its videos?")) return;
             await fetch(`/api/projects/${e.target.dataset.id}`, { method: "DELETE" });
             location.reload();
+        }
+    });
+
+    document.getElementById("save-db-backup")?.addEventListener("click", async () => {
+        const status = document.getElementById("db-backup-status");
+        status.textContent = "Saving...";
+        try {
+            const res = await fetch("/api/db/backup/save", { method: "POST" });
+            const data = await res.json();
+            if (!res.ok) {
+                status.textContent = data.error || "Backup failed";
+                return;
+            }
+            status.textContent = `Saved ${data.saved}`;
+            setTimeout(() => { status.textContent = ""; }, 4000);
+        } catch (err) {
+            status.textContent = "Backup failed";
         }
     });
 

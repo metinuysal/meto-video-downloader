@@ -12,7 +12,7 @@ set "VENV_PY=%ROOT%.venv\Scripts\python.exe"
 set "PY="
 
 :: ─── Python ──────────────────────────────────────────────────────────────────
-echo [1/4] Checking Python...
+echo [1/5] Checking Python...
 call :find_python
 if errorlevel 1 (
     echo   Python not found. Attempting automatic installation via winget...
@@ -32,7 +32,7 @@ echo   Found: %PY%
 
 :: ─── Virtual environment ─────────────────────────────────────────────────────
 echo.
-echo [2/4] Setting up Python virtual environment...
+echo [2/5] Setting up Python virtual environment...
 if not exist "%VENV_PY%" (
     %PY% -m venv .venv
     if errorlevel 1 (
@@ -71,7 +71,7 @@ echo   Python dependencies OK.
 
 :: ─── FFmpeg ──────────────────────────────────────────────────────────────────
 echo.
-echo [3/4] Checking FFmpeg...
+echo [3/5] Checking FFmpeg...
 if exist "%ROOT%tools\ffmpeg\bin\ffmpeg.exe" (
     echo   Found in tools\ffmpeg (bundled).
 ) else (
@@ -98,7 +98,7 @@ if exist "%ROOT%tools\ffmpeg\bin\ffmpeg.exe" (
 
 :: ─── Node.js (required by yt-dlp for YouTube signature solving) ───────────────
 echo.
-echo [4/4] Checking Node.js (required for YouTube downloads)...
+echo [4/5] Checking Node.js (required for YouTube downloads)...
 where node >nul 2>nul
 if not errorlevel 1 (
     for /f "tokens=*" %%v in ('node --version 2^>nul') do echo   Found: %%v
@@ -119,6 +119,26 @@ if not errorlevel 1 (
         )
     )
 )
+
+:: ─── Database & config ───────────────────────────────────────────────────────
+echo.
+echo [5/5] Preparing database and config...
+if not exist "%ROOT%dbbackup" mkdir "%ROOT%dbbackup"
+if not exist "%ROOT%.env" (
+    if exist "%ROOT%.env.example" (
+        copy /Y "%ROOT%.env.example" "%ROOT%.env" >nul
+        echo   Created .env from .env.example
+    )
+) else (
+    echo   .env already exists, skipping.
+)
+"%VENV_PY%" db_backup.py --install
+if errorlevel 1 (
+    echo ERROR: Database setup failed.
+    pause
+    exit /b 1
+)
+echo   Database ready.
 
 :: ─── Done ────────────────────────────────────────────────────────────────────
 echo.

@@ -12,7 +12,9 @@ bulk_video.db-shm
 *.db
 *.db-wal
 *.db-shm
+!dbbackup/bulk_video.db
 
 videos/
 data/
+dbbackup/*.zip
 .env

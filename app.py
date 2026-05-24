@@ -1,9 +1,20 @@
+import io
 import os
 
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, url_for
+from flask import (
+    Flask,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    send_from_directory,
+    url_for,
+)
 
 import config
 import database
+import db_backup
 import downloader
 import video_utils
 
@@ -96,20 +107,27 @@ def settings_page():
     current_id = request.args.get("project", type=int) or 1
     current = database.get_project(current_id) or projects[0]
     settings = database.get_project_settings(current["id"]) or {}
-    
+
     used_bytes = video_utils.get_directory_size(config.VIDEO_DIR)
     used_mb = used_bytes / (1024 * 1024)
     max_mb = config.STORAGE_MAX_MB
-    
+
     storage_info = {
         "used_mb": used_mb,
         "max_mb": max_mb,
         "used_fmt": video_utils.format_filesize(used_bytes),
         "max_fmt": f"{max_mb} MB" if max_mb else "Limitsiz",
-        "percent": min(100, round((used_mb / max_mb * 100) if max_mb else 0, 1))
+        "percent": min(100, round((used_mb / max_mb * 100) if max_mb else 0, 1)),
     }
-    
-    return render_template("settings.html", projects=projects, current=current, settings=settings, storage=storage_info)
+
+    return render_template(
+        "settings.html",
+        projects=projects,
+        current=current,
+        settings=settings,
+        storage=storage_info,
+        sqlite_backend=db_backup.uses_sqlite(),
+    )
 
 
 @app.route("/about")
@@ -202,7 +220,11 @@ def api_queue():
         if config.STORAGE_MAX_MB:
             used_mb = video_utils.get_directory_size(config.VIDEO_DIR) / (1024 * 1024)
             if used_mb >= config.STORAGE_MAX_MB:
-                return jsonify({"error": f"Storage limit reached ({config.STORAGE_MAX_MB} MB). Cannot add more videos."}), 400
+                return jsonify(
+                    {
+                        "error": f"Storage limit reached ({config.STORAGE_MAX_MB} MB). Cannot add more videos."
+                    }
+                ), 400
 
         data = request.get_json()
         raw_urls = data.get("urls", "")
@@ -374,6 +396,37 @@ def api_reset_project():
         return jsonify({"deleted": deleted, "action": "by_status", "status": status})
 
     return jsonify({"error": "Unknown action"}), 400
+
+
+@app.route("/api/db/backup")
+def api_db_backup_download():
+    if not db_backup.uses_sqlite():
+        return jsonify({"error": "Database backup is only available with SQLite."}), 400
+    if not os.path.exists(config.DATABASE_PATH):
+        return jsonify({"error": "Database file not found."}), 404
+    try:
+        payload = db_backup.build_backup_zip_bytes()
+    except FileNotFoundError as exc:
+        return jsonify({"error": str(exc)}), 404
+    return send_file(
+        io.BytesIO(payload),
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=db_backup.backup_download_name(),
+    )
+
+
+@app.route("/api/db/backup/save", methods=["POST"])
+def api_db_backup_save():
+    if not db_backup.uses_sqlite():
+        return jsonify({"error": "Database backup is only available with SQLite."}), 400
+    if not os.path.exists(config.DATABASE_PATH):
+        return jsonify({"error": "Database file not found."}), 404
+    try:
+        path = db_backup.save_backup_to_folder()
+    except FileNotFoundError as exc:
+        return jsonify({"error": str(exc)}), 404
+    return jsonify({"saved": os.path.basename(path), "path": path})
 
 
 @app.route("/api/stats")
