@@ -11,7 +11,7 @@ Organize by project, browse your library, tag favorites — all on your machine.
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-embedded-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
-[Features](#features) · [Quickstart](#quickstart) · [How it works](#how-it-works) · [Docker](#docker) · [Configuration](#configuration)
+[Features](#features) · [Installation](#installation) · [Start](#start) · [Database backup](#database-backup) · [Docker](#docker) · [Configuration](#configuration) · [Türkçe](#türkçe--kurulum-ve-kullanım)
 
 </div>
 
@@ -30,53 +30,129 @@ Organize by project, browse your library, tag favorites — all on your machine.
 
 ---
 
-## Quickstart
+## Installation
 
-### Prerequisites
+### Prerequisites (all platforms)
 
-- Python **3.11+**
-- [`ffmpeg`](https://ffmpeg.org/) on your PATH (recommended for merging/converting)
-- Optional: [Node.js](https://nodejs.org/) for YouTube signature solving
+| Requirement | Notes |
+| :--- | :--- |
+| **Python 3.11+** | [python.org/downloads](https://www.python.org/downloads/) |
+| **ffmpeg** | On your PATH — [ffmpeg.org/download.html](https://ffmpeg.org/download.html) |
+| **Node.js** (recommended) | Needed by yt-dlp for YouTube — [nodejs.org](https://nodejs.org/) |
+| **Git** | To clone the repository |
 
-### Install & run
+### Windows
 
-<details open>
-<summary><b>Linux / macOS</b></summary>
+Easiest path — double-click or run from Command Prompt / PowerShell:
+
+```bat
+git clone https://github.com/metinuysal/meto-video-downloader.git
+cd meto-video-downloader
+install.bat
+```
+
+`install.bat` will:
+
+1. Find or install Python (via winget if needed)
+2. Create `.venv` and install dependencies
+3. Check FFmpeg and Node.js
+4. Create `dbbackup/` and `.env` if missing
+5. Set up the SQLite database (`db_backup.py --install`)
+
+### Linux
 
 ```bash
 git clone https://github.com/metinuysal/meto-video-downloader.git
 cd meto-video-downloader
 
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-cp .env.example .env   # optional
-python app.py
+test -f .env || cp .env.example .env
+python db_backup.py --install
 ```
 
-</details>
+Install system packages if needed (examples):
 
-<details>
-<summary><b>Windows</b></summary>
+```bash
+# Debian / Ubuntu
+sudo apt update && sudo apt install -y python3-venv ffmpeg nodejs git
 
-Double-click `start.bat`, or run manually:
+# Fedora
+sudo dnf install -y python3 ffmpeg nodejs git
+```
 
-```bat
+### macOS
+
+```bash
 git clone https://github.com/metinuysal/meto-video-downloader.git
 cd meto-video-downloader
 
-python -m venv .venv
-.venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 
-copy .env.example .env
+test -f .env || cp .env.example .env
+python db_backup.py --install
+```
+
+Install prerequisites with [Homebrew](https://brew.sh/) if needed:
+
+```bash
+brew install python ffmpeg node
+```
+
+---
+
+## Start
+
+After installation, open **http://localhost:5000** in your browser.
+
+### Windows
+
+Double-click **`start.bat`**, or:
+
+```bat
+start.bat
+```
+
+### Linux / macOS
+
+Activate the virtual environment, then run the app:
+
+```bash
+source .venv/bin/activate
 python app.py
 ```
 
-</details>
+Or in one line from the project folder:
 
-Open **http://localhost:5000** in your browser.
+```bash
+.venv/bin/python app.py
+```
+
+Stop the server with **Ctrl+C** in the terminal.
+
+### Docker
+
+See the [Docker](#docker) section below — no local Python install required.
+
+---
+
+## Database backup
+
+For local (non-Docker) SQLite installs, the repo includes a ready-to-use empty database at [`dbbackup/bulk_video.db`](dbbackup/bulk_video.db) (schema applied, no videos).
+
+| Action | How |
+| :--- | :--- |
+| **First install** | `install.bat` or `python db_backup.py --install` copies/seeds `bulk_video.db` automatically |
+| **Download backup** | Settings → Database Backup → Download ZIP |
+| **Restore** | Put `restore.zip` in `dbbackup/` and rerun `install.bat`, or copy `bulk_video.db` to the project root |
+
+MySQL / PostgreSQL users: configure `BULK_VIDEO_DB_URL` in `.env` — see [Configuration](#configuration).
+
+More details: [`dbbackup/README.txt`](dbbackup/README.txt)
 
 ---
 
@@ -159,6 +235,82 @@ Use responsibly and only download content you have the right to access.
 ## About
 
 Built by **[Metin Uysal](https://metinuysal.net)** · [GitHub](https://github.com/metinuysal)
+
+---
+
+## Türkçe — Kurulum ve kullanım
+
+METO Bulk Video Downloader, bilgisayarında çalışan yerel bir web arayüzüdür. Video linklerini sıraya alır, `yt-dlp` ile indirir; projelere ayırır, kütüphanede etiketler ve favorilerle düzenlersin.
+
+### Gereksinimler
+
+- **Python 3.11+**
+- **ffmpeg** (PATH’te olmalı)
+- **Node.js** (YouTube için önerilir)
+- **Git** (repoyu klonlamak için)
+
+### Kurulum
+
+**Windows** — en kolay yol:
+
+```bat
+git clone https://github.com/metinuysal/meto-video-downloader.git
+cd meto-video-downloader
+install.bat
+```
+
+`install.bat` Python’u bulur/kurar, sanal ortam oluşturur, bağımlılıkları yükler, `.env` ve veritabanını hazırlar.
+
+**Linux / macOS:**
+
+```bash
+git clone https://github.com/metinuysal/meto-video-downloader.git
+cd meto-video-downloader
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+test -f .env || cp .env.example .env
+python db_backup.py --install
+```
+
+### Başlatma
+
+Kurulumdan sonra tarayıcıda **http://localhost:5000** adresini aç.
+
+| İşletim sistemi | Komut |
+| :--- | :--- |
+| **Windows** | `start.bat` (çift tıklama veya terminalden) |
+| **Linux / macOS** | `source .venv/bin/activate` → `python app.py` |
+| **Docker** | `docker compose up --build` |
+
+Durdurmak için terminalde **Ctrl+C**.
+
+### Veritabanı yedeği
+
+Varsayılan olarak **SQLite** kullanılır. Repoda hazır boş veritabanı vardır: `dbbackup/bulk_video.db` (tablolar oluşturulmuş, video yok).
+
+- **İlk kurulum:** `install.bat` veya `python db_backup.py --install` otomatik kurar
+- **Yedek indir:** Ayarlar → Database Backup → Download ZIP
+- **Geri yükle:** `dbbackup/restore.zip` koy → `install.bat` tekrar çalıştır  
+  veya zip’ten `bulk_video.db` dosyasını proje köküne ( `app.py` yanına ) kopyala
+
+MySQL / PostgreSQL kullanıyorsan `.env` içinde `BULK_VIDEO_DB_URL` ayarla — ayrıntılar [`.env.example`](.env.example) dosyasında.
+
+### Docker
+
+Python kurmadan çalıştırmak için:
+
+```bash
+docker compose up --build
+```
+
+Veriler `./data` klasöründe kalır.
+
+### Not
+
+Uygulama **yerelde** çalışmak içindir. Ağa açacaksan önce kullanıcı adı/şifre (`BULK_VIDEO_USERNAME`, `BULK_VIDEO_PASSWORD`) ekle. İndirdiğin içerikler için platform kurallarına ve telif haklarına dikkat et.
 
 <div align="center">
 
