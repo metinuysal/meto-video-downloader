@@ -81,13 +81,30 @@ a:hover { color: var(--accent-hover); }
     color: var(--text-secondary); line-height: 1.2;
     opacity: 0.92;
 }
-.nav-center { flex: 1; max-width: 220px; margin: 0 12px; }
-.project-select {
-    width: 100%; padding: 6px 8px; background: var(--bg-tertiary);
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    color: var(--text); font-size: 0.85rem;
+.nav-center {
+    flex: 1; max-width: 300px; margin: 0 12px;
+    display: flex; align-items: center; gap: 6px;
+    background: var(--bg-tertiary); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 4px 8px;
 }
-.project-select:focus { outline: none; border-color: var(--accent); }
+.nav-center:focus-within { border-color: var(--accent); }
+.project-select-label {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--text-secondary);
+    white-space: nowrap; cursor: pointer; user-select: none;
+}
+.project-label-icon { font-size: 0.9rem; }
+.project-select {
+    flex: 1; min-width: 0; padding: 4px 6px; background: transparent;
+    border: none; color: var(--text); font-size: 0.85rem; font-weight: 600;
+    cursor: pointer;
+}
+.project-select:focus { outline: none; }
+.project-count {
+    font-size: 0.7rem; color: var(--text-secondary);
+    background: var(--bg); padding: 2px 6px; border-radius: 10px; white-space: nowrap;
+}
 .nav-links { display: flex; gap: 4px; }
 .nav-links a {
     color: var(--text-secondary); padding: 6px 12px; border-radius: var(--radius);

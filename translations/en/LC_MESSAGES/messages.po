@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-21 23:27+0300\n"
+"POT-Creation-Date: 2026-08-21 23:48+0300\n"
 "PO-Revision-Date: 2026-08-21 23:30+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: templates/about.html:2 templates/about.html:6 templates/base.html:33
-#: templates/base.html:50
+#: templates/about.html:2 templates/about.html:6 templates/base.html:38
+#: templates/base.html:55
 msgid "About"
 msgstr "About"
 
@@ -325,27 +325,48 @@ msgstr "Selected project:"
 msgid "Son indirme:"
 msgstr "Last download:"
 
-#: templates/base.html:30 templates/base.html:47 templates/index.html:7
+#: templates/base.html:22
+msgid "Active project — select to switch"
+msgstr "Active project — select to switch"
+
+#: templates/base.html:25 templates/settings.html:148
+msgid "Project"
+msgstr "Project"
+
+#: templates/base.html:27 templates/base.html:65 templates/base.html:67
+msgid "Active project"
+msgstr "Active project"
+
+#: templates/base.html:32
+#, python-format
+msgid "%(count)s projects"
+msgstr "%(count)s projects"
+
+#: templates/base.html:35 templates/base.html:52 templates/index.html:7
 msgid "Download"
 msgstr "Download"
 
-#: templates/base.html:31 templates/base.html:48 templates/index.html:8
+#: templates/base.html:36 templates/base.html:53 templates/index.html:8
 #: templates/library.html:6
 msgid "Library"
 msgstr "Library"
 
-#: templates/base.html:32 templates/base.html:49 templates/index.html:39
+#: templates/base.html:37 templates/base.html:54 templates/index.html:39
 #: templates/settings.html:6
 msgid "Settings"
 msgstr "Settings"
 
-#: templates/base.html:35 templates/base.html:52
+#: templates/base.html:40 templates/base.html:57
 msgid "Logout"
 msgstr "Logout"
 
-#: templates/base.html:42
+#: templates/base.html:47
 msgid "Toggle menu"
 msgstr "Toggle menu"
+
+#: templates/base.html:65
+msgid "tap to switch"
+msgstr "tap to switch"
 
 #: templates/index.html:2
 msgid "Download - METO Bulk Video Downloader"
@@ -452,8 +473,8 @@ msgstr "Adding..."
 msgid "Error:"
 msgstr "Error:"
 
-#: templates/index.html:139 templates/settings.html:168
-#: templates/settings.html:187 templates/settings.html:305
+#: templates/index.html:139 templates/settings.html:188
+#: templates/settings.html:207 templates/settings.html:325
 msgid "Failed"
 msgstr "Failed"
 
@@ -489,7 +510,7 @@ msgstr "Search"
 msgid "Title or uploader..."
 msgstr "Title or uploader..."
 
-#: templates/library.html:22 templates/settings.html:166
+#: templates/library.html:22 templates/settings.html:186
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -583,7 +604,8 @@ msgstr "Set Category"
 msgid "Add Tag"
 msgstr "Add Tag"
 
-#: templates/library.html:83 templates/video_detail.html:95
+#: templates/library.html:83 templates/settings.html:132
+#: templates/video_detail.html:95
 msgid "Delete"
 msgstr "Delete"
 
@@ -683,301 +705,354 @@ msgstr "Sign In"
 msgid "Configure"
 msgstr "Configure"
 
-#: templates/settings.html:12
+#: templates/settings.html:7
+msgid ""
+"Settings below apply only to the active project. Switch projects from the "
+"header."
+msgstr ""
+"Settings below apply only to the active project. Switch projects from the "
+"header."
+
+#: templates/settings.html:9
+#, fuzzy
+msgid "Active project:"
+msgstr "Active project"
+
+#: templates/settings.html:10
+#, fuzzy
+msgid "Go to Download"
+msgstr "Download"
+
+#: templates/settings.html:16
 msgid "Global Preferences (Applies to browser)"
 msgstr "Global Preferences (Applies to browser)"
 
-#: templates/settings.html:17
+#: templates/settings.html:21
 msgid "Enable UI Animations"
 msgstr "Enable UI Animations"
 
-#: templates/settings.html:23
+#: templates/settings.html:27
 msgid "Download Quality"
 msgstr "Download Quality"
 
-#: templates/settings.html:25
+#: templates/settings.html:29
 msgid "Video Quality"
 msgstr "Video Quality"
 
-#: templates/settings.html:27
+#: templates/settings.html:31
 msgid "Best Available"
 msgstr "Best Available"
 
-#: templates/settings.html:28
+#: templates/settings.html:32
 msgid "1080p Max"
 msgstr "1080p Max"
 
-#: templates/settings.html:29
+#: templates/settings.html:33
 msgid "720p Max"
 msgstr "720p Max"
 
-#: templates/settings.html:30
+#: templates/settings.html:34
 msgid "480p Max"
 msgstr "480p Max"
 
-#: templates/settings.html:35
+#: templates/settings.html:39
 msgid "Output Format"
 msgstr "Output Format"
 
-#: templates/settings.html:47
+#: templates/settings.html:51
 msgid "Audio Only"
 msgstr "Audio Only"
 
-#: templates/settings.html:55
+#: templates/settings.html:59
 msgid "Download Subtitles"
 msgstr "Download Subtitles"
 
-#: templates/settings.html:63
+#: templates/settings.html:67
 msgid "Download Thumbnail"
 msgstr "Download Thumbnail"
 
-#: templates/settings.html:71
+#: templates/settings.html:75
 msgid "Embed Metadata"
 msgstr "Embed Metadata"
 
-#: templates/settings.html:76
+#: templates/settings.html:80
 msgid "Cookies Browser"
 msgstr "Cookies Browser"
 
-#: templates/settings.html:78
+#: templates/settings.html:82
 msgid "None"
 msgstr "None"
 
-#: templates/settings.html:79
+#: templates/settings.html:83
 msgid "Chrome"
 msgstr "Chrome"
 
-#: templates/settings.html:80
+#: templates/settings.html:84
 msgid "Edge"
 msgstr "Edge"
 
-#: templates/settings.html:81
+#: templates/settings.html:85
 msgid "Firefox"
 msgstr "Firefox"
 
-#: templates/settings.html:82
+#: templates/settings.html:86
 msgid "Brave"
 msgstr "Brave"
 
-#: templates/settings.html:83
+#: templates/settings.html:87
 msgid "Safari"
 msgstr "Safari"
 
-#: templates/settings.html:84
+#: templates/settings.html:88
 msgid "Opera"
 msgstr "Opera"
 
-#: templates/settings.html:86
+#: templates/settings.html:90
 msgid "Extracts cookies from the browser to download restricted videos."
 msgstr "Extracts cookies from the browser to download restricted videos."
 
-#: templates/settings.html:90
+#: templates/settings.html:94
 msgid "Proxy URL"
 msgstr "Proxy URL"
 
-#: templates/settings.html:91
+#: templates/settings.html:95
 msgid "http://user:pass@ip:port"
 msgstr "http://user:pass@ip:port"
 
-#: templates/settings.html:95
+#: templates/settings.html:99
 msgid "Rate Limit"
 msgstr "Rate Limit"
 
-#: templates/settings.html:96
+#: templates/settings.html:100
 msgid "e.g. 5M, 500K"
 msgstr "e.g. 5M, 500K"
 
-#: templates/settings.html:100
+#: templates/settings.html:104
 msgid "Output Template"
 msgstr "Output Template"
 
-#: templates/settings.html:101
-#, python-format
-msgid "%(id)s.%(ext)s"
-msgstr "%(id)s.%(ext)s"
-
-#: templates/settings.html:102
-#, python-format
-msgid "e.g., %(title)s.%(ext)s"
-msgstr "e.g., %(title)s.%(ext)s"
-
 #: templates/settings.html:106
+msgid "e.g.,"
+msgstr "e.g.,"
+
+#: templates/settings.html:110
 msgid "Max Concurrent Downloads"
 msgstr "Max Concurrent Downloads"
 
-#: templates/settings.html:110
+#: templates/settings.html:114
 msgid "Save Settings"
 msgstr "Save Settings"
 
-#: templates/settings.html:115
+#: templates/settings.html:119
 msgid "Projects"
 msgstr "Projects"
 
-#: templates/settings.html:127
-msgid "New project name..."
-msgstr "New project name..."
+#: templates/settings.html:120
+msgid ""
+"Create separate folders for each topic. Active project is shown in the "
+"header — select there to switch."
+msgstr ""
+"Create separate folders for each topic. Active project is shown in the "
+"header — select there to switch."
 
-#: templates/settings.html:128 templates/video_detail.html:77
+#: templates/settings.html:126
+#, fuzzy
+msgid "Active"
+msgstr "Active project"
+
+#: templates/settings.html:134
+#, fuzzy
+msgid "Default"
+msgstr "Delete"
+
+#: templates/settings.html:140
+#, fuzzy
+msgid "Add New Project"
+msgstr "Active project"
+
+#: templates/settings.html:142
+msgid "e.g. Courses, Music, Research..."
+msgstr "e.g. Courses, Music, Research..."
+
+#: templates/settings.html:143 templates/video_detail.html:77
 msgid "Add"
 msgstr "Add"
 
-#: templates/settings.html:134
+#: templates/settings.html:145
+msgid "A folder with the same name will be created under"
+msgstr "A folder with the same name will be created under"
+
+#: templates/settings.html:145
+#, fuzzy
+msgid "videos/"
+msgstr "videos"
+
+#: templates/settings.html:148
+#, fuzzy
+msgid "Tip: Switch projects from the"
+msgstr "Switch projects from the top bar."
+
+#: templates/settings.html:148
+msgid "selector in the header."
+msgstr "selector in the header."
+
+#: templates/settings.html:154
 msgid "Database Backup"
 msgstr "Database Backup"
 
-#: templates/settings.html:136
+#: templates/settings.html:156
 msgid "SQLite only. Download a zip or save a copy into the local"
 msgstr "SQLite only. Download a zip or save a copy into the local"
 
-#: templates/settings.html:136
+#: templates/settings.html:156
 msgid "folder."
 msgstr "folder."
 
-#: templates/settings.html:137
+#: templates/settings.html:157
 msgid "To restore on another PC, put"
 msgstr "To restore on another PC, put"
 
-#: templates/settings.html:137
+#: templates/settings.html:157
 msgid "in"
 msgstr "in"
 
-#: templates/settings.html:137
+#: templates/settings.html:157
 msgid "and run"
 msgstr "and run"
 
-#: templates/settings.html:138
+#: templates/settings.html:158
 msgid "or extract"
 msgstr "or extract"
 
-#: templates/settings.html:138
+#: templates/settings.html:158
 msgid "into the project root manually."
 msgstr "into the project root manually."
 
-#: templates/settings.html:141
+#: templates/settings.html:161
 msgid "Download ZIP"
 msgstr "Download ZIP"
 
-#: templates/settings.html:142
+#: templates/settings.html:162
 msgid "Save copy to dbbackup/"
 msgstr "Save copy to dbbackup/"
 
-#: templates/settings.html:149
+#: templates/settings.html:169
 msgid "Storage & Cleanup"
 msgstr "Storage & Cleanup"
 
-#: templates/settings.html:153
+#: templates/settings.html:173
 msgid "Storage Used:"
 msgstr "Storage Used:"
 
-#: templates/settings.html:160
+#: templates/settings.html:180
 msgid "Storage limit reached. New downloads will be blocked."
 msgstr "Storage limit reached. New downloads will be blocked."
 
-#: templates/settings.html:165
+#: templates/settings.html:185
 msgid "Total Videos"
 msgstr "Total Videos"
 
-#: templates/settings.html:167 templates/settings.html:190
+#: templates/settings.html:187 templates/settings.html:210
 msgid "Completed"
 msgstr "Completed"
 
-#: templates/settings.html:169
+#: templates/settings.html:189
 msgid "Total Size"
 msgstr "Total Size"
 
-#: templates/settings.html:173
+#: templates/settings.html:193
 msgid "Reset & Delete"
 msgstr "Reset & Delete"
 
-#: templates/settings.html:177
+#: templates/settings.html:197
 msgid "Delete videos downloaded before"
 msgstr "Delete videos downloaded before"
 
-#: templates/settings.html:180
+#: templates/settings.html:200
 msgid "Delete Before Date"
 msgstr "Delete Before Date"
 
-#: templates/settings.html:185
+#: templates/settings.html:205
 msgid "Delete videos by status"
 msgstr "Delete videos by status"
 
-#: templates/settings.html:188
+#: templates/settings.html:208
 msgid "Queued"
 msgstr "Queued"
 
-#: templates/settings.html:189
+#: templates/settings.html:209
 msgid "Downloading"
 msgstr "Downloading"
 
-#: templates/settings.html:193
+#: templates/settings.html:213
 msgid "Delete by Status"
 msgstr "Delete by Status"
 
-#: templates/settings.html:198
+#: templates/settings.html:218
 msgid "Delete ALL videos and files in this project"
 msgstr "Delete ALL videos and files in this project"
 
-#: templates/settings.html:200
+#: templates/settings.html:220
 msgid "Reset Project"
 msgstr "Reset Project"
 
-#: templates/settings.html:242
+#: templates/settings.html:262
 msgid "Deleted"
 msgstr "Deleted"
 
-#: templates/settings.html:242
+#: templates/settings.html:262
 msgid "video(s)"
 msgstr "video(s)"
 
-#: templates/settings.html:248
+#: templates/settings.html:268
 msgid "Select a date"
 msgstr "Select a date"
 
-#: templates/settings.html:249
+#: templates/settings.html:269
 msgid "Delete all videos downloaded before"
 msgstr "Delete all videos downloaded before"
 
-#: templates/settings.html:255
+#: templates/settings.html:275
 msgid "Delete all"
 msgstr "Delete all"
 
-#: templates/settings.html:255
+#: templates/settings.html:275
 msgid "videos?"
 msgstr "videos?"
 
-#: templates/settings.html:260
+#: templates/settings.html:280
 msgid "Delete ALL videos and files in this project? This cannot be undone."
 msgstr "Delete ALL videos and files in this project? This cannot be undone."
 
-#: templates/settings.html:261
+#: templates/settings.html:281
 msgid "Are you really sure?"
 msgstr "Are you really sure?"
 
-#: templates/settings.html:280 templates/settings.html:319
+#: templates/settings.html:300 templates/settings.html:339
 msgid "Saving..."
 msgstr "Saving..."
 
-#: templates/settings.html:287
+#: templates/settings.html:307
 msgid "Saved!"
 msgstr "Saved!"
 
-#: templates/settings.html:290
+#: templates/settings.html:310
 msgid "Error saving"
 msgstr "Error saving"
 
-#: templates/settings.html:306
+#: templates/settings.html:326
 msgid "Error creating project"
 msgstr "Error creating project"
 
-#: templates/settings.html:311
+#: templates/settings.html:331
 msgid "Delete this project and all its videos?"
 msgstr "Delete this project and all its videos?"
 
-#: templates/settings.html:324 templates/settings.html:330
+#: templates/settings.html:344 templates/settings.html:350
 msgid "Backup failed"
 msgstr "Backup failed"
 
-#: templates/settings.html:327
+#: templates/settings.html:347
 msgid "Saved"
 msgstr "Saved"
 
@@ -1044,3 +1119,12 @@ msgstr "Open Source"
 #: templates/video_detail.html:185
 msgid "Delete this video and its file?"
 msgstr "Delete this video and its file?"
+
+#~ msgid "%(id)s.%(ext)s"
+#~ msgstr "%(id)s.%(ext)s"
+
+#~ msgid "e.g., %(title)s.%(ext)s"
+#~ msgstr "e.g., %(title)s.%(ext)s"
+
+#~ msgid "New project name..."
+#~ msgstr "New project name..."

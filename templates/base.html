@@ -19,12 +19,17 @@
                 <span class="brand-sub">Bulk Video Downloader</span>
             </a>
         </div>
-        <div class="nav-center">
-            <select id="project-select" class="project-select">
+        <div class="nav-center" title="{{ _("Active project — select to switch") }}">
+            <label for="project-select" class="project-select-label">
+                <span class="project-label-icon">📁</span>
+                <span class="project-label-text">{{ _("Project") }}:</span>
+            </label>
+            <select id="project-select" class="project-select" aria-label="{{ _("Active project") }}">
                 {% for p in projects %}
                 <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>
                 {% endfor %}
             </select>
+            <span class="project-count" title="{{ _("%(count)s projects", count=projects|length) }}">{{ projects|length }}</span>
         </div>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">{{ _("Download") }}</a>
@@ -55,11 +60,16 @@
             <a href="{{ url_for('set_lang', lang='tr') }}" style="padding:4px 10px; border-radius:6px; font-size:0.85rem; {% if CURRENT_LANG=='tr' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">TR</a>
             <a href="{{ url_for('set_lang', lang='en') }}" style="padding:4px 10px; border-radius:6px; font-size:0.85rem; {% if CURRENT_LANG=='en' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">EN</a>
         </div>
-        <select class="project-select-mobile">
-            {% for p in projects %}
-            <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>
-            {% endfor %}
-        </select>
+        <div style="margin-top:12px;">
+            <label for="project-select-mobile" style="font-size:0.82rem; opacity:0.7; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                <span>📁</span> {{ _("Active project") }} — {{ _("tap to switch") }}
+            </label>
+            <select id="project-select-mobile" class="project-select-mobile" aria-label="{{ _("Active project") }}">
+                {% for p in projects %}
+                <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
     <main class="container">
         {% block content %}{% endblock %}
