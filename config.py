@@ -53,6 +53,11 @@ DEBUG = _get_env_bool("BULK_VIDEO_DEBUG", False)
 
 POLL_INTERVAL_MS = 2000
 
+# i18n
+LANGUAGES = ["tr", "en"]
+BABEL_DEFAULT_LOCALE = os.getenv("BULK_VIDEO_LANG", "tr")
+BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASE_DIR, "translations")
+
 # Storage limit in MB
 _storage_max_str = os.getenv("BULK_VIDEO_STORAGE_MAX_MB")
 STORAGE_MAX_MB = int(_storage_max_str) if _storage_max_str and _storage_max_str.isdigit() else None

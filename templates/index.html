@@ -1,30 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Download - METO Bulk Video Downloader{% endblock %}
+{% block title %}{{ _("Download - METO Bulk Video Downloader") }}{% endblock %}
 
 {% block content %}
 <div class="landing-hero">
     <div class="landing-hero-main">
-        <h1>Download</h1>
-        <p>Paste video, playlist, or channel links (one per line). Downloads show up in <a href="/library">Library</a>.</p>
+        <h1>{{ _("Download") }}</h1>
+        <p>{{ _("Paste video, playlist, or channel links (one per line). Downloads show up in") }} <a href="/library">{{ _("Library") }}</a>.</p>
     </div>
     <div class="landing-hero-meta">
-        <span class="badge">Project: {{ current.name }}</span>
+        <span class="badge">{{ _("Project: %(name)s", name=current.name) }}</span>
     </div>
 </div>
 
 <div class="landing-grid">
     <div class="landing-card landing-card-form">
         <form id="download-form">
-            <label class="field-label" for="url-input">Links</label>
-            <textarea id="url-input" placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..." rows="7" autocomplete="off" spellcheck="false"></textarea>
+            <label class="field-label" for="url-input">{{ _("Links") }}</label>
+            <textarea id="url-input" placeholder="{{ _("https://www.youtube.com/watch?v=...") }}&#10;{{ _("https://www.youtube.com/playlist?list=...") }}" rows="7" autocomplete="off" spellcheck="false"></textarea>
             <div class="form-footer">
                 <div class="form-hints">
-                    <span id="url-count" class="badge">0 links</span>
-                    <span class="hint-text">Ctrl+Enter to add</span>
+                    <span id="url-count" class="badge">{{ _("0 links") }}</span>
+                    <span class="hint-text">{{ _("Ctrl+Enter to add") }}</span>
                 </div>
                 <div class="form-actions">
-                    <button id="add-to-queue" type="submit" class="btn btn-primary">Add to Queue</button>
-                    <button id="clear-input" type="button" class="btn btn-outline">Clear</button>
+                    <button id="add-to-queue" type="submit" class="btn btn-primary">{{ _("Add to Queue") }}</button>
+                    <button id="clear-input" type="button" class="btn btn-outline">{{ _("Clear") }}</button>
                     <span id="submit-status"></span>
                 </div>
             </div>
@@ -32,12 +32,12 @@
     </div>
 
     <div class="landing-card landing-card-tips">
-        <h2>Quick Tips</h2>
+        <h2>{{ _("Quick Tips") }}</h2>
         <ul class="tips-list">
-            <li>Mix videos, playlists, and channels. One link per line.</li>
-            <li>Duplicates get skipped automatically.</li>
-            <li>Change quality, format, audio-only, subtitles, and thumbnails in <a href="/settings">Settings</a>.</li>
-            <li>Switch projects from the top bar.</li>
+            <li>{{ _("Mix videos, playlists, and channels. One link per line.") }}</li>
+            <li>{{ _("Duplicates get skipped automatically.") }}</li>
+            <li>{{ _("Change quality, format, audio-only, subtitles, and thumbnails in") }} <a href="/settings">{{ _("Settings") }}</a>.</li>
+            <li>{{ _("Switch projects from the top bar.") }}</li>
         </ul>
     </div>
 </div>
@@ -45,14 +45,14 @@
 <div class="queue-section">
     <div class="queue-header">
         <div class="queue-header-left">
-            <h2>Queue</h2>
+            <h2>{{ _("Queue") }}</h2>
             <span id="queue-count" class="badge">0</span>
             <span id="queue-updated" class="queue-updated"></span>
         </div>
-        <button id="refresh-queue" class="btn btn-sm">Refresh</button>
+        <button id="refresh-queue" class="btn btn-sm">{{ _("Refresh") }}</button>
     </div>
     <div id="queue-container">
-        <p class="empty-state">No active downloads.</p>
+        <p class="empty-state">{{ _("No active downloads.") }}</p>
     </div>
 </div>
 {% endblock %}
@@ -87,7 +87,7 @@
     function updateUrlCount() {
         const urls = normalizeUrls(input.value);
         const n = urls.length;
-        urlCount.textContent = `${n} link${n === 1 ? "" : "s"}`;
+        urlCount.textContent = `${n} ${n === 1 ? "{{ _("link") }}" : "{{ _("links") }}"}`;
     }
 
     input.addEventListener("input", updateUrlCount);
@@ -110,14 +110,14 @@
         e.preventDefault();
         const urls = input.value;
         if (!urls.trim()) {
-            setStatus("Paste at least one link.", "warn");
+            setStatus("{{ _("Paste at least one link.") }}", "warn");
             return;
         }
 
         const urlList = normalizeUrls(urls);
         const hasPlaylist = urlList.some(url => url.includes("playlist?list=") || url.includes("&list="));
         if (hasPlaylist) {
-            if (!confirm("One or more links appear to be a playlist. This will add ALL videos in the playlist to the queue.\n\nDo you want to proceed?")) {
+            if (!confirm("{{ _("One or more links appear to be a playlist. This will add ALL videos in the playlist to the queue.\n\nDo you want to proceed?") }}")) {
                 return;
             }
         }
@@ -125,8 +125,8 @@
         const prevBtnText = addBtn.textContent;
         addBtn.disabled = true;
         clearBtn.disabled = true;
-        addBtn.textContent = "Adding...";
-        setStatus("Adding...", "info");
+        addBtn.textContent = "{{ _("Adding...") }}";
+        setStatus("{{ _("Adding...") }}", "info");
 
         try {
             const res = await fetch(`/api/queue?project=${PROJECT_ID}`, {
@@ -136,11 +136,11 @@
             });
             if (!res.ok) {
                 const err = await res.json();
-                setStatus(`Error: ${err.error || "Failed"}`, "error");
+                setStatus(`{{ _("Error:") }} ${err.error || "{{ _("Failed") }}"}`, "error");
                 return;
             }
             const data = await res.json();
-            setStatus(`Added: ${data.added}, Skipped: ${data.skipped}`, "ok");
+            setStatus(`{{ _("Added:") }} ${data.added}, {{ _("Skipped:") }} ${data.skipped}`, "ok");
             if (data.added > 0) {
                 input.value = "";
                 updateUrlCount();
@@ -148,7 +148,7 @@
             setTimeout(() => { setStatus("", ""); }, 4000);
             loadQueue();
         } catch (err) {
-            setStatus("Connection error", "error");
+            setStatus("{{ _("Connection error") }}", "error");
         } finally {
             addBtn.disabled = false;
             clearBtn.disabled = false;
@@ -173,10 +173,10 @@
             const queue = await res.json();
             const container = document.getElementById("queue-container");
             queueCount.textContent = String(queue.length);
-            queueUpdated.textContent = queue.length ? `Updated ${new Date().toLocaleTimeString()}` : "";
+            queueUpdated.textContent = queue.length ? `{{ _("Updated") }} ${new Date().toLocaleTimeString()}` : "";
 
             if (!queue.length) {
-                container.innerHTML = '<p class="empty-state">No active downloads.</p>';
+                container.innerHTML = '<p class="empty-state">{{ _("No active downloads.") }}</p>';
                 return;
             }
 

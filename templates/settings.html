@@ -3,36 +3,36 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Settings</h1>
-    <p>Configure <strong>{{ current.name }}</strong></p>
+    <h1>{{ _("Settings") }}</h1>
+    <p>{{ _("Configure") }} <strong>{{ current.name }}</strong></p>
 </div>
 
 <div class="settings-layout">
     <div class="settings-card full-width">
-        <h2>Global Preferences (Applies to browser)</h2>
+        <h2>{{ _("Global Preferences (Applies to browser)") }}</h2>
         <div class="setting-group" style="margin-bottom: 0;">
             <label class="toggle-label">
                 <input type="checkbox" id="setting-animations">
                 <span class="toggle-slider"></span>
-                <span>Enable UI Animations</span>
+                <span>{{ _("Enable UI Animations") }}</span>
             </label>
         </div>
     </div>
 
     <div class="settings-card">
-        <h2>Download Quality</h2>
+        <h2>{{ _("Download Quality") }}</h2>
         <div class="setting-group">
-            <label>Video Quality</label>
+            <label>{{ _("Video Quality") }}</label>
             <select id="setting-quality">
-                <option value="best" {% if settings.quality == 'best' %}selected{% endif %}>Best Available</option>
-                <option value="1080" {% if settings.quality == '1080' %}selected{% endif %}>1080p Max</option>
-                <option value="720" {% if settings.quality == '720' %}selected{% endif %}>720p Max</option>
-                <option value="480" {% if settings.quality == '480' %}selected{% endif %}>480p Max</option>
+                <option value="best" {% if settings.quality == 'best' %}selected{% endif %}>{{ _("Best Available") }}</option>
+                <option value="1080" {% if settings.quality == '1080' %}selected{% endif %}>{{ _("1080p Max") }}</option>
+                <option value="720" {% if settings.quality == '720' %}selected{% endif %}>{{ _("720p Max") }}</option>
+                <option value="480" {% if settings.quality == '480' %}selected{% endif %}>{{ _("480p Max") }}</option>
             </select>
         </div>
 
         <div class="setting-group">
-            <label>Output Format</label>
+            <label>{{ _("Output Format") }}</label>
             <select id="setting-format">
                 <option value="mp4" {% if settings.format == 'mp4' %}selected{% endif %}>MP4</option>
                 <option value="mkv" {% if settings.format == 'mkv' %}selected{% endif %}>MKV</option>
@@ -44,7 +44,7 @@
             <label class="toggle-label">
                 <input type="checkbox" id="setting-audio" {% if settings.audio_only %}checked{% endif %}>
                 <span class="toggle-slider"></span>
-                <span>Audio Only</span>
+                <span>{{ _("Audio Only") }}</span>
             </label>
         </div>
 
@@ -52,7 +52,7 @@
             <label class="toggle-label">
                 <input type="checkbox" id="setting-subtitles" {% if settings.subtitles %}checked{% endif %}>
                 <span class="toggle-slider"></span>
-                <span>Download Subtitles</span>
+                <span>{{ _("Download Subtitles") }}</span>
             </label>
         </div>
 
@@ -60,7 +60,7 @@
             <label class="toggle-label">
                 <input type="checkbox" id="setting-thumbnail" {% if settings.thumbnail is not defined or settings.thumbnail %}checked{% endif %}>
                 <span class="toggle-slider"></span>
-                <span>Download Thumbnail</span>
+                <span>{{ _("Download Thumbnail") }}</span>
             </label>
         </div>
 
@@ -68,51 +68,51 @@
             <label class="toggle-label">
                 <input type="checkbox" id="setting-embed-metadata" {% if settings.embed_metadata %}checked{% endif %}>
                 <span class="toggle-slider"></span>
-                <span>Embed Metadata</span>
+                <span>{{ _("Embed Metadata") }}</span>
             </label>
         </div>
 
         <div class="setting-group">
-            <label>Cookies Browser</label>
+            <label>{{ _("Cookies Browser") }}</label>
             <select id="setting-cookies-browser" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
-                <option value="" {% if not settings.cookies_browser %}selected{% endif %}>None</option>
-                <option value="chrome" {% if settings.cookies_browser == 'chrome' %}selected{% endif %}>Chrome</option>
-                <option value="edge" {% if settings.cookies_browser == 'edge' %}selected{% endif %}>Edge</option>
-                <option value="firefox" {% if settings.cookies_browser == 'firefox' %}selected{% endif %}>Firefox</option>
-                <option value="brave" {% if settings.cookies_browser == 'brave' %}selected{% endif %}>Brave</option>
-                <option value="safari" {% if settings.cookies_browser == 'safari' %}selected{% endif %}>Safari</option>
-                <option value="opera" {% if settings.cookies_browser == 'opera' %}selected{% endif %}>Opera</option>
+                <option value="" {% if not settings.cookies_browser %}selected{% endif %}>{{ _("None") }}</option>
+                <option value="chrome" {% if settings.cookies_browser == 'chrome' %}selected{% endif %}>{{ _("Chrome") }}</option>
+                <option value="edge" {% if settings.cookies_browser == 'edge' %}selected{% endif %}>{{ _("Edge") }}</option>
+                <option value="firefox" {% if settings.cookies_browser == 'firefox' %}selected{% endif %}>{{ _("Firefox") }}</option>
+                <option value="brave" {% if settings.cookies_browser == 'brave' %}selected{% endif %}>{{ _("Brave") }}</option>
+                <option value="safari" {% if settings.cookies_browser == 'safari' %}selected{% endif %}>{{ _("Safari") }}</option>
+                <option value="opera" {% if settings.cookies_browser == 'opera' %}selected{% endif %}>{{ _("Opera") }}</option>
             </select>
-            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">Extracts cookies from the browser to download restricted videos.</small>
+            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">{{ _("Extracts cookies from the browser to download restricted videos.") }}</small>
         </div>
 
         <div class="setting-group">
-            <label>Proxy URL</label>
-            <input type="text" id="setting-proxy" value="{{ settings.proxy or '' }}" placeholder="http://user:pass@ip:port" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+            <label>{{ _("Proxy URL") }}</label>
+            <input type="text" id="setting-proxy" value="{{ settings.proxy or '' }}" placeholder="{{ _("http://user:pass@ip:port") }}" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
         </div>
 
         <div class="setting-group">
-            <label>Rate Limit</label>
-            <input type="text" id="setting-rate-limit" value="{{ settings.rate_limit or '' }}" placeholder="e.g. 5M, 500K" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
+            <label>{{ _("Rate Limit") }}</label>
+            <input type="text" id="setting-rate-limit" value="{{ settings.rate_limit or '' }}" placeholder="{{ _("e.g. 5M, 500K") }}" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
         </div>
 
         <div class="setting-group">
-            <label>Output Template</label>
+            <label>{{ _("Output Template") }}</label>
             <input type="text" id="setting-output-template" value="{{ settings.output_template or '%(id)s.%(ext)s' }}" placeholder="%(id)s.%(ext)s" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
-            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">e.g., %(title)s.%(ext)s</small>
+            <small class="text-muted" style="display:block;margin-top:4px;color:#aaa;">{{ _("e.g.,") }} %(title)s.%(ext)s</small>
         </div>
 
         <div class="setting-group">
-            <label>Max Concurrent Downloads</label>
+            <label>{{ _("Max Concurrent Downloads") }}</label>
             <input type="number" id="setting-max-concurrent" value="{{ settings.max_concurrent or 1 }}" min="1" max="10" style="width: 100%; padding: 8px; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; color: #fff;">
         </div>
 
-        <button id="save-settings" class="btn btn-primary">Save Settings</button>
+        <button id="save-settings" class="btn btn-primary">{{ _("Save Settings") }}</button>
         <span id="save-status"></span>
     </div>
 
     <div class="settings-card">
-        <h2>Projects</h2>
+        <h2>{{ _("Projects") }}</h2>
         <div class="project-list" id="project-list">
             {% for p in projects %}
             <div class="project-item" data-id="{{ p.id }}">
@@ -124,80 +124,80 @@
             {% endfor %}
         </div>
         <div class="add-project">
-            <input type="text" id="new-project-name" placeholder="New project name...">
-            <button id="add-project" class="btn btn-sm btn-primary">Add</button>
+            <input type="text" id="new-project-name" placeholder="{{ _("New project name...") }}">
+            <button id="add-project" class="btn btn-sm btn-primary">{{ _("Add") }}</button>
         </div>
     </div>
 
     {% if sqlite_backend %}
     <div class="settings-card full-width">
-        <h2>Database Backup</h2>
+        <h2>{{ _("Database Backup") }}</h2>
         <p style="color:#aaa;margin-bottom:16px;">
-            SQLite only. Download a zip or save a copy into the local <code>dbbackup/</code> folder.
-            To restore on another PC, put <code>restore.zip</code> in <code>dbbackup/</code> and run <code>install.bat</code>,
-            or extract <code>bulk_video.db</code> into the project root manually.
+            {{ _("SQLite only. Download a zip or save a copy into the local") }} <code>dbbackup/</code> {{ _("folder.") }}
+            {{ _("To restore on another PC, put") }} <code>restore.zip</code> {{ _("in") }} <code>dbbackup/</code> {{ _("and run") }} <code>install.bat</code>,
+            {{ _("or extract") }} <code>bulk_video.db</code> {{ _("into the project root manually.") }}
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
-            <a id="download-db-backup" class="btn btn-primary" href="/api/db/backup">Download ZIP</a>
-            <button id="save-db-backup" type="button" class="btn btn-outline">Save copy to dbbackup/</button>
+            <a id="download-db-backup" class="btn btn-primary" href="/api/db/backup">{{ _("Download ZIP") }}</a>
+            <button id="save-db-backup" type="button" class="btn btn-outline">{{ _("Save copy to dbbackup/") }}</button>
             <span id="db-backup-status"></span>
         </div>
     </div>
     {% endif %}
 
     <div class="settings-card full-width">
-        <h2>Storage & Cleanup</h2>
+        <h2>{{ _("Storage & Cleanup") }}</h2>
         
         <div class="storage-info" style="margin-bottom: 20px; padding: 15px; background: #1a1a1a; border-radius: 8px; border: 1px solid #333;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
-                <span><strong>Storage Used:</strong> {{ storage.used_fmt }} / {{ storage.max_fmt }}</span>
+                <span><strong>{{ _("Storage Used:") }}</strong> {{ storage.used_fmt }} / {{ storage.max_fmt }}</span>
                 <span>{{ storage.percent }}%</span>
             </div>
             <div style="background: #2a2a2a; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid #444;">
                 <div style="background: {% if storage.percent > 90 %}#dc3545{% elif storage.percent > 75 %}#ffc107{% else %}#007bff{% endif %}; height: 100%; width: {{ storage.percent }}%; transition: width 0.3s ease;"></div>
             </div>
             {% if storage.percent >= 100 %}
-            <small style="color: #dc3545; display: block; margin-top: 8px;">Storage limit reached. New downloads will be blocked.</small>
+            <small style="color: #dc3545; display: block; margin-top: 8px;">{{ _("Storage limit reached. New downloads will be blocked.") }}</small>
             {% endif %}
         </div>
 
         <div id="project-stats" class="stats-grid">
-            <div class="stat-item"><span class="stat-value" id="stat-total">-</span><span class="stat-label">Total Videos</span></div>
-            <div class="stat-item"><span class="stat-value" id="stat-favorites">-</span><span class="stat-label">Favorites</span></div>
-            <div class="stat-item"><span class="stat-value" id="stat-completed">-</span><span class="stat-label">Completed</span></div>
-            <div class="stat-item"><span class="stat-value" id="stat-failed">-</span><span class="stat-label">Failed</span></div>
-            <div class="stat-item"><span class="stat-value" id="stat-size">-</span><span class="stat-label">Total Size</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-total">-</span><span class="stat-label">{{ _("Total Videos") }}</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-favorites">-</span><span class="stat-label">{{ _("Favorites") }}</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-completed">-</span><span class="stat-label">{{ _("Completed") }}</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-failed">-</span><span class="stat-label">{{ _("Failed") }}</span></div>
+            <div class="stat-item"><span class="stat-value" id="stat-size">-</span><span class="stat-label">{{ _("Total Size") }}</span></div>
         </div>
 
         <div class="reset-section">
-            <h3>Reset & Delete</h3>
+            <h3>{{ _("Reset & Delete") }}</h3>
 
             <div class="reset-row">
                 <div>
-                    <label>Delete videos downloaded before</label>
+                    <label>{{ _("Delete videos downloaded before") }}</label>
                     <input type="date" id="reset-date">
                 </div>
-                <button id="reset-by-date" class="btn btn-sm btn-danger">Delete Before Date</button>
+                <button id="reset-by-date" class="btn btn-sm btn-danger">{{ _("Delete Before Date") }}</button>
             </div>
 
             <div class="reset-row">
                 <div>
-                    <label>Delete videos by status</label>
+                    <label>{{ _("Delete videos by status") }}</label>
                     <select id="reset-status">
-                        <option value="failed">Failed</option>
-                        <option value="queued">Queued</option>
-                        <option value="downloading">Downloading</option>
-                        <option value="completed">Completed</option>
+                        <option value="failed">{{ _("Failed") }}</option>
+                        <option value="queued">{{ _("Queued") }}</option>
+                        <option value="downloading">{{ _("Downloading") }}</option>
+                        <option value="completed">{{ _("Completed") }}</option>
                     </select>
                 </div>
-                <button id="reset-by-status" class="btn btn-sm btn-danger">Delete by Status</button>
+                <button id="reset-by-status" class="btn btn-sm btn-danger">{{ _("Delete by Status") }}</button>
             </div>
 
             <div class="reset-row reset-danger">
                 <div>
-                    <label>Delete ALL videos and files in this project</label>
+                    <label>{{ _("Delete ALL videos and files in this project") }}</label>
                 </div>
-                <button id="reset-all" class="btn btn-sm btn-danger">Reset Project</button>
+                <button id="reset-all" class="btn btn-sm btn-danger">{{ _("Reset Project") }}</button>
             </div>
         </div>
     </div>
@@ -239,26 +239,26 @@
             body: JSON.stringify(body),
         });
         const data = await res.json();
-        alert(`Deleted ${data.deleted} video(s)`);
+        alert(`{{ _("Deleted") }} ${data.deleted} {{ _("video(s)") }}`);
         loadStats();
     }
 
     document.getElementById("reset-by-date").addEventListener("click", () => {
         const date = document.getElementById("reset-date").value;
-        if (!date) { alert("Select a date"); return; }
-        if (!confirm(`Delete all videos downloaded before ${date}?`)) return;
+        if (!date) { alert("{{ _("Select a date") }}"); return; }
+        if (!confirm(`{{ _("Delete all videos downloaded before") }} ${date}?`)) return;
         doReset("before_date", { action: "before_date", date });
     });
 
     document.getElementById("reset-by-status").addEventListener("click", () => {
         const status = document.getElementById("reset-status").value;
-        if (!confirm(`Delete all ${status} videos?`)) return;
+        if (!confirm(`{{ _("Delete all") }} ${status} {{ _("videos?") }}`)) return;
         doReset("by_status", { action: "by_status", status });
     });
 
     document.getElementById("reset-all").addEventListener("click", () => {
-        if (!confirm("Delete ALL videos and files in this project? This cannot be undone.")) return;
-        if (!confirm("Are you really sure?")) return;
+        if (!confirm("{{ _("Delete ALL videos and files in this project? This cannot be undone.") }}")) return;
+        if (!confirm("{{ _("Are you really sure?") }}")) return;
         doReset("all", { action: "all" });
     });
 
@@ -277,17 +277,17 @@
             max_concurrent: parseInt(document.getElementById("setting-max-concurrent").value) || 1,
         };
         const status = document.getElementById("save-status");
-        status.textContent = "Saving...";
+        status.textContent = "{{ _("Saving...") }}";
         try {
             await fetch(`/api/settings?project=${PROJECT_ID}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            status.textContent = "Saved!";
+            status.textContent = "{{ _("Saved!") }}";
             setTimeout(() => { status.textContent = ""; }, 2000);
         } catch (err) {
-            status.textContent = "Error saving";
+            status.textContent = "{{ _("Error saving") }}";
         }
     });
 
@@ -302,13 +302,13 @@
                 body: JSON.stringify({ name }),
             });
             if (res.ok) { location.reload(); }
-            else { const err = await res.json(); alert(err.error || "Failed"); }
-        } catch (err) { alert("Error creating project"); }
+            else { const err = await res.json(); alert(err.error || "{{ _("Failed") }}"); }
+        } catch (err) { alert("{{ _("Error creating project") }}"); }
     });
 
     document.getElementById("project-list").addEventListener("click", async (e) => {
         if (e.target.classList.contains("delete-project")) {
-            if (!confirm("Delete this project and all its videos?")) return;
+            if (!confirm("{{ _("Delete this project and all its videos?") }}")) return;
             await fetch(`/api/projects/${e.target.dataset.id}`, { method: "DELETE" });
             location.reload();
         }
@@ -316,18 +316,18 @@
 
     document.getElementById("save-db-backup")?.addEventListener("click", async () => {
         const status = document.getElementById("db-backup-status");
-        status.textContent = "Saving...";
+        status.textContent = "{{ _("Saving...") }}";
         try {
             const res = await fetch("/api/db/backup/save", { method: "POST" });
             const data = await res.json();
             if (!res.ok) {
-                status.textContent = data.error || "Backup failed";
+                status.textContent = data.error || "{{ _("Backup failed") }}";
                 return;
             }
-            status.textContent = `Saved ${data.saved}`;
+            status.textContent = `{{ _("Saved") }} ${data.saved}`;
             setTimeout(() => { status.textContent = ""; }, 4000);
         } catch (err) {
-            status.textContent = "Backup failed";
+            status.textContent = "{{ _("Backup failed") }}";
         }
     });
 

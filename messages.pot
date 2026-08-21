@@ -1,0 +1,1032 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-21 23:27+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/about.html:2 templates/about.html:6 templates/base.html:33
+#: templates/base.html:50
+msgid "About"
+msgstr ""
+
+#: templates/about.html:7
+msgid ""
+"Bulk Video Downloader runs on your machine: queue links, download with "
+"open-source tooling, and browse everything in the library."
+msgstr ""
+
+#: templates/about.html:11
+msgid "Uptime:"
+msgstr ""
+
+#: templates/about.html:12 templates/about.html:84
+msgid "Docker"
+msgstr ""
+
+#: templates/about.html:12 templates/about.html:84 templates/about.html:119
+msgid "Host"
+msgstr ""
+
+#: templates/about.html:18
+msgid "Author"
+msgstr ""
+
+#: templates/about.html:19
+msgid "Maintained by"
+msgstr ""
+
+#: templates/about.html:19
+msgid "More work and contact via the links below."
+msgstr ""
+
+#: templates/about.html:23
+msgid "Website"
+msgstr ""
+
+#: templates/about.html:27
+msgid "Project Repository"
+msgstr ""
+
+#: templates/about.html:31
+msgid "GitHub profile"
+msgstr ""
+
+#: templates/about.html:37
+msgid "Open source"
+msgstr ""
+
+#: templates/about.html:38
+msgid ""
+"This app bundles and orchestrates trusted open-source utilities—see the "
+"project README for details (for example"
+msgstr ""
+
+#: templates/about.html:38
+msgid "and Python)."
+msgstr ""
+
+#: templates/about.html:42
+msgid "Features & Architecture"
+msgstr ""
+
+#: templates/about.html:45
+msgid "Cloud Ready"
+msgstr ""
+
+#: templates/about.html:46
+msgid ""
+"Fully compatible with Docker and Dokploy. Configure everything seamlessly"
+" via"
+msgstr ""
+
+#: templates/about.html:46
+msgid "variables."
+msgstr ""
+
+#: templates/about.html:49
+msgid "Flexible Database"
+msgstr ""
+
+#: templates/about.html:50
+msgid "Runs on a zero-config"
+msgstr ""
+
+#: templates/about.html:50
+msgid "file by default, but natively supports"
+msgstr ""
+
+#: templates/about.html:50
+msgid "and"
+msgstr ""
+
+#: templates/about.html:50
+msgid "for production environments."
+msgstr ""
+
+#: templates/about.html:53
+msgid "Secure Access"
+msgstr ""
+
+#: templates/about.html:54
+msgid ""
+"Includes an optional, cookie-based authentication system. Set a username "
+"and password to lock down the UI for public servers."
+msgstr ""
+
+#: templates/about.html:57
+msgid "Library Management"
+msgstr ""
+
+#: templates/about.html:58
+msgid ""
+"Organize massive collections with grid/list views, metadata tagging, "
+"favoriting, and multi-select bulk operations."
+msgstr ""
+
+#: templates/about.html:64
+msgid "Sistem Çalışması"
+msgstr ""
+
+#: templates/about.html:65
+msgid "Uygulama"
+msgstr ""
+
+#: templates/about.html:65
+msgid "üzerine kurulu, Flask arka ucuyla kuyruk tabanlı çalışır. Adımlar:"
+msgstr ""
+
+#: templates/about.html:69
+msgid "Adım"
+msgstr ""
+
+#: templates/about.html:76
+msgid "Poll interval:"
+msgstr ""
+
+#: templates/about.html:76
+msgid "Video klasörü:"
+msgstr ""
+
+#: templates/about.html:76 templates/about.html:100
+msgid "Auth:"
+msgstr ""
+
+#: templates/about.html:76 templates/about.html:100
+msgid "açık"
+msgstr ""
+
+#: templates/about.html:76 templates/about.html:100
+msgid "kapalı"
+msgstr ""
+
+#: templates/about.html:81
+msgid "Sistem Bilgileri"
+msgstr ""
+
+#: templates/about.html:85
+msgid "debug"
+msgstr ""
+
+#: templates/about.html:85
+msgid "prod"
+msgstr ""
+
+#: templates/about.html:89
+msgid "Uptime"
+msgstr ""
+
+#: templates/about.html:90
+msgid "Python"
+msgstr ""
+
+#: templates/about.html:91
+msgid "Platform"
+msgstr ""
+
+#: templates/about.html:92
+msgid "Flask / yt-dlp"
+msgstr ""
+
+#: templates/about.html:93
+msgid "ffmpeg"
+msgstr ""
+
+#: templates/about.html:94
+msgid "JS Runtimes"
+msgstr ""
+
+#: templates/about.html:95
+msgid "Host:Port"
+msgstr ""
+
+#: templates/about.html:96
+msgid "Video Dir"
+msgstr ""
+
+#: templates/about.html:97
+msgid "Disk"
+msgstr ""
+
+#: templates/about.html:100
+msgid "Boş:"
+msgstr ""
+
+#: templates/about.html:100
+msgid "Poll:"
+msgstr ""
+
+#: templates/about.html:100
+msgid "Limit:"
+msgstr ""
+
+#: templates/about.html:100
+msgid "limitsiz"
+msgstr ""
+
+#: templates/about.html:107
+msgid "Veritabanı Bilgileri"
+msgstr ""
+
+#: templates/about.html:117
+msgid "Dosya"
+msgstr ""
+
+#: templates/about.html:120
+msgid "DB / User"
+msgstr ""
+
+#: templates/about.html:121
+msgid "URL"
+msgstr ""
+
+#: templates/about.html:123
+msgid "Tablolar"
+msgstr ""
+
+#: templates/about.html:125
+msgid "Satırlar"
+msgstr ""
+
+#: templates/about.html:129
+msgid "Projeler"
+msgstr ""
+
+#: templates/about.html:130
+msgid "Videolar"
+msgstr ""
+
+#: templates/about.html:131
+msgid "Etiketler"
+msgstr ""
+
+#: templates/about.html:135
+msgid "SQLite dosya tabanlıdır, yedek için Settings → Database Backup kullanın."
+msgstr ""
+
+#: templates/about.html:135
+msgid "MySQL/PostgreSQL dokploy veya docker-compose ile gelir, yedek için"
+msgstr ""
+
+#: templates/about.html:135
+msgid "kullanın."
+msgstr ""
+
+#: templates/about.html:140
+msgid "Canlı Durum & Kuyruk"
+msgstr ""
+
+#: templates/about.html:144
+msgid "Kuyrukta"
+msgstr ""
+
+#: templates/about.html:148
+msgid "İndiriliyor"
+msgstr ""
+
+#: templates/about.html:152
+msgid "Tamamlandı"
+msgstr ""
+
+#: templates/about.html:156
+msgid "Başarısız"
+msgstr ""
+
+#: templates/about.html:160
+msgid "Seçili proje:"
+msgstr ""
+
+#: templates/about.html:161
+msgid "Son indirme:"
+msgstr ""
+
+#: templates/base.html:30 templates/base.html:47 templates/index.html:7
+msgid "Download"
+msgstr ""
+
+#: templates/base.html:31 templates/base.html:48 templates/index.html:8
+#: templates/library.html:6
+msgid "Library"
+msgstr ""
+
+#: templates/base.html:32 templates/base.html:49 templates/index.html:39
+#: templates/settings.html:6
+msgid "Settings"
+msgstr ""
+
+#: templates/base.html:35 templates/base.html:52
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:42
+msgid "Toggle menu"
+msgstr ""
+
+#: templates/index.html:2
+msgid "Download - METO Bulk Video Downloader"
+msgstr ""
+
+#: templates/index.html:8
+msgid ""
+"Paste video, playlist, or channel links (one per line). Downloads show up"
+" in"
+msgstr ""
+
+#: templates/index.html:11
+#, python-format
+msgid "Project: %(name)s"
+msgstr ""
+
+#: templates/index.html:18
+msgid "Links"
+msgstr ""
+
+#: templates/index.html:19
+msgid "https://www.youtube.com/watch?v=..."
+msgstr ""
+
+#: templates/index.html:19
+msgid "https://www.youtube.com/playlist?list=..."
+msgstr ""
+
+#: templates/index.html:22
+msgid "0 links"
+msgstr ""
+
+#: templates/index.html:23
+msgid "Ctrl+Enter to add"
+msgstr ""
+
+#: templates/index.html:26
+msgid "Add to Queue"
+msgstr ""
+
+#: templates/index.html:27
+msgid "Clear"
+msgstr ""
+
+#: templates/index.html:35
+msgid "Quick Tips"
+msgstr ""
+
+#: templates/index.html:37
+msgid "Mix videos, playlists, and channels. One link per line."
+msgstr ""
+
+#: templates/index.html:38
+msgid "Duplicates get skipped automatically."
+msgstr ""
+
+#: templates/index.html:39
+msgid "Change quality, format, audio-only, subtitles, and thumbnails in"
+msgstr ""
+
+#: templates/index.html:40
+msgid "Switch projects from the top bar."
+msgstr ""
+
+#: templates/index.html:48
+msgid "Queue"
+msgstr ""
+
+#: templates/index.html:52
+msgid "Refresh"
+msgstr ""
+
+#: templates/index.html:55 templates/index.html:179
+msgid "No active downloads."
+msgstr ""
+
+#: templates/index.html:90
+msgid "link"
+msgstr ""
+
+#: templates/index.html:90
+msgid "links"
+msgstr ""
+
+#: templates/index.html:113
+msgid "Paste at least one link."
+msgstr ""
+
+#: templates/index.html:120
+msgid ""
+"One or more links appear to be a playlist. This will add ALL videos in "
+"the playlist to the queue.\n"
+"\n"
+"Do you want to proceed?"
+msgstr ""
+
+#: templates/index.html:128 templates/index.html:129
+msgid "Adding..."
+msgstr ""
+
+#: templates/index.html:139
+msgid "Error:"
+msgstr ""
+
+#: templates/index.html:139 templates/settings.html:168
+#: templates/settings.html:187 templates/settings.html:305
+msgid "Failed"
+msgstr ""
+
+#: templates/index.html:143
+msgid "Added:"
+msgstr ""
+
+#: templates/index.html:143
+msgid "Skipped:"
+msgstr ""
+
+#: templates/index.html:151
+msgid "Connection error"
+msgstr ""
+
+#: templates/index.html:176
+msgid "Updated"
+msgstr ""
+
+#: templates/library.html:2
+msgid "Library - METO Bulk Video Downloader"
+msgstr ""
+
+#: templates/library.html:12 templates/library.html:88
+msgid "Filters"
+msgstr ""
+
+#: templates/library.html:17
+msgid "Search"
+msgstr ""
+
+#: templates/library.html:18
+msgid "Title or uploader..."
+msgstr ""
+
+#: templates/library.html:22 templates/settings.html:166
+msgid "Favorites"
+msgstr ""
+
+#: templates/library.html:24 templates/library.html:31
+#: templates/library.html:37 templates/library.html:47
+#: templates/library.html:52
+msgid "All"
+msgstr ""
+
+#: templates/library.html:25
+msgid "Favorites Only"
+msgstr ""
+
+#: templates/library.html:30 templates/video_detail.html:39
+msgid "Orientation"
+msgstr ""
+
+#: templates/library.html:35 templates/video_detail.html:42
+msgid "Length"
+msgstr ""
+
+#: templates/library.html:38
+msgid "Short (<1min)"
+msgstr ""
+
+#: templates/library.html:39
+msgid "Medium (1-10min)"
+msgstr ""
+
+#: templates/library.html:40
+msgid "Long (10-60min)"
+msgstr ""
+
+#: templates/library.html:41
+msgid "Feature (>60min)"
+msgstr ""
+
+#: templates/library.html:46 templates/video_detail.html:36
+msgid "Aspect Ratio"
+msgstr ""
+
+#: templates/library.html:51 templates/video_detail.html:60
+msgid "Category"
+msgstr ""
+
+#: templates/library.html:56
+msgid "Sort By"
+msgstr ""
+
+#: templates/library.html:58
+msgid "Date Downloaded"
+msgstr ""
+
+#: templates/library.html:59
+msgid "Title"
+msgstr ""
+
+#: templates/library.html:60 templates/video_detail.html:30
+msgid "Duration"
+msgstr ""
+
+#: templates/library.html:61
+msgid "File Size"
+msgstr ""
+
+#: templates/library.html:62 templates/video_detail.html:27
+msgid "Upload Date"
+msgstr ""
+
+#: templates/library.html:66
+msgid "Clear Filters"
+msgstr ""
+
+#: templates/library.html:71
+msgid "0 videos"
+msgstr ""
+
+#: templates/library.html:74
+msgid "0 selected"
+msgstr ""
+
+#: templates/library.html:76
+msgid "Move to..."
+msgstr ""
+
+#: templates/library.html:81
+msgid "Set Category"
+msgstr ""
+
+#: templates/library.html:82
+msgid "Add Tag"
+msgstr ""
+
+#: templates/library.html:83 templates/video_detail.html:95
+msgid "Delete"
+msgstr ""
+
+#: templates/library.html:90
+msgid "Grid"
+msgstr ""
+
+#: templates/library.html:91
+msgid "List"
+msgstr ""
+
+#: templates/library.html:98
+msgid "Load More"
+msgstr ""
+
+#: templates/library.html:155
+msgid "videos"
+msgstr ""
+
+#: templates/library.html:155
+msgid "video"
+msgstr ""
+
+#: templates/library.html:172
+msgid "No videos found."
+msgstr ""
+
+#: templates/library.html:186 templates/library.html:215
+msgid "Toggle favorite"
+msgstr ""
+
+#: templates/library.html:296
+msgid "selected"
+msgstr ""
+
+#: templates/library.html:340
+msgid "Bulk action failed."
+msgstr ""
+
+#: templates/library.html:343
+msgid "Error communicating with server."
+msgstr ""
+
+#: templates/library.html:350
+msgid "Move"
+msgstr ""
+
+#: templates/library.html:350
+msgid "videos to this project?"
+msgstr ""
+
+#: templates/library.html:359
+msgid "Enter category for"
+msgstr ""
+
+#: templates/library.html:359 templates/library.html:366
+msgid "videos:"
+msgstr ""
+
+#: templates/library.html:366
+msgid "Enter tag to add to"
+msgstr ""
+
+#: templates/library.html:373
+msgid "Are you sure you want to delete"
+msgstr ""
+
+#: templates/library.html:373
+msgid "videos permanently?"
+msgstr ""
+
+#: templates/login.html:2
+msgid "Login"
+msgstr ""
+
+#: templates/login.html:12
+msgid "Welcome Back"
+msgstr ""
+
+#: templates/login.html:13
+msgid "Sign in to continue"
+msgstr ""
+
+#: templates/login.html:24
+msgid "Username"
+msgstr ""
+
+#: templates/login.html:29
+msgid "Password"
+msgstr ""
+
+#: templates/login.html:33
+msgid "Sign In"
+msgstr ""
+
+#: templates/settings.html:7
+msgid "Configure"
+msgstr ""
+
+#: templates/settings.html:12
+msgid "Global Preferences (Applies to browser)"
+msgstr ""
+
+#: templates/settings.html:17
+msgid "Enable UI Animations"
+msgstr ""
+
+#: templates/settings.html:23
+msgid "Download Quality"
+msgstr ""
+
+#: templates/settings.html:25
+msgid "Video Quality"
+msgstr ""
+
+#: templates/settings.html:27
+msgid "Best Available"
+msgstr ""
+
+#: templates/settings.html:28
+msgid "1080p Max"
+msgstr ""
+
+#: templates/settings.html:29
+msgid "720p Max"
+msgstr ""
+
+#: templates/settings.html:30
+msgid "480p Max"
+msgstr ""
+
+#: templates/settings.html:35
+msgid "Output Format"
+msgstr ""
+
+#: templates/settings.html:47
+msgid "Audio Only"
+msgstr ""
+
+#: templates/settings.html:55
+msgid "Download Subtitles"
+msgstr ""
+
+#: templates/settings.html:63
+msgid "Download Thumbnail"
+msgstr ""
+
+#: templates/settings.html:71
+msgid "Embed Metadata"
+msgstr ""
+
+#: templates/settings.html:76
+msgid "Cookies Browser"
+msgstr ""
+
+#: templates/settings.html:78
+msgid "None"
+msgstr ""
+
+#: templates/settings.html:79
+msgid "Chrome"
+msgstr ""
+
+#: templates/settings.html:80
+msgid "Edge"
+msgstr ""
+
+#: templates/settings.html:81
+msgid "Firefox"
+msgstr ""
+
+#: templates/settings.html:82
+msgid "Brave"
+msgstr ""
+
+#: templates/settings.html:83
+msgid "Safari"
+msgstr ""
+
+#: templates/settings.html:84
+msgid "Opera"
+msgstr ""
+
+#: templates/settings.html:86
+msgid "Extracts cookies from the browser to download restricted videos."
+msgstr ""
+
+#: templates/settings.html:90
+msgid "Proxy URL"
+msgstr ""
+
+#: templates/settings.html:91
+msgid "http://user:pass@ip:port"
+msgstr ""
+
+#: templates/settings.html:95
+msgid "Rate Limit"
+msgstr ""
+
+#: templates/settings.html:96
+msgid "e.g. 5M, 500K"
+msgstr ""
+
+#: templates/settings.html:100
+msgid "Output Template"
+msgstr ""
+
+#: templates/settings.html:101
+#, python-format
+msgid "%(id)s.%(ext)s"
+msgstr ""
+
+#: templates/settings.html:102
+#, python-format
+msgid "e.g., %(title)s.%(ext)s"
+msgstr ""
+
+#: templates/settings.html:106
+msgid "Max Concurrent Downloads"
+msgstr ""
+
+#: templates/settings.html:110
+msgid "Save Settings"
+msgstr ""
+
+#: templates/settings.html:115
+msgid "Projects"
+msgstr ""
+
+#: templates/settings.html:127
+msgid "New project name..."
+msgstr ""
+
+#: templates/settings.html:128 templates/video_detail.html:77
+msgid "Add"
+msgstr ""
+
+#: templates/settings.html:134
+msgid "Database Backup"
+msgstr ""
+
+#: templates/settings.html:136
+msgid "SQLite only. Download a zip or save a copy into the local"
+msgstr ""
+
+#: templates/settings.html:136
+msgid "folder."
+msgstr ""
+
+#: templates/settings.html:137
+msgid "To restore on another PC, put"
+msgstr ""
+
+#: templates/settings.html:137
+msgid "in"
+msgstr ""
+
+#: templates/settings.html:137
+msgid "and run"
+msgstr ""
+
+#: templates/settings.html:138
+msgid "or extract"
+msgstr ""
+
+#: templates/settings.html:138
+msgid "into the project root manually."
+msgstr ""
+
+#: templates/settings.html:141
+msgid "Download ZIP"
+msgstr ""
+
+#: templates/settings.html:142
+msgid "Save copy to dbbackup/"
+msgstr ""
+
+#: templates/settings.html:149
+msgid "Storage & Cleanup"
+msgstr ""
+
+#: templates/settings.html:153
+msgid "Storage Used:"
+msgstr ""
+
+#: templates/settings.html:160
+msgid "Storage limit reached. New downloads will be blocked."
+msgstr ""
+
+#: templates/settings.html:165
+msgid "Total Videos"
+msgstr ""
+
+#: templates/settings.html:167 templates/settings.html:190
+msgid "Completed"
+msgstr ""
+
+#: templates/settings.html:169
+msgid "Total Size"
+msgstr ""
+
+#: templates/settings.html:173
+msgid "Reset & Delete"
+msgstr ""
+
+#: templates/settings.html:177
+msgid "Delete videos downloaded before"
+msgstr ""
+
+#: templates/settings.html:180
+msgid "Delete Before Date"
+msgstr ""
+
+#: templates/settings.html:185
+msgid "Delete videos by status"
+msgstr ""
+
+#: templates/settings.html:188
+msgid "Queued"
+msgstr ""
+
+#: templates/settings.html:189
+msgid "Downloading"
+msgstr ""
+
+#: templates/settings.html:193
+msgid "Delete by Status"
+msgstr ""
+
+#: templates/settings.html:198
+msgid "Delete ALL videos and files in this project"
+msgstr ""
+
+#: templates/settings.html:200
+msgid "Reset Project"
+msgstr ""
+
+#: templates/settings.html:242
+msgid "Deleted"
+msgstr ""
+
+#: templates/settings.html:242
+msgid "video(s)"
+msgstr ""
+
+#: templates/settings.html:248
+msgid "Select a date"
+msgstr ""
+
+#: templates/settings.html:249
+msgid "Delete all videos downloaded before"
+msgstr ""
+
+#: templates/settings.html:255
+msgid "Delete all"
+msgstr ""
+
+#: templates/settings.html:255
+msgid "videos?"
+msgstr ""
+
+#: templates/settings.html:260
+msgid "Delete ALL videos and files in this project? This cannot be undone."
+msgstr ""
+
+#: templates/settings.html:261
+msgid "Are you really sure?"
+msgstr ""
+
+#: templates/settings.html:280 templates/settings.html:319
+msgid "Saving..."
+msgstr ""
+
+#: templates/settings.html:287
+msgid "Saved!"
+msgstr ""
+
+#: templates/settings.html:290
+msgid "Error saving"
+msgstr ""
+
+#: templates/settings.html:306
+msgid "Error creating project"
+msgstr ""
+
+#: templates/settings.html:311
+msgid "Delete this project and all its videos?"
+msgstr ""
+
+#: templates/settings.html:324 templates/settings.html:330
+msgid "Backup failed"
+msgstr ""
+
+#: templates/settings.html:327
+msgid "Saved"
+msgstr ""
+
+#: templates/video_detail.html:2
+msgid "METO Bulk Video Downloader"
+msgstr ""
+
+#: templates/video_detail.html:10
+msgid "Your browser does not support video."
+msgstr ""
+
+#: templates/video_detail.html:14
+msgid "No video file found."
+msgstr ""
+
+#: templates/video_detail.html:24
+msgid "Uploader"
+msgstr ""
+
+#: templates/video_detail.html:33
+msgid "Resolution"
+msgstr ""
+
+#: templates/video_detail.html:45
+msgid "Size"
+msgstr ""
+
+#: templates/video_detail.html:48
+msgid "Downloaded"
+msgstr ""
+
+#: templates/video_detail.html:50
+msgid "Status"
+msgstr ""
+
+#: templates/video_detail.html:52
+msgid "Favorite"
+msgstr ""
+
+#: templates/video_detail.html:63
+msgid "No category"
+msgstr ""
+
+#: templates/video_detail.html:68
+msgid "New category..."
+msgstr ""
+
+#: templates/video_detail.html:69
+msgid "Set"
+msgstr ""
+
+#: templates/video_detail.html:74
+msgid "Tags"
+msgstr ""
+
+#: templates/video_detail.html:76
+msgid "Add tag..."
+msgstr ""
+
+#: templates/video_detail.html:94
+msgid "Open Source"
+msgstr ""
+
+#: templates/video_detail.html:185
+msgid "Delete this video and its file?"
+msgstr ""
+

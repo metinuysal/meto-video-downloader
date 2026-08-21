@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ video.title }} - METO Bulk Video Downloader{% endblock %}
+{% block title %}{{ video.title }} - {{ _("METO Bulk Video Downloader") }}{% endblock %}
 
 {% block content %}
 <div class="detail-layout">
@@ -7,11 +7,11 @@
         {% if video.video_url %}
         <video controls class="video-player" preload="metadata">
             <source src="{{ video.video_url }}">
-            Your browser does not support video.
+            {{ _("Your browser does not support video.") }}
         </video>
         {% else %}
         <div class="video-player no-video">
-            <p>No video file found.</p>
+            <p>{{ _("No video file found.") }}</p>
         </div>
         {% endif %}
     </div>
@@ -21,35 +21,35 @@
 
         <div class="detail-meta">
             {% if video.uploader %}
-            <div class="meta-row"><span class="meta-label">Uploader</span><span>{{ video.uploader }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Uploader") }}</span><span>{{ video.uploader }}</span></div>
             {% endif %}
             {% if video.upload_date %}
-            <div class="meta-row"><span class="meta-label">Upload Date</span><span>{{ video.upload_date }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Upload Date") }}</span><span>{{ video.upload_date }}</span></div>
             {% endif %}
             {% if video.duration %}
-            <div class="meta-row"><span class="meta-label">Duration</span><span>{{ video.duration // 60 }}:{{ "%02d" | format(video.duration % 60) }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Duration") }}</span><span>{{ video.duration // 60 }}:{{ "%02d" | format(video.duration % 60) }}</span></div>
             {% endif %}
             {% if video.width and video.height %}
-            <div class="meta-row"><span class="meta-label">Resolution</span><span>{{ video.width }}x{{ video.height }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Resolution") }}</span><span>{{ video.width }}x{{ video.height }}</span></div>
             {% endif %}
             {% if video.aspect_ratio %}
-            <div class="meta-row"><span class="meta-label">Aspect Ratio</span><span>{{ video.aspect_ratio }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Aspect Ratio") }}</span><span>{{ video.aspect_ratio }}</span></div>
             {% endif %}
             {% if video.orientation %}
-            <div class="meta-row"><span class="meta-label">Orientation</span><span class="badge">{{ video.orientation }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Orientation") }}</span><span class="badge">{{ video.orientation }}</span></div>
             {% endif %}
             {% if video.length_category %}
-            <div class="meta-row"><span class="meta-label">Length</span><span class="badge">{{ video.length_category }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Length") }}</span><span class="badge">{{ video.length_category }}</span></div>
             {% endif %}
             {% if video.filesize %}
-            <div class="meta-row"><span class="meta-label">Size</span><span id="filesize-display"></span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Size") }}</span><span id="filesize-display"></span></div>
             {% endif %}
             {% if video.downloaded_at %}
-            <div class="meta-row"><span class="meta-label">Downloaded</span><span>{{ video.downloaded_at }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Downloaded") }}</span><span>{{ video.downloaded_at }}</span></div>
             {% endif %}
-            <div class="meta-row"><span class="meta-label">Status</span><span class="status-badge status-{{ video.status }}">{{ video.status }}</span></div>
+            <div class="meta-row"><span class="meta-label">{{ _("Status") }}</span><span class="status-badge status-{{ video.status }}">{{ video.status }}</span></div>
             <div class="meta-row">
-                <span class="meta-label">Favorite</span>
+                <span class="meta-label">{{ _("Favorite") }}</span>
                 <button id="detail-favorite" class="detail-star-btn {% if video.favorite %}starred{% endif %}" data-id="{{ video.id }}">
                     {% if video.favorite %}&#9733;{% else %}&#9734;{% endif %}
                 </button>
@@ -57,24 +57,24 @@
         </div>
 
         <div class="detail-section">
-            <h3>Category</h3>
+            <h3>{{ _("Category") }}</h3>
             <div class="category-selector">
                 <select id="category-select">
-                    <option value="">No category</option>
+                    <option value="">{{ _("No category") }}</option>
                     {% for cat in categories %}
                     <option value="{{ cat }}" {% if video.custom_category == cat %}selected{% endif %}>{{ cat }}</option>
                     {% endfor %}
                 </select>
-                <input type="text" id="new-category" placeholder="New category...">
-                <button id="set-category" class="btn btn-sm">Set</button>
+                <input type="text" id="new-category" placeholder="{{ _("New category...") }}">
+                <button id="set-category" class="btn btn-sm">{{ _("Set") }}</button>
             </div>
         </div>
 
         <div class="detail-section">
-            <h3>Tags</h3>
+            <h3>{{ _("Tags") }}</h3>
             <div class="tag-input-row">
-                <input type="text" id="tag-input" placeholder="Add tag...">
-                <button id="add-tag" class="btn btn-sm">Add</button>
+                <input type="text" id="tag-input" placeholder="{{ _("Add tag...") }}">
+                <button id="add-tag" class="btn btn-sm">{{ _("Add") }}</button>
             </div>
             <div id="tags-container" class="tags-container">
                 {% for tag in tags %}
@@ -91,8 +91,8 @@
         </div>
 
         <div class="detail-actions">
-            <a href="{{ video.url }}" target="_blank" class="btn btn-outline">Open Source</a>
-            <button id="delete-video" class="btn btn-danger">Delete</button>
+            <a href="{{ video.url }}" target="_blank" class="btn btn-outline">{{ _("Open Source") }}</a>
+            <button id="delete-video" class="btn btn-danger">{{ _("Delete") }}</button>
         </div>
     </div>
 </div>
@@ -182,7 +182,7 @@
     });
 
     document.getElementById("delete-video").addEventListener("click", async () => {
-        if (!confirm("Delete this video and its file?")) return;
+        if (!confirm("{{ _("Delete this video and its file?") }}")) return;
         await fetch(`/api/video/${VIDEO_ID}`, { method: "DELETE" });
         window.location.href = "/library";
     });

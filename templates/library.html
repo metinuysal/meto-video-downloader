@@ -1,101 +1,101 @@
 {% extends "base.html" %}
-{% block title %}Library - METO Bulk Video Downloader{% endblock %}
+{% block title %}{{ _("Library - METO Bulk Video Downloader") }}{% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h1>Library</h1>
+    <h1>{{ _("Library") }}</h1>
 </div>
 
 <div class="library-layout">
     <aside class="filters-panel" id="filters-panel">
         <div class="filters-header">
-            <h3>Filters</h3>
+            <h3>{{ _("Filters") }}</h3>
             <button class="btn btn-sm btn-outline close-filters" id="close-filters">&times;</button>
         </div>
 
         <div class="filter-group">
-            <label>Search</label>
-            <input type="text" id="filter-search" placeholder="Title or uploader...">
+            <label>{{ _("Search") }}</label>
+            <input type="text" id="filter-search" placeholder="{{ _("Title or uploader...") }}">
         </div>
 
         <div class="filter-group">
-            <label>Favorites</label>
+            <label>{{ _("Favorites") }}</label>
             <select id="filter-favorite">
-                <option value="">All</option>
-                <option value="1">Favorites Only</option>
+                <option value="">{{ _("All") }}</option>
+                <option value="1">{{ _("Favorites Only") }}</option>
             </select>
         </div>
 
         <div class="filter-group">
-            <label>Orientation</label>
-            <select id="filter-orientation"><option value="">All</option></select>
+            <label>{{ _("Orientation") }}</label>
+            <select id="filter-orientation"><option value="">{{ _("All") }}</option></select>
         </div>
 
         <div class="filter-group">
-            <label>Length</label>
+            <label>{{ _("Length") }}</label>
             <select id="filter-length">
-                <option value="">All</option>
-                <option value="short">Short (&lt;1min)</option>
-                <option value="medium">Medium (1-10min)</option>
-                <option value="long">Long (10-60min)</option>
-                <option value="feature">Feature (&gt;60min)</option>
+                <option value="">{{ _("All") }}</option>
+                <option value="short">{{ _("Short (<1min)") }}</option>
+                <option value="medium">{{ _("Medium (1-10min)") }}</option>
+                <option value="long">{{ _("Long (10-60min)") }}</option>
+                <option value="feature">{{ _("Feature (>60min)") }}</option>
             </select>
         </div>
 
         <div class="filter-group">
-            <label>Aspect Ratio</label>
-            <select id="filter-aspect"><option value="">All</option></select>
+            <label>{{ _("Aspect Ratio") }}</label>
+            <select id="filter-aspect"><option value="">{{ _("All") }}</option></select>
         </div>
 
         <div class="filter-group">
-            <label>Category</label>
-            <select id="filter-category"><option value="">All</option></select>
+            <label>{{ _("Category") }}</label>
+            <select id="filter-category"><option value="">{{ _("All") }}</option></select>
         </div>
 
         <div class="filter-group">
-            <label>Sort By</label>
+            <label>{{ _("Sort By") }}</label>
             <select id="filter-sort">
-                <option value="downloaded_at">Date Downloaded</option>
-                <option value="title">Title</option>
-                <option value="duration">Duration</option>
-                <option value="filesize">File Size</option>
-                <option value="upload_date">Upload Date</option>
+                <option value="downloaded_at">{{ _("Date Downloaded") }}</option>
+                <option value="title">{{ _("Title") }}</option>
+                <option value="duration">{{ _("Duration") }}</option>
+                <option value="filesize">{{ _("File Size") }}</option>
+                <option value="upload_date">{{ _("Upload Date") }}</option>
             </select>
         </div>
 
-        <button id="clear-filters" class="btn btn-sm btn-outline">Clear Filters</button>
+        <button id="clear-filters" class="btn btn-sm btn-outline">{{ _("Clear Filters") }}</button>
     </aside>
 
     <div class="library-main">
         <div class="library-toolbar">
-            <span id="video-count">0 videos</span>
+            <span id="video-count">{{ _("0 videos") }}</span>
             
             <div id="bulk-toolbar" style="display:none; gap: 8px; align-items: center; background: #2a2a2a; padding: 4px 12px; border-radius: 6px; margin-left: 16px;">
-                <span id="selected-count" style="font-weight: 500; font-size: 0.9em; margin-right: 8px;">0 selected</span>
+                <span id="selected-count" style="font-weight: 500; font-size: 0.9em; margin-right: 8px;">{{ _("0 selected") }}</span>
                 <select id="bulk-move-project" class="btn btn-sm" style="max-width: 150px;">
-                    <option value="">Move to...</option>
+                    <option value="">{{ _("Move to...") }}</option>
                     {% for p in projects %}
                     <option value="{{ p.id }}">{{ p.name }}</option>
                     {% endfor %}
                 </select>
-                <button id="bulk-category" class="btn btn-sm btn-outline">Set Category</button>
-                <button id="bulk-tag" class="btn btn-sm btn-outline">Add Tag</button>
-                <button id="bulk-delete" class="btn btn-sm btn-danger">Delete</button>
+                <button id="bulk-category" class="btn btn-sm btn-outline">{{ _("Set Category") }}</button>
+                <button id="bulk-tag" class="btn btn-sm btn-outline">{{ _("Add Tag") }}</button>
+                <button id="bulk-delete" class="btn btn-sm btn-danger">{{ _("Delete") }}</button>
                 <button id="bulk-clear" class="btn btn-sm btn-outline">&times;</button>
             </div>
 
             <div class="toolbar-actions" style="margin-left: auto;">
-                <button class="btn btn-sm btn-outline filter-toggle" id="filter-toggle">Filters</button>
+                <button class="btn btn-sm btn-outline filter-toggle" id="filter-toggle">{{ _("Filters") }}</button>
                 <div class="view-toggle">
-                    <button id="view-grid" class="btn btn-sm active" title="Grid">&#9638;</button>
-                    <button id="view-list" class="btn btn-sm" title="List">&#9776;</button>
+                    <button id="view-grid" class="btn btn-sm active" title="{{ _("Grid") }}">&#9638;</button>
+                    <button id="view-list" class="btn btn-sm" title="{{ _("List") }}">&#9776;</button>
                 </div>
             </div>
         </div>
         <div id="video-grid" class="video-grid"></div>
         <div id="video-list" class="video-list" style="display:none;"></div>
         <div id="load-more-container" style="text-align:center;padding:20px;">
-            <button id="load-more" class="btn btn-outline" style="display:none;">Load More</button>
+            <button id="load-more" class="btn btn-outline" style="display:none;">{{ _("Load More") }}</button>
         </div>
     </div>
 </div>
@@ -152,7 +152,7 @@
         const res = await fetch(`/api/videos?${params}`);
         const data = await res.json();
 
-        document.getElementById("video-count").textContent = `${data.total} video${data.total !== 1 ? "s" : ""}`;
+        document.getElementById("video-count").textContent = `${data.total} ${data.total !== 1 ? "{{ _("videos") }}" : "{{ _("video") }}"}`;
 
         if (!append) currentOffset = 0;
         currentOffset = (append ? currentOffset : 0) + data.videos.length;
@@ -169,7 +169,7 @@
         if (!append) { grid.innerHTML = ""; list.innerHTML = ""; }
 
         if (!videos.length && !append) {
-            grid.innerHTML = '<p class="empty-state">No videos found.</p>';
+            grid.innerHTML = '<p class="empty-state">{{ _("No videos found.") }}</p>';
             return;
         }
 
@@ -183,7 +183,7 @@
             card.innerHTML = `
                 <div class="video-thumb" onclick="window.location.href='/video/${v.id}'">${thumb}
                     <input type="checkbox" class="video-checkbox" data-id="${v.id}" onclick="event.stopPropagation(); toggleSelection(this);" style="position:absolute; top:8px; left:8px; width:18px; height:18px; z-index:10; cursor:pointer;">
-                    <button class="star-btn" data-id="${v.id}" title="Toggle favorite">${star}</button>
+                    <button class="star-btn" data-id="${v.id}" title="{{ _("Toggle favorite") }}">${star}</button>
                 </div>
                 <div class="video-info" onclick="window.location.href='/video/${v.id}'">
                     <h4 class="truncate" title="${escapeHtml(v.title)}">${escapeHtml(v.title)}</h4>
@@ -212,7 +212,7 @@
                         ${v.custom_category ? `<span class="badge cat">${escapeHtml(v.custom_category)}</span>` : ""}
                     </div>
                 </div>
-                <button class="star-btn-row" data-id="${v.id}" title="Toggle favorite">${star}</button>`;
+                <button class="star-btn-row" data-id="${v.id}" title="{{ _("Toggle favorite") }}">${star}</button>`;
             list.appendChild(row);
         });
     }
@@ -293,7 +293,7 @@
         const countSpan = document.getElementById("selected-count");
         if (selectedVideoIds.size > 0) {
             toolbar.style.display = "flex";
-            countSpan.textContent = `${selectedVideoIds.size} selected`;
+            countSpan.textContent = `${selectedVideoIds.size} {{ _("selected") }}`;
         } else {
             toolbar.style.display = "none";
         }
@@ -337,17 +337,17 @@
                 loadVideos();
                 loadFilters();
             } else {
-                alert("Bulk action failed.");
+                alert("{{ _("Bulk action failed.") }}");
             }
         } catch (e) {
-            alert("Error communicating with server.");
+            alert("{{ _("Error communicating with server.") }}");
         }
     }
 
     document.getElementById("bulk-move-project").addEventListener("change", (e) => {
         const targetId = e.target.value;
         if (!targetId) return;
-        if (!confirm(`Move ${selectedVideoIds.size} videos to this project?`)) {
+        if (!confirm(`{{ _("Move") }} ${selectedVideoIds.size} {{ _("videos to this project?") }}`)) {
             e.target.value = "";
             return;
         }
@@ -356,21 +356,21 @@
     });
 
     document.getElementById("bulk-category").addEventListener("click", () => {
-        const cat = prompt(`Enter category for ${selectedVideoIds.size} videos:`);
+        const cat = prompt(`{{ _("Enter category for") }} ${selectedVideoIds.size} {{ _("videos:") }}`);
         if (cat !== null) {
             executeBulkAction("set_category", cat.trim());
         }
     });
 
     document.getElementById("bulk-tag").addEventListener("click", () => {
-        const tag = prompt(`Enter tag to add to ${selectedVideoIds.size} videos:`);
+        const tag = prompt(`{{ _("Enter tag to add to") }} ${selectedVideoIds.size} {{ _("videos:") }}`);
         if (tag !== null && tag.trim()) {
             executeBulkAction("add_tag", tag.trim());
         }
     });
 
     document.getElementById("bulk-delete").addEventListener("click", () => {
-        if (confirm(`Are you sure you want to delete ${selectedVideoIds.size} videos permanently?`)) {
+        if (confirm(`{{ _("Are you sure you want to delete") }} ${selectedVideoIds.size} {{ _("videos permanently?") }}`)) {
             executeBulkAction("delete", null);
         }
     });

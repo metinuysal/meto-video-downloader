@@ -1,56 +1,164 @@
 {% extends "base.html" %}
-{% block title %}About - METO Bulk Video Downloader{% endblock %}
+{% block title %}{{ _("About") }} - METO Bulk Video Downloader{% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h1>About</h1>
-    <p><span class="about-inline-brand">METO</span> Bulk Video Downloader runs on your machine: queue links, download with open-source tooling, and browse everything in the library.</p>
+    <h1>{{ _("About") }}</h1>
+    <p><span class="about-inline-brand">METO</span> {{ _("Bulk Video Downloader runs on your machine: queue links, download with open-source tooling, and browse everything in the library.") }}</p>
+    <p style="margin-top:8px; font-size:0.85rem; opacity:0.7;">
+        <span style="font-family:monospace; background:#f1f5f9; padding:2px 6px; border-radius:4px;">v{{ system_info.app_version }}</span>
+        {% if system_info.git_commit %}<span style="font-family:monospace; background:#f1f5f9; padding:2px 6px; border-radius:4px; margin-left:6px;">{{ system_info.git_commit }}</span>{% endif %}
+        <span style="margin-left:8px;">{{ _("Uptime:") }} {{ system_info.uptime }}</span>
+        <span style="margin-left:8px;">{{ _("Docker") if system_info.is_docker else _("Host") }} · {{ system_info.platform.split("-")[0] }}</span>
+    </p>
 </div>
 
 <div class="about-layout">
     <div class="settings-card about-card">
-        <h2>Author</h2>
-        <p class="about-text">Maintained by <strong>metinuysal</strong>. More work and contact via the links below.</p>
+        <h2>{{ _("Author") }}</h2>
+        <p class="about-text">{{ _("Maintained by") }} <strong>metinuysal</strong>. {{ _("More work and contact via the links below.") }}</p>
         <ul class="about-link-list">
             <li>
                 <a href="https://metinuysal.net" target="_blank" rel="noopener noreferrer" class="about-external-link">metinuysal.net</a>
-                <span class="about-link-hint">Website</span>
+                <span class="about-link-hint">{{ _("Website") }}</span>
             </li>
             <li>
                 <a href="https://github.com/metinuysal/meto-video-downloader/" target="_blank" rel="noopener noreferrer" class="about-external-link">github.com/metinuysal/meto-video-downloader</a>
-                <span class="about-link-hint">Project Repository</span>
+                <span class="about-link-hint">{{ _("Project Repository") }}</span>
             </li>
             <li>
                 <a href="https://github.com/metinuysal" target="_blank" rel="noopener noreferrer" class="about-external-link">github.com/metinuysal</a>
-                <span class="about-link-hint">GitHub profile</span>
+                <span class="about-link-hint">{{ _("GitHub profile") }}</span>
             </li>
         </ul>
     </div>
 
     <div class="settings-card about-card">
-        <h2>Open source</h2>
-        <p class="about-text">This app bundles and orchestrates trusted open-source utilities—see the project README for details (for example <code>yt-dlp</code>, Flask, and Python).</p>
+        <h2>{{ _("Open source") }}</h2>
+        <p class="about-text">{{ _("This app bundles and orchestrates trusted open-source utilities—see the project README for details (for example") }} <code>yt-dlp</code>, Flask, {{ _("and Python).") }}</p>
     </div>
 
     <div class="settings-card about-card" style="grid-column: 1 / -1;">
-        <h2>Features & Architecture</h2>
+        <h2>{{ _("Features & Architecture") }}</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 12px;">
             <div>
-                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Cloud Ready</h3>
-                <p class="about-text">Fully compatible with Docker and Dokploy. Configure everything seamlessly via <code>.env</code> variables.</p>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">{{ _("Cloud Ready") }}</h3>
+                <p class="about-text">{{ _("Fully compatible with Docker and Dokploy. Configure everything seamlessly via") }} <code>.env</code> {{ _("variables.") }}</p>
             </div>
             <div>
-                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Flexible Database</h3>
-                <p class="about-text">Runs on a zero-config <strong>SQLite</strong> file by default, but natively supports <strong>MySQL</strong> and <strong>PostgreSQL</strong> for production environments.</p>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">{{ _("Flexible Database") }}</h3>
+                <p class="about-text">{{ _("Runs on a zero-config") }} <strong>SQLite</strong> {{ _("file by default, but natively supports") }} <strong>MySQL</strong> {{ _("and") }} <strong>PostgreSQL</strong> {{ _("for production environments.") }}</p>
             </div>
             <div>
-                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Secure Access</h3>
-                <p class="about-text">Includes an optional, cookie-based authentication system. Set a username and password to lock down the UI for public servers.</p>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">{{ _("Secure Access") }}</h3>
+                <p class="about-text">{{ _("Includes an optional, cookie-based authentication system. Set a username and password to lock down the UI for public servers.") }}</p>
             </div>
             <div>
-                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">Library Management</h3>
-                <p class="about-text">Organize massive collections with grid/list views, metadata tagging, favoriting, and multi-select bulk operations.</p>
+                <h3 style="font-size: 0.95rem; margin-bottom: 4px; color: var(--accent);">{{ _("Library Management") }}</h3>
+                <p class="about-text">{{ _("Organize massive collections with grid/list views, metadata tagging, favoriting, and multi-select bulk operations.") }}</p>
             </div>
+        </div>
+    </div>
+
+    <div class="settings-card about-card" style="grid-column: 1 / -1;">
+        <h2>{{ _("Sistem Çalışması") }}</h2>
+        <p class="about-text" style="margin-bottom: 12px;">{{ _("Uygulama") }} <code>yt-dlp</code> + <code>ffmpeg</code> {{ _("üzerine kurulu, Flask arka ucuyla kuyruk tabanlı çalışır. Adımlar:") }}</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            {% for w in workflow %}
+            <div style="background: var(--bg-soft, #f8f9fa); border: 1px solid var(--border); border-radius: 10px; padding: 12px;">
+                <div style="font-weight: 700; color: var(--accent); font-size: 0.85rem; margin-bottom: 4px;">{{ _("Adım") }} {{ w.step }}</div>
+                <div style="font-weight: 600; margin-bottom: 4px;">{{ w.title }}</div>
+                <div class="about-text" style="font-size: 0.88rem;">{{ w.desc }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="about-text" style="margin-top: 12px; font-size: 0.85rem; opacity: 0.85;">
+            {{ _("Poll interval:") }} <code>{{ system_info.poll_interval_ms }} ms</code> · {{ _("Video klasörü:") }} <code>{{ system_info.video_dir }}</code> · {{ _("Auth:") }} <code>{{ _("açık") if system_info.auth_enabled else _("kapalı") }}</code>
+        </div>
+    </div>
+
+    <div class="settings-card about-card">
+        <h2>{{ _("Sistem Bilgileri") }}</h2>
+        <div style="margin-bottom: 10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="padding: 3px 8px; border-radius: 6px; background: #f1f5f9; font-size: 0.78rem; font-family: monospace;">v{{ system_info.app_version }}{% if system_info.git_commit %} · {{ system_info.git_commit }}{% endif %}</span>
+            <span style="padding: 3px 8px; border-radius: 6px; background: {% if system_info.is_docker %}#dbeafe{% else %}#fef3c7{% endif %}; font-size: 0.78rem;">{{ _("Docker") if system_info.is_docker else _("Host") }}</span>
+            <span style="padding: 3px 8px; border-radius: 6px; background: {% if system_info.debug %}#fee2e2{% else %}#dcfce7{% endif %}; font-size: 0.78rem;">{{ _("debug") if system_info.debug else _("prod") }}</span>
+        </div>
+        <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse;">
+            <tbody>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Uptime") }}</td><td style="padding: 5px 8px;">{{ system_info.uptime }} <span style="opacity:0.6; font-size:0.82rem;">({{ system_info.started_at }})</span></td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Python") }}</td><td style="padding: 5px 8px; font-family: monospace;">{{ system_info.python_version }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Platform") }}</td><td style="padding: 5px 8px; font-family: monospace; word-break: break-all; font-size: 0.82rem;">{{ system_info.platform }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Flask / yt-dlp") }}</td><td style="padding: 5px 8px; font-family: monospace;">{{ system_info.flask_version }} / {{ system_info.ytdlp_version }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("ffmpeg") }}</td><td style="padding: 5px 8px; font-family: monospace; font-size: 0.78rem; word-break: break-all;">{% if system_info.ffmpeg_available %}✓ {% endif %}{{ system_info.ffmpeg_version }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("JS Runtimes") }}</td><td style="padding: 5px 8px; font-family: monospace; font-size: 0.82rem;">{{ system_info.js_runtimes }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Host:Port") }}</td><td style="padding: 5px 8px; font-family: monospace;">{{ system_info.host }}:{{ system_info.port }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Video Dir") }}</td><td style="padding: 5px 8px; font-family: monospace; word-break: break-all;">{{ system_info.video_dir }} ({{ db_info.video_dir_size_fmt }})</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Disk") }}</td><td style="padding: 5px 8px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span>{{ system_info.disk_used_fmt }} / {{ system_info.disk_total_fmt }}</span><span>{{ system_info.disk_percent }}%</span></div>
+                    <div style="background:#e5e7eb; height:6px; border-radius:4px; margin-top:4px; overflow:hidden;"><div style="background:{% if system_info.disk_percent>90 %}#ef4444{% elif system_info.disk_percent>75 %}#f59e0b{% else %}#3b82f6{% endif %}; height:100%; width:{{ system_info.disk_percent }}%"></div></div>
+                    <div style="font-size:0.78rem; opacity:0.6; margin-top:2px;">{{ _("Boş:") }} {{ system_info.disk_free_fmt }} · {{ _("Poll:") }} {{ system_info.poll_interval_ms }}ms · {{ _("Auth:") }} {{ _("açık") if system_info.auth_enabled else _("kapalı") }} · {{ _("Limit:") }} {{ system_info.storage_max_mb if system_info.storage_max_mb else _("limitsiz") }}</div>
+                </td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="settings-card about-card">
+        <h2>{{ _("Veritabanı Bilgileri") }}</h2>
+        <div style="margin-bottom: 10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="display:inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; background: {% if db_info.status_ok %}#dcfce7{% else %}#fee2e2{% endif %}; color: {% if db_info.status_ok %}#166534{% else %}#991b1b{% endif %};">
+                {{ db_info.type }} · {{ db_info.status }}
+            </span>
+            {% if db_info.db_file_size_fmt and db_info.db_file_size_fmt != "—" %}<span style="padding:4px 8px; border-radius:999px; background:#f1f5f9; font-size:0.78rem;">{{ db_info.db_file_size_fmt }}</span>{% endif %}
+        </div>
+        <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse;">
+            <tbody>
+                {% if db_info.type == "SQLite" %}
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Dosya") }}</td><td style="padding: 5px 8px; font-family: monospace; word-break: break-all; font-size:0.82rem;">{{ db_info.path }}</td></tr>
+                {% else %}
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Host") }}</td><td style="padding: 5px 8px; font-family: monospace;">{{ db_info.host }}:{{ db_info.port }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("DB / User") }}</td><td style="padding: 5px 8px; font-family: monospace;">{{ db_info.name }} / {{ db_info.user }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("URL") }}</td><td style="padding: 5px 8px; font-family: monospace; word-break: break-all; font-size: 0.78rem;">{{ db_info.url_masked }}</td></tr>
+                {% endif %}
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Tablolar") }}</td><td style="padding: 5px 8px; font-family: monospace; font-size: 0.78rem;">{{ db_info.tables | join(", ") if db_info.tables else "—" }}</td></tr>
+                {% if db_info.table_counts %}
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Satırlar") }}</td><td style="padding: 5px 8px; font-family: monospace; font-size:0.78rem;">
+                    {% for t,c in db_info.table_counts.items() %}<span style="margin-right:10px;">{{ t }}: {{ c }}</span>{% endfor %}
+                </td></tr>
+                {% endif %}
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Projeler") }}</td><td style="padding: 5px 8px;">{{ db_info.total_projects }}</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Videolar") }}</td><td style="padding: 5px 8px;">{{ db_info.total_videos }} ({{ db_info.total_size_fmt }})</td></tr>
+                <tr><td style="padding: 5px 8px; opacity:0.7;">{{ _("Etiketler") }}</td><td style="padding: 5px 8px;">{{ db_info.total_tags }}</td></tr>
+            </tbody>
+        </table>
+        <p class="about-text" style="margin-top: 10px; font-size: 0.82rem; opacity: 0.75;">
+            {% if db_info.type == "SQLite" %}{{ _("SQLite dosya tabanlıdır, yedek için Settings → Database Backup kullanın.") }}{% else %}{{ _("MySQL/PostgreSQL dokploy veya docker-compose ile gelir, yedek için") }} <code>mysqldump</code> / <code>pg_dump</code> {{ _("kullanın.") }}{% endif %}
+        </p>
+    </div>
+
+    <div class="settings-card about-card" style="grid-column: 1 / -1;">
+        <h2>{{ _("Canlı Durum & Kuyruk") }}</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            <div style="background: #f8fafc; border:1px solid var(--border); border-radius:8px; padding:10px; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:700;">{{ live_info.queued }}</div>
+                <div style="font-size:0.82rem; opacity:0.7;">{{ _("Kuyrukta") }}</div>
+            </div>
+            <div style="background: #fef3c7; border:1px solid #fde68a; border-radius:8px; padding:10px; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:700;">{{ live_info.downloading }}</div>
+                <div style="font-size:0.82rem; opacity:0.7;">{{ _("İndiriliyor") }}</div>
+            </div>
+            <div style="background: #dcfce7; border:1px solid #bbf7d0; border-radius:8px; padding:10px; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:700;">{{ live_info.completed }}</div>
+                <div style="font-size:0.82rem; opacity:0.7;">{{ _("Tamamlandı") }}</div>
+            </div>
+            <div style="background: #fee2e2; border:1px solid #fecaca; border-radius:8px; padding:10px; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:700;">{{ live_info.failed }}</div>
+                <div style="font-size:0.82rem; opacity:0.7;">{{ _("Başarısız") }}</div>
+            </div>
+        </div>
+        <div style="margin-top:12px; font-size:0.88rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+            <span style="opacity:0.7;">{{ _("Seçili proje:") }} <strong>{{ current.name }}</strong> (#{{ current.id }})</span>
+            <span style="opacity:0.7;">{{ _("Son indirme:") }} <code>{{ live_info.last_download }}</code></span>
         </div>
     </div>
 </div>

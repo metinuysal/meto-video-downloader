@@ -174,25 +174,77 @@ flowchart LR
 
 ---
 
-## Docker
+## Docker — Tak-Çalıştır (MySQL Dahil)
 
+**Sıfır ayar, tek komut (önerilen):**
+
+```bash
+git clone https://github.com/metinuysal/meto-video-downloader.git
+cd meto-video-downloader
+chmod +x deploy.sh
+./deploy.sh
+# -> http://localhost:5000 (veya http://SUNUCU_IP:5000)
+```
+
+`deploy.sh` ne yapar?
+1. `.env` yoksa otomatik oluşturur (`SECRET_KEY`, `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` rastgele)
+2. `./data` klasörünü hazırlar
+3. `docker compose up --build -d` ile **app + MySQL 8.0**'ı ayağa kaldırır
+4. Healthcheck'leri bekler ve URL'yi yazdırır
+
+Diğer komutlar:
+```bash
+./deploy.sh logs     # canlı log
+./deploy.sh ps       # durum
+./deploy.sh down     # durdur (veriler kalır)
+./deploy.sh update   # git pull + rebuild
+./deploy.sh clean    # DİKKAT: tüm verileri siler
+```
+
+**Manuel (deploy.sh olmadan):**
+```bash
+# .env olmadan da çalışır — varsayılan şifreler (rootsecret/bulkpass) kullanılır
+docker compose up --build -d
+docker compose ps
+docker compose logs -f
+
+# .env ile özelleştir:
+cp .env.example .env
+# .env içini düzenle, sonra tekrar:
+docker compose up --build -d
+```
+
+**Tek imaj (MySQL'siz, SQLite):**
 ```bash
 docker build -t meto-video .
-docker compose up --build
-```
-
-Manual run:
-
-```bash
-# bash
 docker run --rm -p 5000:5000 -v "$(pwd)/data:/data" meto-video
-
-# PowerShell
-docker run --rm -p 5000:5000 -v "${PWD}\data:/data" meto-video
 ```
 
-- Downloads and the database are stored in `./data`
-- The container listens on `0.0.0.0` and honors the `PORT` environment variable
+- Videolar `./data` içinde, MySQL verileri `mysql_data` volume'de saklanır (Dokploy'da otomatik prefixlenir)
+- Container `0.0.0.0` dinler, `PORT`/`BULK_VIDEO_PORT` değişkenini okur (`deploy.sh` ve `docker-compose.yml` üzerinden)
+- MySQL host: `db` (compose iç network), dışarı kapalı — açmak için `docker-compose.yml:14` `ports` satırını aç
+- `expose: ${PORT:-5000}` + `ports: ${PORT:-5000}:${PORT:-5000}` → Dokploy Traefik ve local `docker compose up` ile uyumlu
+- `container_name` yok → Dokploy multi-deploy çakışmaz, `healthcheck` Traefik için zorunlu
+
+### Dokploy ile Deploy (Önerilen PaaS)
+
+Dokploy `docker-compose.yml`'i doğrudan destekler — ek ayar gerekmez:
+
+1. Dokploy → **Projects** → **Create Service** → **Compose** → isim ver (örn. `meto`)
+2. **Source**: **GitHub** (repo URL) veya **Raw** (bu `docker-compose.yml`'i yapıştır)
+3. **Environment** sekmesinde değşikenleri ekle (Dokploy otomatik `SECRET_KEY` üretir, istersen elle):
+   ```
+   PORT=5000
+   SECRET_KEY=<openssl rand -hex 32>
+   MYSQL_ROOT_PASSWORD=<güçlü şifre>
+   MYSQL_PASSWORD=<güçlü şifre>
+   BULK_VIDEO_USERNAME=admin  # opsiyonel login
+   BULK_VIDEO_PASSWORD=...
+   ```
+4. **Domains** → **Add Domain** → Service: `bulk-video`, Internal Port: `5000`, Let's Encrypt seç
+5. **Deploy** → **Preview Compose** ile Traefik label'larını kontrol et → Deploy
+
+Not: `expose` ve `healthcheck` zaten var, Dokploy `dokploy-network`'ü otomatik enjekte eder. MySQL'e domain verme, iç network `db:3306` ile erişilir.
 
 ---
 
@@ -298,15 +350,37 @@ Varsayılan olarak **SQLite** kullanılır. Repoda hazır boş veritabanı vard�
 
 MySQL / PostgreSQL kullanıyorsan `.env` içinde `BULK_VIDEO_DB_URL` ayarla — ayrıntılar [`.env.example`](.env.example) dosyasında.
 
-### Docker
+### Docker — Tak-Çalıştır (Önerilen)
 
-Python kurmadan çalıştırmak için:
+Sıfır kurulum, MySQL dahil:
 
 ```bash
-docker compose up --build
+git clone https://github.com/metinuysal/meto-video-downloader.git
+cd meto-video-downloader
+chmod +x deploy.sh
+./deploy.sh
+# Tarayıcı: http://localhost:5000  (sunucuda: http://SUNUCU_IP:5000)
 ```
 
-Veriler `./data` klasöründe kalır.
+Alternatifler:
+```bash
+./deploy.sh logs     # log izle
+./deploy.sh ps       # durum
+./deploy.sh down     # durdur
+docker compose up --build -d   # .env olmadan manuel (varsayılan şifrelerle çalışır)
+```
+
+**Sunucuya teslim (tak-çalıştır paket):**
+1. Bu klasörü zip'le veya `git clone` ver
+2. Sunucuda tek komut: `./deploy.sh`
+3. `PORT=5000` çakışırsa `.env` içinde değiştir, tekrar `./deploy.sh`
+4. Tersine proxy (Nginx) gerekiyorsa `http://127.0.0.1:5000`'a yönlendir
+5. Yedek: `docker compose exec db mysqldump -u root -p bulk_video > backup.sql` ve `./data` klasörü
+
+Veriler `./data` (videolar) ve `mysql_data` volume (MySQL, Dokploy'da prefixlenir) içinde kalıcıdır.
+
+**Dokploy ile tek tık:**
+Dokploy → Compose Service → Git/Raw olarak `docker-compose.yml` → Environment doldur → Domains → `bulk-video:5000` seç → Deploy. `expose`/`healthcheck` hazır, Traefik otomatik.
 
 ### Not
 

@@ -38,6 +38,14 @@ def is_postgres():
     return bool(config.DATABASE_URL and config.DATABASE_URL.startswith("postgres"))
 
 
+def _first_value(row):
+    if row is None:
+        return None
+    if isinstance(row, dict):
+        return next(iter(row.values()))
+    return row[0]
+
+
 def get_integrity_error():
     if is_mysql():
         import pymysql
@@ -93,7 +101,14 @@ class MySQLConnectionWrapper:
         for stmt in statements:
             stmt = stmt.strip()
             if stmt:
-                cursor.execute(stmt)
+                try:
+                    cursor.execute(stmt)
+                except Exception as e:
+                    # MySQL'de CREATE INDEX IF NOT EXISTS desteklenmez, ikinci çalışmada duplicate hatası görmezden gel
+                    msg = str(e).lower()
+                    if "already exists" in msg or "duplicate" in msg:
+                        continue
+                    raise
 
     def cursor(self):
         import pymysql.cursors
@@ -289,6 +304,13 @@ def init_db():
         """
         if is_mysql():
             script = script.replace("AUTOINCREMENT", "AUTO_INCREMENT")
+            # MySQL: TEXT + UNIQUE için key length gerekir -> VARCHAR(255)
+            script = script.replace("slug TEXT UNIQUE NOT NULL", "slug VARCHAR(255) UNIQUE NOT NULL")
+            script = script.replace("name TEXT UNIQUE NOT NULL", "name VARCHAR(255) UNIQUE NOT NULL")
+            # MySQL strict mode'da TEXT kolonlarına DEFAULT verilemez -> VARCHAR(255)
+            script = script.replace("TEXT DEFAULT", "VARCHAR(255) DEFAULT")
+            # MySQL CREATE INDEX IF NOT EXISTS desteklemez
+            script = script.replace("CREATE INDEX IF NOT EXISTS", "CREATE INDEX")
         elif is_postgres():
             script = script.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY")
             script = script.replace("DATETIME", "TIMESTAMP")
@@ -314,6 +336,8 @@ def init_db():
             ("max_concurrent", "INTEGER DEFAULT 1"),
         ]
         for col, col_def in columns:
+            if is_mysql() and "TEXT" in col_def:
+                col_def = col_def.replace("TEXT", "VARCHAR(255)")
             try:
                 conn.execute(f"ALTER TABLE project_settings ADD COLUMN {col} {col_def}")
             except Exception:
@@ -512,7 +536,7 @@ def count_videos(project_id, filters=None, search=None):
         params.extend([f"%{search}%", f"%{search}%"])
 
     with get_db() as conn:
-        return conn.execute(query, params).fetchone()[0]
+        return _first_value(conn.execute(query, params).fetchone())
 
 
 def get_queue(project_id):
@@ -602,22 +626,30 @@ def reset_project(project_id):
 
 def get_project_stats(project_id):
     with get_db() as conn:
-        total = conn.execute(
-            "SELECT COUNT(*) FROM videos WHERE project_id = ?", (project_id,)
-        ).fetchone()[0]
-        favorites = conn.execute(
-            "SELECT COUNT(*) FROM videos WHERE project_id = ? AND favorite = 1", (project_id,)
-        ).fetchone()[0]
-        completed = conn.execute(
-            "SELECT COUNT(*) FROM videos WHERE project_id = ? AND status = 'completed'",
-            (project_id,),
-        ).fetchone()[0]
-        failed = conn.execute(
-            "SELECT COUNT(*) FROM videos WHERE project_id = ? AND status = 'failed'", (project_id,)
-        ).fetchone()[0]
-        total_size = conn.execute(
-            "SELECT COALESCE(SUM(filesize), 0) FROM videos WHERE project_id = ?", (project_id,)
-        ).fetchone()[0]
+        total = _first_value(
+            conn.execute("SELECT COUNT(*) FROM videos WHERE project_id = ?", (project_id,)).fetchone()
+        )
+        favorites = _first_value(
+            conn.execute(
+                "SELECT COUNT(*) FROM videos WHERE project_id = ? AND favorite = 1", (project_id,)
+            ).fetchone()
+        )
+        completed = _first_value(
+            conn.execute(
+                "SELECT COUNT(*) FROM videos WHERE project_id = ? AND status = 'completed'",
+                (project_id,),
+            ).fetchone()
+        )
+        failed = _first_value(
+            conn.execute(
+                "SELECT COUNT(*) FROM videos WHERE project_id = ? AND status = 'failed'", (project_id,)
+            ).fetchone()
+        )
+        total_size = _first_value(
+            conn.execute(
+                "SELECT COALESCE(SUM(filesize), 0) FROM videos WHERE project_id = ?", (project_id,)
+            ).fetchone()
+        )
         return {
             "total": total,
             "favorites": favorites,
@@ -706,7 +738,7 @@ def get_distinct_values(project_id, column):
             f"SELECT DISTINCT {column} FROM videos WHERE project_id = ? AND {column} != '' ORDER BY {column}",
             (project_id,),
         ).fetchall()
-        return [r[0] for r in rows]
+        return [_first_value(r) for r in rows]
 
 
 def get_all_categories(project_id):

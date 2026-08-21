@@ -1,0 +1,1047 @@
+# Turkish translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-21 23:27+0300\n"
+"PO-Revision-Date: 2026-08-21 23:30+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: tr <LL@li.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/about.html:2 templates/about.html:6 templates/base.html:33
+#: templates/base.html:50
+msgid "About"
+msgstr "Hakkında"
+
+#: templates/about.html:7
+msgid ""
+"Bulk Video Downloader runs on your machine: queue links, download with open-"
+"source tooling, and browse everything in the library."
+msgstr ""
+"METO Bulk Video Downloader makinenizde çalışır: linkleri kuyruğa alın, açık "
+"kaynak araçlarla indirin ve kütüphanede gezinin."
+
+#: templates/about.html:11
+msgid "Uptime:"
+msgstr "Çalışma Süresi:"
+
+#: templates/about.html:12 templates/about.html:84
+msgid "Docker"
+msgstr "Docker"
+
+#: templates/about.html:12 templates/about.html:84 templates/about.html:119
+msgid "Host"
+msgstr "Sunucu"
+
+#: templates/about.html:18
+msgid "Author"
+msgstr "Yazar"
+
+#: templates/about.html:19
+msgid "Maintained by"
+msgstr "Geliştirici"
+
+#: templates/about.html:19
+msgid "More work and contact via the links below."
+msgstr "Diğer çalışmalar ve iletişim için aşağıdaki bağlantılar."
+
+#: templates/about.html:23
+msgid "Website"
+msgstr "Web Sitesi"
+
+#: templates/about.html:27
+msgid "Project Repository"
+msgstr "Proje Deposu"
+
+#: templates/about.html:31
+msgid "GitHub profile"
+msgstr "GitHub Profili"
+
+#: templates/about.html:37
+msgid "Open source"
+msgstr "Açık Kaynak"
+
+#: templates/about.html:38
+msgid ""
+"This app bundles and orchestrates trusted open-source utilities—see the "
+"project README for details (for example"
+msgstr ""
+"Bu uygulama güvenilir açık kaynak araçları bir araya getirir — detaylar için"
+" README'ye bakın (örneğin"
+
+#: templates/about.html:38
+msgid "and Python)."
+msgstr "ve Python)."
+
+#: templates/about.html:42
+msgid "Features & Architecture"
+msgstr "Özellikler & Mimari"
+
+#: templates/about.html:45
+msgid "Cloud Ready"
+msgstr "Bulut Hazır"
+
+#: templates/about.html:46
+msgid ""
+"Fully compatible with Docker and Dokploy. Configure everything seamlessly "
+"via"
+msgstr "Docker ve Dokploy ile tam uyumlu. Her şeyi sorunsuzca"
+
+#: templates/about.html:46
+msgid "variables."
+msgstr "değişkenleri ile yapılandırın."
+
+#: templates/about.html:49
+msgid "Flexible Database"
+msgstr "Esnek Veritabanı"
+
+#: templates/about.html:50
+msgid "Runs on a zero-config"
+msgstr "Sıfır ayarlı"
+
+#: templates/about.html:50
+msgid "file by default, but natively supports"
+msgstr "dosya ile varsayılan çalışır, ancak yerleşik olarak destekler"
+
+#: templates/about.html:50
+msgid "and"
+msgstr "ve"
+
+#: templates/about.html:50
+msgid "for production environments."
+msgstr "üretim ortamları için."
+
+#: templates/about.html:53
+msgid "Secure Access"
+msgstr "Güvenli Erişim"
+
+#: templates/about.html:54
+msgid ""
+"Includes an optional, cookie-based authentication system. Set a username and"
+" password to lock down the UI for public servers."
+msgstr ""
+"İsteğe bağlı çerez tabanlı kimlik doğrulama içerir. Genel sunucular için "
+"UI'ı kilitlemek üzere kullanıcı adı ve şifre belirleyin."
+
+#: templates/about.html:57
+msgid "Library Management"
+msgstr "Kütüphane Yönetimi"
+
+#: templates/about.html:58
+msgid ""
+"Organize massive collections with grid/list views, metadata tagging, "
+"favoriting, and multi-select bulk operations."
+msgstr ""
+"Devasa koleksiyonları ızgara/liste görünümleri, metadata etiketleme, "
+"favorileme ve çoklu seçim toplu işlemlerle düzenleyin."
+
+#: templates/about.html:64
+msgid "Sistem Çalışması"
+msgstr "Sistem Çalışması"
+
+#: templates/about.html:65
+msgid "Uygulama"
+msgstr "Uygulama"
+
+#: templates/about.html:65
+msgid "üzerine kurulu, Flask arka ucuyla kuyruk tabanlı çalışır. Adımlar:"
+msgstr "üzerine kurulu, Flask arka ucuyla kuyruk tabanlı çalışır. Adımlar:"
+
+#: templates/about.html:69
+msgid "Adım"
+msgstr "Adım"
+
+#: templates/about.html:76
+msgid "Poll interval:"
+msgstr "Poll interval:"
+
+#: templates/about.html:76
+msgid "Video klasörü:"
+msgstr "Video klasörü:"
+
+#: templates/about.html:76 templates/about.html:100
+msgid "Auth:"
+msgstr "Auth:"
+
+#: templates/about.html:76 templates/about.html:100
+msgid "açık"
+msgstr "açık"
+
+#: templates/about.html:76 templates/about.html:100
+msgid "kapalı"
+msgstr "kapalı"
+
+#: templates/about.html:81
+msgid "Sistem Bilgileri"
+msgstr "Sistem Bilgileri"
+
+#: templates/about.html:85
+msgid "debug"
+msgstr "debug"
+
+#: templates/about.html:85
+msgid "prod"
+msgstr "prod"
+
+#: templates/about.html:89
+msgid "Uptime"
+msgstr "Çalışma Süresi"
+
+#: templates/about.html:90
+msgid "Python"
+msgstr "Python"
+
+#: templates/about.html:91
+msgid "Platform"
+msgstr "Platform"
+
+#: templates/about.html:92
+msgid "Flask / yt-dlp"
+msgstr "Flask / yt-dlp"
+
+#: templates/about.html:93
+msgid "ffmpeg"
+msgstr "ffmpeg"
+
+#: templates/about.html:94
+msgid "JS Runtimes"
+msgstr "JS Çalışma Ortamları"
+
+#: templates/about.html:95
+msgid "Host:Port"
+msgstr "Sunucu:Port"
+
+#: templates/about.html:96
+msgid "Video Dir"
+msgstr "Video Klasörü"
+
+#: templates/about.html:97
+msgid "Disk"
+msgstr "Disk"
+
+#: templates/about.html:100
+msgid "Boş:"
+msgstr "Boş:"
+
+#: templates/about.html:100
+msgid "Poll:"
+msgstr "Poll:"
+
+#: templates/about.html:100
+msgid "Limit:"
+msgstr "Limit:"
+
+#: templates/about.html:100
+msgid "limitsiz"
+msgstr "limitsiz"
+
+#: templates/about.html:107
+msgid "Veritabanı Bilgileri"
+msgstr "Veritabanı Bilgileri"
+
+#: templates/about.html:117
+msgid "Dosya"
+msgstr "Dosya"
+
+#: templates/about.html:120
+msgid "DB / User"
+msgstr "DB / User"
+
+#: templates/about.html:121
+msgid "URL"
+msgstr "URL"
+
+#: templates/about.html:123
+msgid "Tablolar"
+msgstr "Tablolar"
+
+#: templates/about.html:125
+msgid "Satırlar"
+msgstr "Satırlar"
+
+#: templates/about.html:129
+msgid "Projeler"
+msgstr "Projeler"
+
+#: templates/about.html:130
+msgid "Videolar"
+msgstr "Videolar"
+
+#: templates/about.html:131
+msgid "Etiketler"
+msgstr "Etiketler"
+
+#: templates/about.html:135
+msgid ""
+"SQLite dosya tabanlıdır, yedek için Settings → Database Backup kullanın."
+msgstr ""
+"SQLite dosya tabanlıdır, yedek için Settings → Database Backup kullanın."
+
+#: templates/about.html:135
+msgid "MySQL/PostgreSQL dokploy veya docker-compose ile gelir, yedek için"
+msgstr "MySQL/PostgreSQL dokploy veya docker-compose ile gelir, yedek için"
+
+#: templates/about.html:135
+msgid "kullanın."
+msgstr "kullanın."
+
+#: templates/about.html:140
+msgid "Canlı Durum & Kuyruk"
+msgstr "Canlı Durum & Kuyruk"
+
+#: templates/about.html:144
+msgid "Kuyrukta"
+msgstr "Kuyrukta"
+
+#: templates/about.html:148
+msgid "İndiriliyor"
+msgstr "İndiriliyor"
+
+#: templates/about.html:152
+msgid "Tamamlandı"
+msgstr "Tamamlandı"
+
+#: templates/about.html:156
+msgid "Başarısız"
+msgstr "Başarısız"
+
+#: templates/about.html:160
+msgid "Seçili proje:"
+msgstr "Seçili proje:"
+
+#: templates/about.html:161
+msgid "Son indirme:"
+msgstr "Son indirme:"
+
+#: templates/base.html:30 templates/base.html:47 templates/index.html:7
+msgid "Download"
+msgstr "İndir"
+
+#: templates/base.html:31 templates/base.html:48 templates/index.html:8
+#: templates/library.html:6
+msgid "Library"
+msgstr "Kütüphane"
+
+#: templates/base.html:32 templates/base.html:49 templates/index.html:39
+#: templates/settings.html:6
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: templates/base.html:35 templates/base.html:52
+msgid "Logout"
+msgstr "Çıkış"
+
+#: templates/base.html:42
+msgid "Toggle menu"
+msgstr "Menüyü aç/kapat"
+
+#: templates/index.html:2
+msgid "Download - METO Bulk Video Downloader"
+msgstr "İndir - METO Toplu Video İndirici"
+
+#: templates/index.html:8
+msgid ""
+"Paste video, playlist, or channel links (one per line). Downloads show up in"
+msgstr ""
+"Video, oynatma listesi veya kanal linklerini yapıştırın (satır başına bir). "
+"İndirmeler"
+
+#: templates/index.html:11
+#, python-format
+msgid "Project: %(name)s"
+msgstr "Proje: %(name)s"
+
+#: templates/index.html:18
+msgid "Links"
+msgstr "Linkler"
+
+#: templates/index.html:19
+msgid "https://www.youtube.com/watch?v=..."
+msgstr "https://www.youtube.com/watch?v=..."
+
+#: templates/index.html:19
+msgid "https://www.youtube.com/playlist?list=..."
+msgstr "https://www.youtube.com/playlist?list=..."
+
+#: templates/index.html:22
+msgid "0 links"
+msgstr "0 link"
+
+#: templates/index.html:23
+msgid "Ctrl+Enter to add"
+msgstr "Eklemek için Ctrl+Enter"
+
+#: templates/index.html:26
+msgid "Add to Queue"
+msgstr "Kuyruğa Ekle"
+
+#: templates/index.html:27
+msgid "Clear"
+msgstr "Temizle"
+
+#: templates/index.html:35
+msgid "Quick Tips"
+msgstr "Hızlı İpuçları"
+
+#: templates/index.html:37
+msgid "Mix videos, playlists, and channels. One link per line."
+msgstr ""
+"Videoları, oynatma listelerini ve kanalları karıştırın. Satır başına bir "
+"link."
+
+#: templates/index.html:38
+msgid "Duplicates get skipped automatically."
+msgstr "Kopyalar otomatik atlanır."
+
+#: templates/index.html:39
+msgid "Change quality, format, audio-only, subtitles, and thumbnails in"
+msgstr "Kalite, format, sadece ses, altyazı ve küçük resimleri"
+
+#: templates/index.html:40
+msgid "Switch projects from the top bar."
+msgstr "Projeleri üst bardan değiştirin."
+
+#: templates/index.html:48
+msgid "Queue"
+msgstr "Kuyruk"
+
+#: templates/index.html:52
+msgid "Refresh"
+msgstr "Yenile"
+
+#: templates/index.html:55 templates/index.html:179
+msgid "No active downloads."
+msgstr "Aktif indirme yok."
+
+#: templates/index.html:90
+msgid "link"
+msgstr "link"
+
+#: templates/index.html:90
+msgid "links"
+msgstr "link"
+
+#: templates/index.html:113
+msgid "Paste at least one link."
+msgstr "En az bir link yapıştırın."
+
+#: templates/index.html:120
+msgid ""
+"One or more links appear to be a playlist. This will add ALL videos in the playlist to the queue.\n"
+"\n"
+"Do you want to proceed?"
+msgstr ""
+"Bir veya daha fazla link oynatma listesi gibi görünüyor. Bu, listedeki TÜM videoları kuyruğa ekleyecek.\n"
+"\n"
+"Devam etmek istiyor musunuz?"
+
+#: templates/index.html:128 templates/index.html:129
+msgid "Adding..."
+msgstr "Ekleniyor..."
+
+#: templates/index.html:139
+msgid "Error:"
+msgstr "Hata:"
+
+#: templates/index.html:139 templates/settings.html:168
+#: templates/settings.html:187 templates/settings.html:305
+msgid "Failed"
+msgstr "Başarısız"
+
+#: templates/index.html:143
+msgid "Added:"
+msgstr "Eklendi:"
+
+#: templates/index.html:143
+msgid "Skipped:"
+msgstr "Atlandı:"
+
+#: templates/index.html:151
+msgid "Connection error"
+msgstr "Bağlantı hatası"
+
+#: templates/index.html:176
+msgid "Updated"
+msgstr "Güncellendi"
+
+#: templates/library.html:2
+msgid "Library - METO Bulk Video Downloader"
+msgstr "Kütüphane - METO Toplu Video İndirici"
+
+#: templates/library.html:12 templates/library.html:88
+msgid "Filters"
+msgstr "Filtreler"
+
+#: templates/library.html:17
+msgid "Search"
+msgstr "Ara"
+
+#: templates/library.html:18
+msgid "Title or uploader..."
+msgstr "Başlık veya yükleyen..."
+
+#: templates/library.html:22 templates/settings.html:166
+msgid "Favorites"
+msgstr "Favoriler"
+
+#: templates/library.html:24 templates/library.html:31
+#: templates/library.html:37 templates/library.html:47
+#: templates/library.html:52
+msgid "All"
+msgstr "Tümü"
+
+#: templates/library.html:25
+msgid "Favorites Only"
+msgstr "Sadece Favoriler"
+
+#: templates/library.html:30 templates/video_detail.html:39
+msgid "Orientation"
+msgstr "Yön"
+
+#: templates/library.html:35 templates/video_detail.html:42
+msgid "Length"
+msgstr "Süre"
+
+#: templates/library.html:38
+msgid "Short (<1min)"
+msgstr "Kısa (<1dk)"
+
+#: templates/library.html:39
+msgid "Medium (1-10min)"
+msgstr "Orta (1-10dk)"
+
+#: templates/library.html:40
+msgid "Long (10-60min)"
+msgstr "Uzun (10-60dk)"
+
+#: templates/library.html:41
+msgid "Feature (>60min)"
+msgstr "Film (>60dk)"
+
+#: templates/library.html:46 templates/video_detail.html:36
+msgid "Aspect Ratio"
+msgstr "En Boy Oranı"
+
+#: templates/library.html:51 templates/video_detail.html:60
+msgid "Category"
+msgstr "Kategori"
+
+#: templates/library.html:56
+msgid "Sort By"
+msgstr "Sırala"
+
+#: templates/library.html:58
+msgid "Date Downloaded"
+msgstr "İndirme Tarihi"
+
+#: templates/library.html:59
+msgid "Title"
+msgstr "Başlık"
+
+#: templates/library.html:60 templates/video_detail.html:30
+msgid "Duration"
+msgstr "Süre"
+
+#: templates/library.html:61
+msgid "File Size"
+msgstr "Dosya Boyutu"
+
+#: templates/library.html:62 templates/video_detail.html:27
+msgid "Upload Date"
+msgstr "Yükleme Tarihi"
+
+#: templates/library.html:66
+msgid "Clear Filters"
+msgstr "Filtreleri Temizle"
+
+#: templates/library.html:71
+msgid "0 videos"
+msgstr "0 video"
+
+#: templates/library.html:74
+msgid "0 selected"
+msgstr "0 seçili"
+
+#: templates/library.html:76
+msgid "Move to..."
+msgstr "Taşı..."
+
+#: templates/library.html:81
+msgid "Set Category"
+msgstr "Kategori Belirle"
+
+#: templates/library.html:82
+msgid "Add Tag"
+msgstr "Etiket Ekle"
+
+#: templates/library.html:83 templates/video_detail.html:95
+msgid "Delete"
+msgstr "Sil"
+
+#: templates/library.html:90
+msgid "Grid"
+msgstr "Izgara"
+
+#: templates/library.html:91
+msgid "List"
+msgstr "Liste"
+
+#: templates/library.html:98
+msgid "Load More"
+msgstr "Daha Fazla Yükle"
+
+#: templates/library.html:155
+msgid "videos"
+msgstr "video"
+
+#: templates/library.html:155
+msgid "video"
+msgstr "video"
+
+#: templates/library.html:172
+msgid "No videos found."
+msgstr "Video bulunamadı."
+
+#: templates/library.html:186 templates/library.html:215
+msgid "Toggle favorite"
+msgstr "Favoriyi aç/kapat"
+
+#: templates/library.html:296
+msgid "selected"
+msgstr "seçili"
+
+#: templates/library.html:340
+msgid "Bulk action failed."
+msgstr "Toplu işlem başarısız."
+
+#: templates/library.html:343
+msgid "Error communicating with server."
+msgstr "Sunucuyla iletişim hatası."
+
+#: templates/library.html:350
+msgid "Move"
+msgstr "Taşı"
+
+#: templates/library.html:350
+msgid "videos to this project?"
+msgstr "videoyu bu projeye?"
+
+#: templates/library.html:359
+msgid "Enter category for"
+msgstr "Kategori girin:"
+
+#: templates/library.html:359 templates/library.html:366
+msgid "videos:"
+msgstr "videolar için:"
+
+#: templates/library.html:366
+msgid "Enter tag to add to"
+msgstr "Etiket girin:"
+
+#: templates/library.html:373
+msgid "Are you sure you want to delete"
+msgstr "Silmek istediğinizden emin misiniz"
+
+#: templates/library.html:373
+msgid "videos permanently?"
+msgstr "videoyu kalıcı olarak?"
+
+#: templates/login.html:2
+msgid "Login"
+msgstr "Giriş"
+
+#: templates/login.html:12
+msgid "Welcome Back"
+msgstr "Tekrar Hoş Geldiniz"
+
+#: templates/login.html:13
+msgid "Sign in to continue"
+msgstr "Devam etmek için giriş yapın"
+
+#: templates/login.html:24
+msgid "Username"
+msgstr "Kullanıcı Adı"
+
+#: templates/login.html:29
+msgid "Password"
+msgstr "Şifre"
+
+#: templates/login.html:33
+msgid "Sign In"
+msgstr "Giriş Yap"
+
+#: templates/settings.html:7
+msgid "Configure"
+msgstr "Yapılandır"
+
+#: templates/settings.html:12
+msgid "Global Preferences (Applies to browser)"
+msgstr "Genel Tercihler (Tarayıcıya uygulanır)"
+
+#: templates/settings.html:17
+msgid "Enable UI Animations"
+msgstr "Arayüz Animasyonlarını Etkinleştir"
+
+#: templates/settings.html:23
+msgid "Download Quality"
+msgstr "İndirme Kalitesi"
+
+#: templates/settings.html:25
+msgid "Video Quality"
+msgstr "Video Kalitesi"
+
+#: templates/settings.html:27
+msgid "Best Available"
+msgstr "En İyi Mevcut"
+
+#: templates/settings.html:28
+msgid "1080p Max"
+msgstr "1080p Maks"
+
+#: templates/settings.html:29
+msgid "720p Max"
+msgstr "720p Maks"
+
+#: templates/settings.html:30
+msgid "480p Max"
+msgstr "480p Maks"
+
+#: templates/settings.html:35
+msgid "Output Format"
+msgstr "Çıktı Formatı"
+
+#: templates/settings.html:47
+msgid "Audio Only"
+msgstr "Sadece Ses"
+
+#: templates/settings.html:55
+msgid "Download Subtitles"
+msgstr "Altyazıları İndir"
+
+#: templates/settings.html:63
+msgid "Download Thumbnail"
+msgstr "Küçük Resmi İndir"
+
+#: templates/settings.html:71
+msgid "Embed Metadata"
+msgstr "Metadata Göm"
+
+#: templates/settings.html:76
+msgid "Cookies Browser"
+msgstr "Çerez Tarayıcısı"
+
+#: templates/settings.html:78
+msgid "None"
+msgstr "Hiçbiri"
+
+#: templates/settings.html:79
+msgid "Chrome"
+msgstr "Chrome"
+
+#: templates/settings.html:80
+msgid "Edge"
+msgstr "Edge"
+
+#: templates/settings.html:81
+msgid "Firefox"
+msgstr "Firefox"
+
+#: templates/settings.html:82
+msgid "Brave"
+msgstr "Brave"
+
+#: templates/settings.html:83
+msgid "Safari"
+msgstr "Safari"
+
+#: templates/settings.html:84
+msgid "Opera"
+msgstr "Opera"
+
+#: templates/settings.html:86
+msgid "Extracts cookies from the browser to download restricted videos."
+msgstr "Kısıtlı videoları indirmek için tarayıcıdan çerezleri çıkarır."
+
+#: templates/settings.html:90
+msgid "Proxy URL"
+msgstr "Proxy URL"
+
+#: templates/settings.html:91
+msgid "http://user:pass@ip:port"
+msgstr "http://kullanici:sifre@ip:port"
+
+#: templates/settings.html:95
+msgid "Rate Limit"
+msgstr "Hız Limiti"
+
+#: templates/settings.html:96
+msgid "e.g. 5M, 500K"
+msgstr "örn. 5M, 500K"
+
+#: templates/settings.html:100
+msgid "Output Template"
+msgstr "Çıktı Şablonu"
+
+#: templates/settings.html:101
+#, python-format
+msgid "%(id)s.%(ext)s"
+msgstr "%(id)s.%(ext)s"
+
+#: templates/settings.html:102
+#, python-format
+msgid "e.g., %(title)s.%(ext)s"
+msgstr "örn. %(title)s.%(ext)s"
+
+#: templates/settings.html:106
+msgid "Max Concurrent Downloads"
+msgstr "Maks Eşzamanlı İndirme"
+
+#: templates/settings.html:110
+msgid "Save Settings"
+msgstr "Ayarları Kaydet"
+
+#: templates/settings.html:115
+msgid "Projects"
+msgstr "Projeler"
+
+#: templates/settings.html:127
+msgid "New project name..."
+msgstr "Yeni proje adı..."
+
+#: templates/settings.html:128 templates/video_detail.html:77
+msgid "Add"
+msgstr "Ekle"
+
+#: templates/settings.html:134
+msgid "Database Backup"
+msgstr "Veritabanı Yedeği"
+
+#: templates/settings.html:136
+msgid "SQLite only. Download a zip or save a copy into the local"
+msgstr "Sadece SQLite. Yerel"
+
+#: templates/settings.html:136
+msgid "folder."
+msgstr "klasörüne zip indirin veya kopya kaydedin."
+
+#: templates/settings.html:137
+msgid "To restore on another PC, put"
+msgstr "Başka bir PC'de geri yüklemek için"
+
+#: templates/settings.html:137
+msgid "in"
+msgstr "içine"
+
+#: templates/settings.html:137
+msgid "and run"
+msgstr "koyun ve"
+
+#: templates/settings.html:138
+msgid "or extract"
+msgstr "veya"
+
+#: templates/settings.html:138
+msgid "into the project root manually."
+msgstr "çıkarın."
+
+#: templates/settings.html:141
+msgid "Download ZIP"
+msgstr "ZIP İndir"
+
+#: templates/settings.html:142
+msgid "Save copy to dbbackup/"
+msgstr "dbbackup/'a kopya kaydet"
+
+#: templates/settings.html:149
+msgid "Storage & Cleanup"
+msgstr "Depolama & Temizlik"
+
+#: templates/settings.html:153
+msgid "Storage Used:"
+msgstr "Kullanılan Depolama:"
+
+#: templates/settings.html:160
+msgid "Storage limit reached. New downloads will be blocked."
+msgstr "Depolama limiti doldu. Yeni indirmeler engellenecek."
+
+#: templates/settings.html:165
+msgid "Total Videos"
+msgstr "Toplam Video"
+
+#: templates/settings.html:167 templates/settings.html:190
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: templates/settings.html:169
+msgid "Total Size"
+msgstr "Toplam Boyut"
+
+#: templates/settings.html:173
+msgid "Reset & Delete"
+msgstr "Sıfırla & Sil"
+
+#: templates/settings.html:177
+msgid "Delete videos downloaded before"
+msgstr "Şu tarihten önce indirilen videoları sil"
+
+#: templates/settings.html:180
+msgid "Delete Before Date"
+msgstr "Tarihten Önce Sil"
+
+#: templates/settings.html:185
+msgid "Delete videos by status"
+msgstr "Duruma göre videoları sil"
+
+#: templates/settings.html:188
+msgid "Queued"
+msgstr "Kuyrukta"
+
+#: templates/settings.html:189
+msgid "Downloading"
+msgstr "İndiriliyor"
+
+#: templates/settings.html:193
+msgid "Delete by Status"
+msgstr "Duruma Göre Sil"
+
+#: templates/settings.html:198
+msgid "Delete ALL videos and files in this project"
+msgstr "Bu projedeki TÜM videoları ve dosyaları sil"
+
+#: templates/settings.html:200
+msgid "Reset Project"
+msgstr "Projeyi Sıfırla"
+
+#: templates/settings.html:242
+msgid "Deleted"
+msgstr "Silindi"
+
+#: templates/settings.html:242
+msgid "video(s)"
+msgstr "video"
+
+#: templates/settings.html:248
+msgid "Select a date"
+msgstr "Bir tarih seçin"
+
+#: templates/settings.html:249
+msgid "Delete all videos downloaded before"
+msgstr "Şu tarihten önce indirilen tüm videolar silinsin mi"
+
+#: templates/settings.html:255
+msgid "Delete all"
+msgstr "Tüm"
+
+#: templates/settings.html:255
+msgid "videos?"
+msgstr "videolar silinsin mi?"
+
+#: templates/settings.html:260
+msgid "Delete ALL videos and files in this project? This cannot be undone."
+msgstr "Bu projedeki TÜM videolar ve dosyalar silinsin mi? Bu geri alınamaz."
+
+#: templates/settings.html:261
+msgid "Are you really sure?"
+msgstr "Gerçekten emin misiniz?"
+
+#: templates/settings.html:280 templates/settings.html:319
+msgid "Saving..."
+msgstr "Kaydediliyor..."
+
+#: templates/settings.html:287
+msgid "Saved!"
+msgstr "Kaydedildi!"
+
+#: templates/settings.html:290
+msgid "Error saving"
+msgstr "Kaydetme hatası"
+
+#: templates/settings.html:306
+msgid "Error creating project"
+msgstr "Proje oluşturma hatası"
+
+#: templates/settings.html:311
+msgid "Delete this project and all its videos?"
+msgstr "Bu projeyi ve tüm videolarını silmek istiyor musunuz?"
+
+#: templates/settings.html:324 templates/settings.html:330
+msgid "Backup failed"
+msgstr "Yedekleme başarısız"
+
+#: templates/settings.html:327
+msgid "Saved"
+msgstr "Kaydedildi"
+
+#: templates/video_detail.html:2
+msgid "METO Bulk Video Downloader"
+msgstr "METO Bulk Video Downloader"
+
+#: templates/video_detail.html:10
+msgid "Your browser does not support video."
+msgstr "Tarayıcınız videoyu desteklemiyor."
+
+#: templates/video_detail.html:14
+msgid "No video file found."
+msgstr "Video dosyası bulunamadı."
+
+#: templates/video_detail.html:24
+msgid "Uploader"
+msgstr "Yükleyen"
+
+#: templates/video_detail.html:33
+msgid "Resolution"
+msgstr "Çözünürlük"
+
+#: templates/video_detail.html:45
+msgid "Size"
+msgstr "Boyut"
+
+#: templates/video_detail.html:48
+msgid "Downloaded"
+msgstr "İndirildi"
+
+#: templates/video_detail.html:50
+msgid "Status"
+msgstr "Durum"
+
+#: templates/video_detail.html:52
+msgid "Favorite"
+msgstr "Favori"
+
+#: templates/video_detail.html:63
+msgid "No category"
+msgstr "Kategori yok"
+
+#: templates/video_detail.html:68
+msgid "New category..."
+msgstr "Yeni kategori..."
+
+#: templates/video_detail.html:69
+msgid "Set"
+msgstr "Ayarla"
+
+#: templates/video_detail.html:74
+msgid "Tags"
+msgstr "Etiketler"
+
+#: templates/video_detail.html:76
+msgid "Add tag..."
+msgstr "Etiket ekle..."
+
+#: templates/video_detail.html:94
+msgid "Open Source"
+msgstr "Açık Kaynak"
+
+#: templates/video_detail.html:185
+msgid "Delete this video and its file?"
+msgstr "Bu videoyu ve dosyasını silmek istiyor musunuz?"

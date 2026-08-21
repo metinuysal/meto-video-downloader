@@ -87,6 +87,12 @@ def _get_ydl_opts(project_folder, settings):
         "extract_flat": "in_playlist",
     }
 
+    # Audio only: en iyi sesi al ve mp3'e çevir (ffmpeg gerekir)
+    if audio_only:
+        opts["postprocessors"] = [
+            {"key": "FFmpegExtractAudio", "preferredcodec": "mp3", "preferredquality": "192"}
+        ]
+
     if merge_fmt and not audio_only:
         opts["merge_output_format"] = merge_fmt
 
@@ -147,10 +153,17 @@ def _extract_metadata(info):
 
 def _find_downloaded_file(project_folder, video_id):
     base = os.path.join(config.VIDEO_DIR, project_folder)
-    for ext in ("mp4", "mkv", "webm", "avi", "mov", "m4a", "opus"):
+    for ext in ("mp3", "mp4", "mkv", "webm", "avi", "mov", "m4a", "opus", "m4a", "wav", "flac"):
         path = os.path.join(base, f"{video_id}.{ext}")
         if os.path.exists(path):
             return path
+    # Fallback: herhangi bir dosyayı bul (audio_only'de ext değişebilir)
+    import glob as _glob
+
+    for pat in (f"{video_id}.*", f"{video_id}_*.*"):
+        for p in _glob.glob(os.path.join(base, pat)):
+            if os.path.isfile(p):
+                return p
     return ""
 
 

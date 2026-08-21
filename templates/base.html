@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ CURRENT_LANG }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -27,26 +27,34 @@
             </select>
         </div>
         <div class="nav-links">
-            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Download</a>
-            <a href="/library" class="{% if request.path == '/library' %}active{% endif %}">Library</a>
-            <a href="/settings" class="{% if request.path == '/settings' %}active{% endif %}">Settings</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About</a>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">{{ _("Download") }}</a>
+            <a href="/library" class="{% if request.path == '/library' %}active{% endif %}">{{ _("Library") }}</a>
+            <a href="/settings" class="{% if request.path == '/settings' %}active{% endif %}">{{ _("Settings") }}</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">{{ _("About") }}</a>
             {% if AUTH_ENABLED and AUTHENTICATED %}
-            <a href="/logout" style="color: #ef4444; margin-left: auto;">Logout</a>
+            <a href="/logout" style="color: #ef4444; margin-left: auto;">{{ _("Logout") }}</a>
             {% endif %}
+            <div class="lang-switch" style="display:flex; gap:4px; margin-left:12px; align-items:center;">
+                <a href="{{ url_for('set_lang', lang='tr') }}" style="padding:2px 6px; border-radius:4px; font-size:0.78rem; {% if CURRENT_LANG=='tr' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">TR</a>
+                <a href="{{ url_for('set_lang', lang='en') }}" style="padding:2px 6px; border-radius:4px; font-size:0.78rem; {% if CURRENT_LANG=='en' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">EN</a>
+            </div>
         </div>
-        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <button class="nav-toggle" id="nav-toggle" aria-label="{{ _('Toggle menu') }}">
             <span></span><span></span><span></span>
         </button>
     </nav>
     <div class="mobile-menu" id="mobile-menu">
-        <a href="/">Download</a>
-        <a href="/library">Library</a>
-        <a href="/settings">Settings</a>
-        <a href="/about">About</a>
+        <a href="/">{{ _("Download") }}</a>
+        <a href="/library">{{ _("Library") }}</a>
+        <a href="/settings">{{ _("Settings") }}</a>
+        <a href="/about">{{ _("About") }}</a>
         {% if AUTH_ENABLED and AUTHENTICATED %}
-        <a href="/logout" style="color: #ef4444;">Logout</a>
+        <a href="/logout" style="color: #ef4444;">{{ _("Logout") }}</a>
         {% endif %}
+        <div style="display:flex; gap:8px; margin-top:12px; justify-content:center;">
+            <a href="{{ url_for('set_lang', lang='tr') }}" style="padding:4px 10px; border-radius:6px; font-size:0.85rem; {% if CURRENT_LANG=='tr' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">TR</a>
+            <a href="{{ url_for('set_lang', lang='en') }}" style="padding:4px 10px; border-radius:6px; font-size:0.85rem; {% if CURRENT_LANG=='en' %}background:var(--accent); color:#fff;{% else %}background:#f1f5f9;{% endif %}">EN</a>
+        </div>
         <select class="project-select-mobile">
             {% for p in projects %}
             <option value="{{ p.id }}" {% if current and p.id == current.id %}selected{% endif %}>{{ p.name }}</option>

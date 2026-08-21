@@ -1,9 +1,65 @@
+# Tak-Çalıştır: tek komut -> docker compose up --build -d
+# Dokploy uyumlu: expose + Traefik, container_name yok, volume prefix'e bırakıldı
+# .env yoksa varsayılan şifrelerle çalışır, production'da deploy.sh otomatik .env üretir.
 services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootsecret}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-bulk_video}
+      MYSQL_USER: ${MYSQL_USER:-bulkuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-bulkpass}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootsecret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    # Host'tan MySQL'e bağlanman gerekirse aç (tak-çalıştır için kapalı daha güvenli):
+    # ports:
+    #   - "127.0.0.1:3306:3306"
+
   bulk-video:
     build: .
+    restart: unless-stopped
+    init: true
+    env_file:
+      - path: .env
+        required: false
+    expose:
+      - "${PORT:-5000}"
     ports:
-      - "5000:5000"
+      - "${PORT:-5000}:${PORT:-5000}"
     environment:
-      BULK_VIDEO_DEBUG: 1
+      BULK_VIDEO_DEBUG: ${BULK_VIDEO_DEBUG:-0}
+      SECRET_KEY: ${SECRET_KEY:-}
+      # Compose içindeki MySQL'e bağlan - config.py DATABASE_URL'yi okuyor
+      BULK_VIDEO_DB_URL: mysql+pymysql://${MYSQL_USER:-bulkuser}:${MYSQL_PASSWORD:-bulkpass}@db:3306/${MYSQL_DATABASE:-bulk_video}
+      BULK_VIDEO_DB_TYPE: mysql
+      BULK_VIDEO_VIDEO_DIR: /data/videos
+      BULK_VIDEO_DB_PATH: /data/bulk_video.db
+      BULK_VIDEO_USERNAME: ${BULK_VIDEO_USERNAME:-}
+      BULK_VIDEO_PASSWORD: ${BULK_VIDEO_PASSWORD:-}
+      BULK_VIDEO_HOST: 0.0.0.0
+      BULK_VIDEO_PORT: ${PORT:-5000}
+      PORT: ${PORT:-5000}
     volumes:
       - ./data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import os, urllib.request; urllib.request.urlopen('http://localhost:'+(os.getenv('BULK_VIDEO_PORT') or os.getenv('PORT','5000'))+'/').read()\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  mysql_data:
